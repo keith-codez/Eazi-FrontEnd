@@ -50,7 +50,7 @@ function Login({ onLogin }) {
         </p>
         <p className="mt-4 text-center">
           Forgot Password?{" "}
-          <Link to="/forgot-password" className="text-blue-600 hover:underline">Reset Password</Link>
+          <Link to="/request/password_reset" className="text-blue-600 hover:underline">Reset Password</Link>
         </p>
       </form>
     </div>

@@ -5,8 +5,8 @@ import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import ForgotPassword from  "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import PasswordResetRequest from "./components/PasswordResetRequest";
+import PasswordReset from "./components/PasswordReset";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
@@ -33,8 +33,8 @@ function App() {
                 <Route path="*" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login onLogin={handleLogin} />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
+                <Route path="/request/password_reset" element={<PasswordResetRequest />} />
+                <Route path="/password-reset/:token" element={<PasswordReset/>} />
               </>
             ) : (
               <>
