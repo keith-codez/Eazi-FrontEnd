@@ -1,64 +1,67 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, Car, Users, Briefcase, Calendar, DollarSign, Settings, LogOut } from "lucide-react";
 
-function Sidebar({ onLogout }) {
+const Sidebar = ({ onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleSidebar = () => setIsOpen(!isOpen);
+
+  const handleLogout = () => {
+    onLogout();
+    navigate("/login");
+  };
+
+  const menuItems = [
+    { name: "Dashboard", icon: <Car />, link: "/dashboard" },
+    { name: "Fleet", icon: <Car />, link: "/fleet/fleet", sub: [
+        { name: "Vehicles", link: "/fleet/vehicles" },
+        { name: "Maintenance Records", link: "/fleet/maintenance" },
+        { name: "Unavailability", link: "/fleet/unavailability" }
+      ]
+    },
+    { name: "Customers", icon: <Users />, link: "/customers/customers", sub: [
+        { name: "Customer List", link: "/customers/list" },
+        { name: "Bookings", link: "/customers/bookings" }
+      ]
+    },
+    { name: "Suppliers", icon: <Briefcase />, link: "/suppliers/suppliers", sub: [
+        { name: "Supplier List", link: "/suppliers/list" }
+      ]
+    },
+    { name: "Bookings", icon: <Calendar />, link: "/bookings/bookings", sub: [
+        { name: "Active Bookings", link: "/bookings/active" },
+        { name: "Booking History", link: "/bookings/history" }
+      ]
+    },
+    { name: "Finances", icon: <DollarSign />, link: "/finances/finances", sub: [
+        { name: "Payments", link: "/finances/payments" },
+        { name: "Booking Invoices", link: "/finances/invoices" }
+      ]
+    },
+    { name: "Settings", icon: <Settings />, link: "/settings" }
+  ];
 
   return (
-    <>
-      {/* Toggle Button - Always Visible */}
-      <button 
-        className="fixed top-4 left-4 z-50 p-2 bg-blue-700 text-white rounded-md md:hidden hover:bg-blue-800 transition"
-        onClick={() => setIsOpen(true)}
-      >
-        ☰ Menu
+    <div className="fixed inset-y-0 left-0 bg-gray-900 text-white w-64 p-5 flex flex-col justify-between h-full">
+      <h2 className="text-xl font-bold mb-6">EaziDrive</h2>
+      <ul>
+        {menuItems.map((item) => (
+          <li key={item.name} className="mb-4">
+            <Link to={item.link} className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-700 rounded">
+              {item.icon}
+              <span>{item.name}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleLogout} className="flex items-center space-x-2 w-full text-left p-2 bg-red-600 hover:bg-red-700 rounded">
+        <LogOut size={20} />
+        <span>Logout</span>
       </button>
-
-      {/* Sidebar - Full Height with Close Button */}
-      <div className={`fixed top-0 left-0 h-screen w-64 bg-gray-900 text-white p-4 transition-transform transform 
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
-        
-        {/* Close "X" Button */}
-        <button 
-          className="absolute top-4 right-4 text-white text-xl md:hidden"
-          onClick={() => setIsOpen(false)}
-        >
-          ✖
-        </button>
-
-        <h2 className="text-xl font-bold mt-10">Admin Panel</h2>
-        <nav className="mt-4">
-          <ul>
-            <li className="mb-2">
-              <Link to="/dashboard" className="block p-2 hover:bg-gray-700">Dashboard</Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/users" className="block p-2 hover:bg-gray-700">Users</Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/settings" className="block p-2 hover:bg-gray-700">Settings</Link>
-            </li>
-            <li className="mb-2">
-              <button 
-                onClick={onLogout} 
-                className="block w-full text-left p-2 bg-red-600 hover:bg-red-700 rounded-md"
-              >
-                Logout
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
-      {/* Click Outside to Close (Optional) */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 md:hidden" 
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-    </>
+    </div>
   );
-}
+};
 
 export default Sidebar;
