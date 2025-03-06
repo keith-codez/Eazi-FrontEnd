@@ -9,7 +9,7 @@ const BookingsSubmenu = () => {
   ];
 
   return (
-    <div className="flex space-x-4 pb-2 mb-4 overflow-x-auto">
+    <div className="flex space-x-4 pb-2 mb-4 overflow-x-auto whitespace-nowrap  border-gray-300">
       {sublinks.map((item) => (
         <NavLink
           key={item.link}

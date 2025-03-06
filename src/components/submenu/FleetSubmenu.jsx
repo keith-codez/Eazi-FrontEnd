@@ -10,18 +10,24 @@ const FleetSubmenu = () => {
   ];
 
   return (
-    <div className="flex space-x-4 pb-2 mb-4 overflow-x-auto">
-      {sublinks.map((item) => (
-        <NavLink
-          key={item.link}
-          to={item.link}
-          className={({ isActive }) =>
-            `px-4 py-2 text-lg ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`
-          }
-        >
-          {item.name}
-        </NavLink>
-      ))}
+    <div className="mt-10 px-2">
+      <div className="flex flex-wrap justify-between items-center border-b border-gray-300 pb-1 w-full max-w-screen-md mx-auto">
+        {sublinks.map((item) => (
+          <NavLink
+            key={item.link}
+            to={item.link}
+            className={({ isActive }) =>
+              `px-3 py-1 text-xs md:text-sm font-medium ${
+                isActive
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-600 hover:text-gray-800"
+              }`
+            }
+          >
+            {item.name}
+          </NavLink>
+        ))}
+      </div>
     </div>
   );
 };

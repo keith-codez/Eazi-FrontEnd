@@ -44,23 +44,47 @@ const Sidebar = ({ onLogout }) => {
   ];
 
   return (
-    <div className="fixed inset-y-0 left-0 bg-gray-900 text-white w-64 p-5 flex flex-col justify-between h-full">
-      <h2 className="text-xl font-bold mb-6">EaziDrive</h2>
-      <ul>
-        {menuItems.map((item) => (
-          <li key={item.name} className="mb-4">
-            <Link to={item.link} className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-700 rounded">
-              {item.icon}
-              <span>{item.name}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <button onClick={handleLogout} className="flex items-center space-x-2 w-full text-left p-2 bg-red-600 hover:bg-red-700 rounded">
-        <LogOut size={20} />
-        <span>Logout</span>
-      </button>
-    </div>
+    <>
+      {/* Hamburger Menu Button */}
+      <button 
+      onClick={toggleSidebar}
+      className="md:hidden fixed top-4 left-4 z-50 bg-gray-900 text-white p-2 rounded"
+      >
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+      {/* Sidebar */}
+      <div 
+        className={`fixed inset-y-0 left-0 bg-gray-900 text-white w-80 md:w-64 p-5 flex flex-col justify-between h-full 
+        transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform md:translate-x-0 md:block`}
+      >
+        <h2 className="text-xl font-bold mb-6 text-center">EaziDrive</h2>
+        
+        <ul className="space-y-2">
+          {menuItems.map((item) => (
+            <li key={item.name} className="mb-4">
+              <Link 
+                to={item.link} 
+                className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-700 rounded"
+                onClick={() => setIsOpen(false)} // Close sidebar on mobile when a link is clicked
+              >
+                {item.icon}
+                <span>{item.name}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* Logout Button */}
+        <button 
+          onClick={handleLogout} 
+          className="flex items-center space-x-2 w-full text-left p-2 bg-red-600 hover:bg-red-700 rounded mt-4"
+        >
+          <LogOut size={20} />
+          <span>Logout</span>
+        </button>
+      </div>
+    </>
   );
 };
 

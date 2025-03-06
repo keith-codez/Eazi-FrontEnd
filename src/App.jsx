@@ -47,7 +47,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex">
+      <div className="flex w-full min-h-screen overflow-x-hidden">
         {token && <Sidebar onLogout={handleLogout} />}
         <div className={`flex-grow p-4 ${token ? "md:ml-64" : ""}`}>
           <Routes>

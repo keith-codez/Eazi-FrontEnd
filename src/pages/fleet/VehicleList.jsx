@@ -25,7 +25,7 @@ const VehicleList = () => {
   if (loading) return <p>Loading vehicles...</p>;
 
   return (
-    <div>
+    <div className="w-full min-h-screen px-4 md:px-8">
       <FleetSubmenu />
       <h2>Vehicle List</h2>
       {vehicles.length === 0 ? (
