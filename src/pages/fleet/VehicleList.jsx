@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import FleetSubmenu from "../../components/submenu/FleetSubmenu";
+
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -26,7 +26,6 @@ const VehicleList = () => {
 
   return (
     <div className="w-full min-h-screen px-4 md:px-8">
-      <FleetSubmenu />
       <h2>Vehicle List</h2>
       {vehicles.length === 0 ? (
         <p>No vehicles found.</p>

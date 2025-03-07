@@ -18,11 +18,7 @@ import Invoices from "./pages/finances/Invoices";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
-import Fleet from "./pages/fleet/Fleet";
-import Customers from "./pages/customers/Customers";
-import Bookings from "./pages/bookings/Bookings";
-import Finances from "./pages/finances/Finances";
-import Suppliers from "./pages/suppliers/Suppliers";
+
 
 
 function App() {
@@ -65,19 +61,14 @@ function App() {
                 {/* Private Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/fleet/fleet" element={<Fleet />} />
                 <Route path="/fleet/vehicles" element={<VehicleList />} />
                 <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
                 <Route path="/fleet/unavailability" element={<Unavailability />} />
-                <Route path="/customers/customers" element={<Customers />} />
                 <Route path="/customers/list" element={<CustomerList />} />
                 <Route path="/customers/bookings" element={<CustomerBookings />} />
-                <Route path="/suppliers/suppliers" element={<Suppliers />} />
                 <Route path="/suppliers/list" element={<SupplierList />} />
-                <Route path="/bookings/bookings" element={<Bookings />} />
                 <Route path="/bookings/active" element={<ActiveBookings />} />
                 <Route path="/bookings/history" element={<BookingHistory />} />
-                <Route path="/finances/finances" element={<Finances />} />
                 <Route path="/finances/payments" element={<Payments />} />
                 <Route path="/finances/invoices" element={<Invoices />} />
                 <Route path="/settings" element={<Settings />} />
