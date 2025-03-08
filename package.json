@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
+    "@shadcn/ui": "^0.0.4",
     "@tailwindcss/vite": "^4.0.8",
     "@tanstack/react-query": "^5.66.9",
     "axios": "^1.7.9",
@@ -20,6 +21,7 @@
     "react-redux": "^9.2.0",
     "react-router": "^7.2.0",
     "react-router-dom": "^7.2.0",
+    "react-swipeable": "^7.0.2",
     "recharts": "^2.15.1",
     "tailwindcss": "^4.0.8"
   },
