@@ -18,6 +18,7 @@ import Invoices from "./pages/finances/Invoices";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
+import AddVehicle from "./pages/fleet/AddVehicle";
 
 
 
@@ -62,6 +63,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/fleet/vehicles" element={<VehicleList />} />
+                <Route path="/add-vehicle" element={<AddVehicle />} />
                 <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
                 <Route path="/fleet/unavailability" element={<Unavailability />} />
                 <Route path="/customers/list" element={<CustomerList />} />

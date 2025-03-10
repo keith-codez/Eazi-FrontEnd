@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSwipeable } from "react-swipeable";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -10,7 +11,6 @@ const VehicleList = () => {
     const fetchVehicles = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/staff/vehicles/");
-        console.log(response.data); // Check API response
         setVehicles(response.data);
       } catch (err) {
         console.error("Error fetching vehicles:", err);
@@ -26,11 +26,19 @@ const VehicleList = () => {
 
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-16 md:mt-0">
-      <h2 className="text-2xl font-semibold mb-4">Vehicle List</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold">Vehicle List</h2>
+        
+        {/* "Add Vehicle" button links to the Add Vehicle page */}
+        <Link to="/add-vehicle" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+          Add Vehicle
+        </Link>
+      </div>
+
       {vehicles.length === 0 ? (
         <p className="text-gray-500">No vehicles found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {vehicles.map((vehicle) => (
             <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))}
@@ -72,23 +80,15 @@ const VehicleCard = ({ vehicle }) => {
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">No Image</div>
         )}
-        {/* Left Arrow */}
         {vehicle.images.length > 1 && (
-          <button
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full"
-            onClick={handlePrev}
-          >
-            &#10094;
-          </button>
-        )}
-        {/* Right Arrow */}
-        {vehicle.images.length > 1 && (
-          <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full"
-            onClick={handleNext}
-          >
-            &#10095;
-          </button>
+          <>
+            <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full" onClick={handlePrev}>
+              &#10094;
+            </button>
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full" onClick={handleNext}>
+              &#10095;
+            </button>
+          </>
         )}
       </div>
       <div className="p-4">
