@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSwipeable } from "react-swipeable";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom";
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -28,8 +28,6 @@ const VehicleList = () => {
     <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-16 md:mt-0">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Vehicle List</h2>
-        
-        {/* "Add Vehicle" button links to the Add Vehicle page */}
         <Link to="/add-vehicle" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
           Add Vehicle
         </Link>
@@ -69,7 +67,7 @@ const VehicleCard = ({ vehicle }) => {
   });
 
   return (
-    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
+    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[350px] md:h-[400px] flex flex-col">
       <div {...handlers} className="relative w-full h-40 bg-gray-200 flex items-center justify-center">
         {vehicle.images.length > 0 ? (
           <img
@@ -91,11 +89,16 @@ const VehicleCard = ({ vehicle }) => {
           </>
         )}
       </div>
-      <div className="p-4">
+      <div className="p-4 flex-1">
         <h3 className="text-lg font-semibold">{vehicle.make} {vehicle.model}</h3>
         <p className="text-sm text-gray-600">Color: {vehicle.color}</p>
         <p className="text-sm text-gray-600">Mileage: {vehicle.mileage} km</p>
         <p className="text-sm text-gray-600">Price: ${vehicle.price_per_day}/day</p>
+      </div>
+      <div className="p-4 flex justify-center">
+        <Link to={`/edit-vehicle/${vehicle.id}`} className="bg-blue-500 w-40 text-center text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+          Edit
+        </Link>
       </div>
     </div>
   );

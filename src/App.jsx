@@ -19,6 +19,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
 import AddVehicle from "./pages/fleet/AddVehicle";
+import EditVehicle from "./pages/fleet/EditVehicle";
 
 
 
@@ -64,6 +65,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/fleet/vehicles" element={<VehicleList />} />
                 <Route path="/add-vehicle" element={<AddVehicle />} />
+                <Route path="/edit-vehicle/:id" element={<EditVehicle />} />
                 <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
                 <Route path="/fleet/unavailability" element={<Unavailability />} />
                 <Route path="/customers/list" element={<CustomerList />} />
