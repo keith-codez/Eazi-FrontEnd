@@ -9,6 +9,7 @@ const EditVehicle = () => {
   const [loading, setLoading] = useState(true);
   const [newImages, setNewImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]); // Track deleted images
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -31,24 +32,39 @@ const EditVehicle = () => {
   };
 
   const handleFileChange = (e) => {
-    setNewImages([...e.target.files]);
+    const files = Array.from(e.target.files);
+    setNewImages((prevImages) => [...prevImages, ...files]);
   };
 
   const handleDeleteImage = (imageId) => {
-    setExistingImages(existingImages.filter((img) => img.id !== imageId));
+    setExistingImages(existingImages.filter((img) => img.id !== imageId)); // Remove from UI
+    setDeletedImages((prevDeleted) => [...prevDeleted, imageId]); // Track the deleted image ID
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+
+    // Append updated vehicle data
     Object.entries(vehicle).forEach(([key, value]) => {
       formData.append(key, value);
     });
+
+    // Add new images
     newImages.forEach((file) => {
       formData.append("images", file);
     });
+
+    // Add remaining existing images (after deletion)
+    existingImages.forEach((image) => {
+      formData.append("images", image.image); // You might need to adjust this depending on your backend
+    });
+
+    // Add deleted images (to remove them on the backend)
+    formData.append("deleted_images", JSON.stringify(deletedImages));
+
     try {
-      await axios.put(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`, formData, {
+      await axios.patch(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       navigate("/vehicles");
@@ -90,13 +106,19 @@ const EditVehicle = () => {
           <label className="block text-sm font-medium">Price per day ($)</label>
           <input type="number" name="price_per_day" value={vehicle.price_per_day} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
         </div>
-        
+
         <div className="md:col-span-2">
           <label className="block text-sm font-medium">Upload New Images</label>
           <input type="file" multiple onChange={handleFileChange} className="w-full border p-2 rounded focus:border-blue-500" />
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            {newImages.map((file, index) => (
+              <div key={index} className="relative">
+                <img src={URL.createObjectURL(file)} alt="New" className="w-full h-24 object-cover rounded" />
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Existing Images Section */}
         <div className="md:col-span-2">
           <h3 className="text-lg font-medium mb-2">Existing Images</h3>
           <div className="grid grid-cols-3 gap-4">
