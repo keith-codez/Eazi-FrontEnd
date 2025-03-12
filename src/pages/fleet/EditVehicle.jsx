@@ -10,6 +10,7 @@ const EditVehicle = () => {
   const [newImages, setNewImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [deletedImages, setDeletedImages] = useState([]); // Track deleted images
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -77,9 +78,40 @@ const EditVehicle = () => {
 
   if (loading) return <p className="text-center text-gray-500">Loading vehicle details...</p>;
 
+  const handleConfirmSubmit = async () => {
+    setIsModalOpen(false); // Close modal
+    await handleSubmit(new Event("submit")); // Manually trigger form submission
+  };
+
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 mt-16 md:mt-0">
+    <div className={`${isModalOpen ? "overflow-hidden h-screen" : ""}`}>
+    <div className="w-full max-w-4xl mx-auto p-6 mt-16 md:mt-0 ">
       <h2 className="text-2xl font-semibold mb-4">Edit Vehicle</h2>
+      {/* Confirmation Modal */}
+      {isModalOpen && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
+          <h3 className="text-lg font-semibold mb-4">Confirm Changes</h3>
+          <p className="text-gray-700">Are you sure you want to update this vehicle?</p>
+
+          <div className="mt-4 flex justify-end space-x-4">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirmSubmit}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
       <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium">Make</label>
@@ -140,9 +172,10 @@ const EditVehicle = () => {
         </div>
 
         <div className="md:col-span-2 flex justify-end">
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Update Vehicle</button>
+        <button type="button" onClick={() => setIsModalOpen(true)} className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Update Vehicle</button>
         </div>
       </form>
+    </div>
     </div>
   );
 };
