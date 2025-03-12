@@ -42,36 +42,38 @@ const EditVehicle = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
+  e.preventDefault();
+  const formData = new FormData();
 
-    // Append updated vehicle data
-    Object.entries(vehicle).forEach(([key, value]) => {
+  // Append updated vehicle data
+  Object.entries(vehicle).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
       formData.append(key, value);
-    });
-
-    // Add new images
-    newImages.forEach((file) => {
-      formData.append("images", file);
-    });
-
-    // Add remaining existing images (after deletion)
-    existingImages.forEach((image) => {
-      formData.append("images", image.image); // You might need to adjust this depending on your backend
-    });
-
-    // Add deleted images (to remove them on the backend)
-    formData.append("deleted_images", JSON.stringify(deletedImages));
-
-    try {
-      await axios.patch(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      navigate("/vehicles");
-    } catch (err) {
-      console.error("Error updating vehicle:", err);
     }
-  };
+  });
+
+  // Ensure next_service_date is included
+  if (vehicle.next_service_date) {
+    formData.append("next_service_date", vehicle.next_service_date);
+  }
+
+  // Add new images
+  newImages.forEach((file) => {
+    formData.append("images", file);
+  });
+
+  // Add deleted images to remove them from backend
+  formData.append("deleted_images", JSON.stringify(deletedImages));
+
+  try {
+    await axios.patch(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    navigate("/vehicles");
+  } catch (err) {
+    console.error("Error updating vehicle:", err);
+  }
+};
 
   if (loading) return <p className="text-center text-gray-500">Loading vehicle details...</p>;
 
@@ -105,6 +107,10 @@ const EditVehicle = () => {
         <div>
           <label className="block text-sm font-medium">Price per day ($)</label>
           <input type="number" name="price_per_day" value={vehicle.price_per_day} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Next Service Date</label>
+          <input type="date" name="next_service_date" value={vehicle.next_service_date || ""} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
         </div>
 
         <div className="md:col-span-2">
