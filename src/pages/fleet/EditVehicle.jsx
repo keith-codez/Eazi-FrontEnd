@@ -12,6 +12,8 @@ const EditVehicle = () => {
   const [deletedImages, setDeletedImages] = useState([]); // Track deleted images
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialVehicle, setInitialVehicle] = useState(null); // Store original data
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -93,11 +95,20 @@ const EditVehicle = () => {
     await handleSubmit(new Event("submit")); // Manually trigger form submission
   };
 
+  const handleDeleteVehicle = async () => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`);
+      setIsDeleteModalOpen(false); // Close modal
+      navigate("/vehicles"); // Redirect to vehicle list after deletion
+    } catch (err) {
+      console.error("Error deleting vehicle:", err);
+    }
+  };
+  
   return (
     <div className={`${isModalOpen ? "overflow-hidden h-screen" : ""}`}>
     <div className="w-full max-w-4xl mx-auto p-6 mt-16 md:mt-0 ">
       <h2 className="text-2xl font-semibold mb-4">Edit Vehicle</h2>
-      {/* Confirmation Modal */}
       {/* Confirmation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -166,6 +177,31 @@ const EditVehicle = () => {
         </div>
       )}
 
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
+            <h3 className="text-lg font-semibold mb-4 text-red-600">Confirm Delete</h3>
+            <p className="text-gray-700">Are you sure you want to delete this vehicle? This action cannot be undone.</p>
+            <div className="mt-4 flex justify-end space-x-4">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteVehicle}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium">Make</label>
@@ -225,7 +261,8 @@ const EditVehicle = () => {
           </div>
         </div>
 
-        <div className="md:col-span-2 flex justify-end">
+        <div className="md:col-span-2 flex justify-between">
+        <button type="button" onClick={() => setIsDeleteModalOpen(true)} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Delete Vehicle</button>
         <button type="button" onClick={() => setIsModalOpen(true)} className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Update Vehicle</button>
         </div>
       </form>
