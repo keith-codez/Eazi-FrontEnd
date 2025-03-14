@@ -261,12 +261,36 @@ const EditVehicle = () => {
           </div>
         </div>
 
-        <div className="md:col-span-2 flex justify-between">
-        <button type="button" onClick={() => setIsDeleteModalOpen(true)} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Delete Vehicle</button>
-        <button type="button" onClick={() => setIsModalOpen(true)} className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Update Vehicle</button>
+        <div className="md:col-span-2 flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
+          <div className="flex space-x-4 w-full md:w-auto">
+            <button
+              type="button"
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full md:w-auto"
+            >
+              Delete Vehicle
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate("/fleet/vehicles")}
+              className="bg-gray-500 text-white px-4 py-2 rounded-lg w-full md:w-auto"
+            >
+              Cancel
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto"
+          >
+            Update Vehicle
+          </button>
         </div>
-      </form>
-    </div>
+
+        </form>
+      </div>
     </div>
   );
 };

@@ -5,13 +5,17 @@ import { Link } from "react-router-dom";
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [ownershipFilter, setOwnershipFilter] = useState("");
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/staff/vehicles/");
         setVehicles(response.data);
+        setFilteredVehicles(response.data); // Initialize filtered list
       } catch (err) {
         console.error("Error fetching vehicles:", err);
       } finally {
@@ -22,22 +26,60 @@ const VehicleList = () => {
     fetchVehicles();
   }, []);
 
+  // Filter vehicles based on searchQuery and ownershipFilter
+  useEffect(() => {
+    let filtered = vehicles;
+
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (vehicle) =>
+          vehicle.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          vehicle.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          vehicle.color.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (ownershipFilter) {
+      filtered = filtered.filter((vehicle) => vehicle.ownership === ownershipFilter);
+    }
+
+    setFilteredVehicles(filtered);
+  }, [searchQuery, ownershipFilter, vehicles]);
+
   if (loading) return <p className="text-center text-gray-500">Loading vehicles...</p>;
 
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-16 md:mt-0">
-      <div className="flex justify-between items-center mb-4">
+      {/* Search and Filter */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
         <h2 className="text-2xl font-semibold">Vehicle List</h2>
-        <Link to="/add-vehicle" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-          Add Vehicle
+        <input
+          type="text"
+          placeholder="Search by make, model, or color..."
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full md:w-80"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <select
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full md:w-40"
+          value={ownershipFilter}
+          onChange={(e) => setOwnershipFilter(e.target.value)}
+        >
+          <option value="">All Ownerships</option>
+          <option value="company">Company-owned</option>
+          <option value="private">Privately-owned</option>
+        </select>
+        <Link to="/add-vehicle" className="bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 text-center text-lg w-full md:w-auto md:px-6 md:py-2 shadow-md">
+        + Add Vehicle
         </Link>
       </div>
 
-      {vehicles.length === 0 ? (
+      {/* Vehicle List */}
+      {filteredVehicles.length === 0 ? (
         <p className="text-gray-500">No vehicles found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {vehicles.map((vehicle) => (
+          {filteredVehicles.map((vehicle) => (
             <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))}
         </div>
@@ -67,8 +109,8 @@ const VehicleCard = ({ vehicle }) => {
   });
 
   return (
-    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[350px] md:h-[400px] flex flex-col">
-      <div {...handlers} className="relative w-full h-40 bg-gray-200 flex items-center justify-center">
+    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[400px] md:h-[400px] flex flex-col">
+      <div {...handlers} className="relative w-full h-50 bg-gray-200 flex items-center justify-center">
         {vehicle.images.length > 0 ? (
           <img
             src={vehicle.images[currentImageIndex].image}
