@@ -220,6 +220,10 @@ const EditVehicle = () => {
           <input type="number" name="mileage" value={vehicle.mileage} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
         </div>
         <div>
+          <label className="block text-sm font-medium">Mileage Allowance (km)</label>
+          <input type="number" name="mileage_allowance" value={vehicle.mileage_allowance} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
+        </div>
+        <div>
           <label className="block text-sm font-medium">Ownership</label>
           <select name="ownership" value={vehicle.ownership} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500">
             <option value="Company">Company</option>
@@ -229,6 +233,18 @@ const EditVehicle = () => {
         <div>
           <label className="block text-sm font-medium">Price per day ($)</label>
           <input type="number" name="price_per_day" value={vehicle.price_per_day} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Deposit ($)</label>
+          <input type="number" name="deposit" value={vehicle.deposit} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Registration Number</label>
+          <input type="text" name="registration_number" value={vehicle.registration_number} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Manufacture Year</label>
+          <input type="number" name="manufacture_year" value={vehicle.manufacture_year} onChange={handleInputChange} className="w-full border p-2 rounded focus:border-blue-500" />
         </div>
         <div>
           <label className="block text-sm font-medium">Next Service Date</label>
