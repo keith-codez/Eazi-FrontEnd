@@ -1,0 +1,233 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
+
+export default function AddCustomer() {
+    const [licenseFile, setLicenseFile] = useState(null);
+    const [customers, setCustomers] = useState([]);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const navigate = useNavigate();
+    const [form, setForm] = useState({
+        title: "MR",
+        first_name: "",
+        last_name: "",
+        phone_number: "",
+        email: "",
+        national_id: "",
+        drivers_license: null,
+        next_of_kin1_first_name: "",
+        next_of_kin1_last_name: "",
+        next_of_kin1_id_number: "",
+        next_of_kin1_phone: "",
+        next_of_kin2_first_name: "",
+        next_of_kin2_last_name: "",
+        next_of_kin2_id_number: "",
+        next_of_kin2_phone: "",
+        last_booking_date: null,
+    });
+
+    useEffect(() => {
+        fetchCustomers();
+    }, []);
+
+    const fetchCustomers = async () => {
+        try {
+            const response = await axios.get(API_URL);
+            setCustomers(response.data);
+        } catch (error) {
+            console.error("Error fetching customers", error);
+        }
+    };
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0]; // Get the first selected file
+        if (file) {
+            setLicenseFile({
+                name: file.name,
+                size: (file.size / 1024).toFixed(2), // Convert bytes to KB
+            });
+        } else {
+            setLicenseFile(null);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+    
+        Object.keys(form).forEach((key) => {
+            if (form[key] !== "" && form[key] !== null) {
+                formData.append(key, form[key]);
+            }
+        });
+    
+        try {
+            await axios.post(API_URL, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+    
+            // Show confirmation modal
+            setIsSubmitted(true);
+    
+        } catch (error) {
+            console.error("Error adding customer", error.response?.data || error);
+        }
+    };
+    
+    // Function to reset the form for adding another customer
+    const addAnotherCustomer = () => {
+        setForm({ firstName: "", lastName: "", phone: "", email: "", driverLicense: null });
+        setIsSubmitted(false);
+    };
+    
+    // Function to navigate to the customers list
+    const goToCustomerList = () => {
+        navigate('/customers/list/'); // Change to the correct customer list route
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+                <h2 className="text-2xl font-semibold mb-4 text-center">Add Customer</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Customer Details */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[
+                                { name: "first_name", label: "First Name" },
+                                { name: "last_name", label: "Last Name" },
+                                { name: "phone_number", label: "Phone Number" },
+                                { name: "email", label: "Email", type: "email" },
+                                { name: "national_id", label: "National ID" },
+                            ].map(({ name, label, type = "text" }) => (
+                                <div key={name}>
+                                    <label htmlFor={name} className="block text-gray-700 font-medium">{label}</label>
+                                    <input
+                                        type={type}
+                                        id={name}
+                                        name={name}
+                                        value={form[name]}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Driver's License */}
+                    <div className="space-y-6">
+                        <h3 className="text-lg font-semibold">Driver's License</h3>
+                        
+                        {/* File Input */}
+                        <input 
+                            type="file" 
+                            accept="image/*,application/pdf" 
+                            onChange={handleFileChange} 
+                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
+                        />
+                        
+                        {/* Display File Info */}
+                        {licenseFile && (
+                            <p className="text-sm text-gray-600 mt-2">
+                                <strong>File:</strong> {licenseFile.name} ({licenseFile.size} KB)
+                            </p>
+                        )}
+                    </div>
+
+
+                    <hr className="w-3/4 border-gray-300 my-6 mx-auto" />
+
+                    {/* Next of Kin 1 */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">Next of Kin 1</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[
+                                { name: "next_of_kin1_first_name", label: "First Name" },
+                                { name: "next_of_kin1_last_name", label: "Last Name" },
+                                { name: "next_of_kin1_id_number", label: "ID Number" },
+                                { name: "next_of_kin1_phone", label: "Phone Number" },
+                            ].map(({ name, label }) => (
+                                <div key={name}>
+                                    <label htmlFor={name} className="block text-gray-700 font-medium">{label}</label>
+                                    <input
+                                        type="text"
+                                        id={name}
+                                        name={name}
+                                        value={form[name]}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <hr className="w-3/4 border-gray-300 my-6 mx-auto" />
+
+                    {/* Next of Kin 2 */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">Next of Kin 2</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[
+                                { name: "next_of_kin2_first_name", label: "First Name" },
+                                { name: "next_of_kin2_last_name", label: "Last Name" },
+                                { name: "next_of_kin2_id_number", label: "ID Number" },
+                                { name: "next_of_kin2_phone", label: "Phone Number" },
+                            ].map(({ name, label }) => (
+                                <div key={name}>
+                                    <label htmlFor={name} className="block text-gray-700 font-medium">{label}</label>
+                                    <input
+                                        type="text"
+                                        id={name}
+                                        name={name}
+                                        value={form[name]}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="flex justify-end">
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Add Customer</button>
+                    </div>
+                </form>
+            </div>
+            {isSubmitted && (
+                <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
+                        <h3 className="text-lg font-semibold text-green-600">Customer Added!</h3>
+                        <p className="text-gray-600 mt-2">What would you like to do next?</p>
+
+                        <div className="mt-4 flex justify-center gap-3">
+                            <button 
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                onClick={addAnotherCustomer}
+                            >
+                                Add Another Customer
+                            </button>
+                            <button 
+                                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-800"
+                                onClick={goToCustomerList}
+                            >
+                                Customers List
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+        </div>
+    );
+}

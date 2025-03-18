@@ -20,6 +20,7 @@ import Home from "./pages/Home";
 import Settings from "./pages/Settings";
 import AddVehicle from "./pages/fleet/AddVehicle";
 import EditVehicle from "./pages/fleet/EditVehicle";
+import AddCustomer from "./pages/customers/AddCustomer.jsx";
 
 
 
@@ -69,6 +70,7 @@ function App() {
                 <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
                 <Route path="/fleet/unavailability" element={<Unavailability />} />
                 <Route path="/customers/list" element={<CustomerList />} />
+                <Route path="/add-customer" element={<AddCustomer />} />
                 <Route path="/customers/bookings" element={<CustomerBookings />} />
                 <Route path="/suppliers/list" element={<SupplierList />} />
                 <Route path="/bookings/active" element={<ActiveBookings />} />
