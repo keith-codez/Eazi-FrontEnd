@@ -13,6 +13,7 @@ const EditVehicle = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialVehicle, setInitialVehicle] = useState(null); // Store original data
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  
 
 
   useEffect(() => {

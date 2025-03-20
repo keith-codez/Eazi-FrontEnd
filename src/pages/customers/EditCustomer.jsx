@@ -1,0 +1,223 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+
+const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
+
+export default function EditCustomer() {
+    const { id } = useParams();
+    const [licensePreview, setLicensePreview] = useState(null);
+    const [currentLicenseUrl, setCurrentLicenseUrl] = useState(null);
+    const [form, setForm] = useState({
+        title: "MR",
+        first_name: "",
+        last_name: "",
+        phone_number: "",
+        email: "",
+        national_id: "",
+        drivers_license: null,
+        next_of_kin1_first_name: "",
+        next_of_kin1_last_name: "",
+        next_of_kin1_id_number: "",
+        next_of_kin1_phone: "",
+        next_of_kin2_first_name: "",
+        next_of_kin2_last_name: "",
+        next_of_kin2_id_number: "",
+        next_of_kin2_phone: "",
+    });
+    const navigate = useNavigate();
+    const [initialForm, setInitialForm] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [changes, setChanges] = useState([]);
+
+    useEffect(() => {
+        fetchCustomerData();
+    }, []);
+
+    
+    const fetchCustomerData = async () => {
+        try {
+        const response = await axios.get(`${API_URL}${id}/`);
+        setForm(response.data);
+        setInitialForm(response.data);
+        if (response.data.drivers_license) {
+            setCurrentLicenseUrl(response.data.drivers_license);
+        }
+        } catch (error) {
+        console.error("Error fetching customer data", error);
+        }
+    };
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+   const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file (JPG, PNG, etc.).");
+        return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+        alert("File size should not exceed 5MB.");
+        return;
+        }
+        setForm({ ...form, drivers_license: file });
+        setLicensePreview(URL.createObjectURL(file));
+    }
+    };
+
+    const findChanges = () => {
+        const detectedChanges = [];
+        Object.keys(form).forEach((key) => {
+          if (key === "drivers_license") {
+            if (form[key] !== initialForm[key]) {
+              detectedChanges.push("Driver's License updated.");
+            }
+          } else if (form[key] !== initialForm[key]) {
+            detectedChanges.push(`${key.replace(/_/g, " ")}: ${initialForm[key]} → ${form[key]}`);
+          }
+        });
+        setChanges(detectedChanges);
+        setIsModalOpen(true);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        findChanges();
+      };
+
+      const confirmSubmit = async () => {
+        const formData = new FormData();
+        Object.keys(form).forEach((key) => {
+          if (form[key] !== "" && form[key] !== null) {
+            formData.append(key, form[key]);
+          }
+        });
+    
+        try {
+          await axios.put(`${API_URL}${id}/`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          alert("Customer updated successfully!");
+          navigate("/customers/list/");
+        } catch (error) {
+          console.error("Error updating customer", error);
+        } finally {
+          setIsModalOpen(false);
+        }
+      };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+                <h2 className="text-2xl font-semibold mb-4 text-center">Edit Customer</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Customer Details */}
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {["first_name", "last_name", "phone_number", "email", "national_id"].map((name) => (
+                                <div key={name}>
+                                    <label htmlFor={name} className="block text-gray-700 font-medium">{name.replace("_", " ").toUpperCase()}</label>
+                                    <input
+                                        type={name === "email" ? "email" : "text"}
+                                        id={name}
+                                        name={name}
+                                        value={form[name] || ""}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Driver's License Image Input */}
+                    <label className="block mt-4 mb-2">Update Driver's License (Optional):</label>
+                    <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="border p-2 rounded"
+                    />
+
+                    {/* Image Preview (New or Existing) */}
+                    <div className="mt-4">
+                    {licensePreview ? (
+                        <>
+                        <p className="text-gray-600">New License Preview:</p>
+                        <img
+                            src={licensePreview}
+                            alt="New Driver's License Preview"
+                            className="w-32 h-32 object-cover border rounded"
+                        />
+                        </>
+                    ) : currentLicenseUrl ? (
+                        <>
+                        <p className="text-gray-600">Current License:</p>
+                        <img
+                            src={currentLicenseUrl}
+                            alt="Existing Driver's License"
+                            className="w-32 h-32 object-cover border rounded"
+                        />
+                        </>
+                    ) : (
+                        <p className="text-gray-600">No driver's license uploaded yet.</p>
+                    )}
+                    </div>
+
+                    {/* Next of Kin 1 and 2 */}
+                    {[1, 2].map((kin) => (
+                        <div key={kin}>
+                            <h3 className="text-lg font-semibold mb-2">Next of Kin {kin}</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {["first_name", "last_name", "id_number", "phone"].map((field) => (
+                                    <div key={field}>
+                                        <label htmlFor={`next_of_kin${kin}_${field}`} className="block text-gray-700 font-medium">{field.replace("_", " ").toUpperCase()}</label>
+                                        <input
+                                            type="text"
+                                            id={`next_of_kin${kin}_${field}`}
+                                            name={`next_of_kin${kin}_${field}`}
+                                            value={form[`next_of_kin${kin}_${field}`] || ""}
+                                            onChange={handleChange}
+                                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Submit Button */}
+                    <div className="flex justify-end">
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Update Customer</button>
+                    </div>
+                </form>
+                {/* Confirmation Modal */}
+                {isModalOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                            <h3 className="text-lg font-semibold mb-4">Confirm Changes</h3>
+                            {changes.length > 0 ? (
+                            <ul className="list-disc pl-5 mb-4">
+                                {changes.map((change, index) => (
+                                <li key={index}>{change}</li>
+                                ))}
+                            </ul>
+                            ) : (
+                            <p>No changes detected.</p>
+                            )}
+                            <div className="flex justify-end space-x-4">
+                                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
+                                <button onClick={confirmSubmit}className="px-4 py-2 bg-green-600 text-white rounded">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

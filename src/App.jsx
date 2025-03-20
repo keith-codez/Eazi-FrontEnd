@@ -21,7 +21,7 @@ import Settings from "./pages/Settings";
 import AddVehicle from "./pages/fleet/AddVehicle";
 import EditVehicle from "./pages/fleet/EditVehicle";
 import AddCustomer from "./pages/customers/AddCustomer.jsx";
-
+import EditCustomer from "./pages/customers/EditCustomer.jsx";
 
 
 function App() {
@@ -71,6 +71,7 @@ function App() {
                 <Route path="/fleet/unavailability" element={<Unavailability />} />
                 <Route path="/customers/list" element={<CustomerList />} />
                 <Route path="/add-customer" element={<AddCustomer />} />
+                <Route path="/edit-customer/:id" element={<EditCustomer />} />
                 <Route path="/customers/bookings" element={<CustomerBookings />} />
                 <Route path="/suppliers/list" element={<SupplierList />} />
                 <Route path="/bookings/active" element={<ActiveBookings />} />

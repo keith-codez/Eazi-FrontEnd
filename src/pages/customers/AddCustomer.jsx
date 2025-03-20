@@ -27,6 +27,7 @@ export default function AddCustomer() {
         next_of_kin2_phone: "",
         last_booking_date: null,
     });
+    const [licensePreview, setLicensePreview] = useState(null);
 
     useEffect(() => {
         fetchCustomers();
@@ -45,17 +46,17 @@ export default function AddCustomer() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0]; // Get the first selected file
-        if (file) {
-            setLicenseFile({
-                name: file.name,
-                size: (file.size / 1024).toFixed(2), // Convert bytes to KB
-            });
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+          setForm({ ...form, drivers_license: file });
+          setLicensePreview(URL.createObjectURL(file));
         } else {
-            setLicenseFile(null);
+          setForm({ ...form, drivers_license: null });
+          setLicensePreview(null);
+          alert("Please select a valid image file (JPG, PNG, etc.).");
         }
-    };
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -123,25 +124,27 @@ export default function AddCustomer() {
                         </div>
                     </div>
 
-                    {/* Driver's License */}
-                    <div className="space-y-6">
-                        <h3 className="text-lg font-semibold">Driver's License</h3>
-                        
-                        {/* File Input */}
-                        <input 
-                            type="file" 
-                            accept="image/*,application/pdf" 
-                            onChange={handleFileChange} 
-                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
+                    {/* Driver's License Image */}
+                    <label className="block mt-4 mb-2">Upload Driver's License (Image Only):</label>
+                    <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="border p-2 rounded"
+                    />
+
+                    {/* Image Preview */}
+                    {licensePreview && (
+                    <div className="mt-4">
+                        <p className="text-gray-600">License Preview:</p>
+                        <img
+                        src={licensePreview}
+                        alt="Driver's License Preview"
+                        className="w-32 h-32 object-cover border rounded"
                         />
-                        
-                        {/* Display File Info */}
-                        {licenseFile && (
-                            <p className="text-sm text-gray-600 mt-2">
-                                <strong>File:</strong> {licenseFile.name} ({licenseFile.size} KB)
-                            </p>
-                        )}
                     </div>
+                    )}
+
 
 
                     <hr className="w-3/4 border-gray-300 my-6 mx-auto" />
