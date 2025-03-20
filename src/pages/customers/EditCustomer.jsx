@@ -8,6 +8,7 @@ export default function EditCustomer() {
     const { id } = useParams();
     const [licensePreview, setLicensePreview] = useState(null);
     const [currentLicenseUrl, setCurrentLicenseUrl] = useState(null);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [form, setForm] = useState({
         title: "MR",
         first_name: "",
@@ -29,6 +30,7 @@ export default function EditCustomer() {
     const [initialForm, setInitialForm] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [changes, setChanges] = useState([]);
+    const [modalImage, setModalImage] = useState(null);
 
     useEffect(() => {
         fetchCustomerData();
@@ -47,6 +49,21 @@ export default function EditCustomer() {
         console.error("Error fetching customer data", error);
         }
     };
+
+    const ImageModal = ({ imageSrc, onClose }) => (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="relative p-4">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-white text-3xl font-bold"
+            >
+            &times;
+        </button>
+            <img src={imageSrc} alt="Expanded Driver's License" className="max-w-full max-h-[90vh] rounded-lg" />
+          </div>
+        </div>
+      );
+      
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -86,34 +103,51 @@ export default function EditCustomer() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         findChanges();
-      };
-
-      const confirmSubmit = async () => {
+    };
+    
+    
+    const confirmSubmit = async () => {
         const formData = new FormData();
+      
         Object.keys(form).forEach((key) => {
-          if (form[key] !== "" && form[key] !== null) {
-            formData.append(key, form[key]);
-          }
+            if (key === "drivers_license") {
+                // ✅ Only add the file if it's a new upload
+                if (form[key] instanceof File) {
+                    formData.append(key, form[key]); 
+                }
+            } else if (form[key] !== null && form[key] !== undefined) {
+                formData.append(key, form[key]);
+            }
         });
     
         try {
-          await axios.put(`${API_URL}${id}/`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
-          alert("Customer updated successfully!");
-          navigate("/customers/list/");
+            await axios.put(`${API_URL}${id}/`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            alert("Customer updated successfully!");
+            navigate("/customers/list/");
         } catch (error) {
-          console.error("Error updating customer", error);
+            console.error("Error updating customer", error);
+            if (error.response) {
+                alert(`Error: ${JSON.stringify(error.response.data)}`);
+            }
         } finally {
-          setIsModalOpen(false);
+            setIsModalOpen(false);
         }
+    };
+
+    const handleImageClick = (imageSrc) => {
+        setModalImage(imageSrc);
+        setIsImageModalOpen(true);
       };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Edit Customer</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
                     {/* Customer Details */}
                     <div>
                         <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
@@ -148,25 +182,27 @@ export default function EditCustomer() {
                     <div className="mt-4">
                     {licensePreview ? (
                         <>
-                        <p className="text-gray-600">New License Preview:</p>
+                        <p className="text-gray-600">New License Preview (Click to Expand):</p>
                         <img
-                            src={licensePreview}
-                            alt="New Driver's License Preview"
-                            className="w-32 h-32 object-cover border rounded"
+                        src={licensePreview}
+                        alt="New Driver's License Preview"
+                        className="w-32 h-32 object-cover border rounded cursor-pointer"
+                        onClick={() => handleImageClick(licensePreview)}
                         />
-                        </>
+                    </>
                     ) : currentLicenseUrl ? (
-                        <>
-                        <p className="text-gray-600">Current License:</p>
+                    <>
+                        <p className="text-gray-600">Current License (Click to Expand):</p>
                         <img
-                            src={currentLicenseUrl}
-                            alt="Existing Driver's License"
-                            className="w-32 h-32 object-cover border rounded"
+                        src={currentLicenseUrl}
+                        alt="Existing Driver's License"
+                        className="w-32 h-32 object-cover border rounded cursor-pointer"
+                        onClick={() => handleImageClick(currentLicenseUrl)}
                         />
-                        </>
-                    ) : (
-                        <p className="text-gray-600">No driver's license uploaded yet.</p>
-                    )}
+                    </>
+                ) : (
+                <p className="text-gray-600">No driver's license uploaded yet.</p>
+                )}
                     </div>
 
                     {/* Next of Kin 1 and 2 */}
@@ -195,6 +231,39 @@ export default function EditCustomer() {
                     <div className="flex justify-end">
                         <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Update Customer</button>
                     </div>
+
+                    {/* Image Preview (New or Existing) */}
+                    <div className="mt-4">
+                    {licensePreview ? (
+                        <>
+                        <p className="text-gray-600">New License Preview (Click to Expand):</p>
+                        <img
+                            src={licensePreview}
+                            alt="New Driver's License Preview"
+                            className="w-32 h-32 object-cover border rounded cursor-pointer"
+                            onClick={() => handleImageClick(licensePreview)}
+                        />
+                        </>
+                    ) : currentLicenseUrl ? (
+                        <>
+                        <p className="text-gray-600">Current License (Click to Expand):</p>
+                        <img
+                            src={currentLicenseUrl}
+                            alt="Existing Driver's License"
+                            className="w-32 h-32 object-cover border rounded cursor-pointer"
+                            onClick={() => handleImageClick(currentLicenseUrl)}
+                        />
+                        </>
+                    ) : (
+                        <p className="text-gray-600">No driver's license uploaded yet.</p>
+                    )}
+                    </div>
+
+                    {/* Image Modal */}
+                    {isImageModalOpen && (
+                        <ImageModal imageSrc={modalImage} onClose={() => setIsImageModalOpen(false)} />
+                    )}
+
                 </form>
                 {/* Confirmation Modal */}
                 {isModalOpen && (
