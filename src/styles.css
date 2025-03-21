@@ -4,3 +4,16 @@ body {
     width: 100vw;
   }
   
+
+/* Prevent page scroll */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevent page scrolling */
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

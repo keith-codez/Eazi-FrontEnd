@@ -112,7 +112,7 @@ const EditVehicle = () => {
       <h2 className="text-2xl font-semibold mb-4">Edit Vehicle</h2>
       {/* Confirmation Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
             <h3 className="text-lg font-semibold mb-4">Confirm Changes</h3>
             <p className="text-gray-700">Review the details before updating:</p>
@@ -181,7 +181,7 @@ const EditVehicle = () => {
 
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
             <h3 className="text-lg font-semibold mb-4 text-red-600">Confirm Delete</h3>
             <p className="text-gray-700">Are you sure you want to delete this vehicle? This action cannot be undone.</p>

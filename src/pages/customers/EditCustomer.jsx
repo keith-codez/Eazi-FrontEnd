@@ -9,6 +9,7 @@ export default function EditCustomer() {
     const [licensePreview, setLicensePreview] = useState(null);
     const [currentLicenseUrl, setCurrentLicenseUrl] = useState(null);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [form, setForm] = useState({
         title: "MR",
         first_name: "",
@@ -143,10 +144,43 @@ export default function EditCustomer() {
         setIsImageModalOpen(true);
       };
 
+      const handleDeleteCustomer = async () => {
+        try {
+          await axios.delete(`http://127.0.0.1:8000/api/staff/customers/${id}/`);
+          setIsDeleteModalOpen(false); // Close modal
+          navigate("/customers/list"); // Redirect to vehicle list after deletion
+        } catch (err) {
+          console.error("Error deleting customer:", err);
+        }
+      };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Edit Customer</h2>
+                 {/* Delete Confirmation Modal */}
+                {isDeleteModalOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
+                            <h3 className="text-lg font-semibold mb-4 text-red-600">Confirm Delete</h3>
+                            <p className="text-gray-700">Are you sure you want to delete this customer? This action cannot be undone.</p>
+                            <div className="mt-4 flex justify-end space-x-4">
+                            <button
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDeleteCustomer}
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                                Delete
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
                     {/* Customer Details */}
                     <div>
@@ -227,47 +261,38 @@ export default function EditCustomer() {
                         </div>
                     ))}
 
-                    {/* Submit Button */}
-                    <div className="flex justify-end">
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Update Customer</button>
+                    <div className="md:col-span-2 flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
+                        <div className="flex space-x-4 w-full md:w-auto">
+                            <button
+                            type="button"
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full md:w-auto"
+                            >
+                            Delete Customer
+                            </button>
+
+                            <button
+                            type="button"
+                            onClick={() => navigate("/customers/list")}
+                            className="bg-gray-500 text-white px-4 py-2 rounded-lg w-full md:w-auto"
+                            >
+                            Cancel
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto"
+                        >
+                            Update Vehicle
+                        </button>
                     </div>
 
-                    {/* Image Preview (New or Existing) */}
-                    <div className="mt-4">
-                    {licensePreview ? (
-                        <>
-                        <p className="text-gray-600">New License Preview (Click to Expand):</p>
-                        <img
-                            src={licensePreview}
-                            alt="New Driver's License Preview"
-                            className="w-32 h-32 object-cover border rounded cursor-pointer"
-                            onClick={() => handleImageClick(licensePreview)}
-                        />
-                        </>
-                    ) : currentLicenseUrl ? (
-                        <>
-                        <p className="text-gray-600">Current License (Click to Expand):</p>
-                        <img
-                            src={currentLicenseUrl}
-                            alt="Existing Driver's License"
-                            className="w-32 h-32 object-cover border rounded cursor-pointer"
-                            onClick={() => handleImageClick(currentLicenseUrl)}
-                        />
-                        </>
-                    ) : (
-                        <p className="text-gray-600">No driver's license uploaded yet.</p>
-                    )}
-                    </div>
-
-                    {/* Image Modal */}
-                    {isImageModalOpen && (
-                        <ImageModal imageSrc={modalImage} onClose={() => setIsImageModalOpen(false)} />
-                    )}
 
                 </form>
                 {/* Confirmation Modal */}
                 {isModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
                             <h3 className="text-lg font-semibold mb-4">Confirm Changes</h3>
                             {changes.length > 0 ? (
