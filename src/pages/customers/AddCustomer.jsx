@@ -83,8 +83,26 @@ export default function AddCustomer() {
     
     // Function to reset the form for adding another customer
     const addAnotherCustomer = () => {
-        setForm({ firstName: "", lastName: "", phone: "", email: "", driverLicense: null });
+        setForm({
+            title: "MR",
+            first_name: "",
+            last_name: "",
+            phone_number: "",
+            email: "",
+            national_id: "",
+            drivers_license: null,
+            next_of_kin1_first_name: "",
+            next_of_kin1_last_name: "",
+            next_of_kin1_id_number: "",
+            next_of_kin1_phone: "",
+            next_of_kin2_first_name: "",
+            next_of_kin2_last_name: "",
+            next_of_kin2_id_number: "",
+            next_of_kin2_phone: "",
+            last_booking_date: null,
+        });
         setIsSubmitted(false);
+        setLicensePreview(null);  // Reset the license preview as well
     };
     
     // Function to navigate to the customers list

@@ -49,7 +49,7 @@ const VehicleList = () => {
   if (loading) return <p className="text-center text-gray-500">Loading vehicles...</p>;
 
   return (
-    <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-16 md:mt-0">
+    <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-10 md:mt-0">
       {/* Search and Filter */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
         <h2 className="text-2xl font-semibold">Vehicle List</h2>

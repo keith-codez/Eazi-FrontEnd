@@ -50,20 +50,6 @@ export default function EditCustomer() {
         console.error("Error fetching customer data", error);
         }
     };
-
-    const ImageModal = ({ imageSrc, onClose }) => (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-          <div className="relative p-4">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-white text-3xl font-bold"
-            >
-            &times;
-        </button>
-            <img src={imageSrc} alt="Expanded Driver's License" className="max-w-full max-h-[90vh] rounded-lg" />
-          </div>
-        </div>
-      );
       
 
     const handleChange = (e) => {
@@ -144,6 +130,20 @@ export default function EditCustomer() {
         setIsImageModalOpen(true);
       };
 
+      const ImageModal = ({ imageSrc, onClose }) => (
+        <div className="min-h-screen fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
+          <div className="relative p-2">
+            <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-white text-sm font-semibold bg-gray-800 bg-opacity-70 rounded-full px-4 py-2 hover:bg-gray-600"
+            >
+            Close
+            </button>
+            <img src={imageSrc} alt="Expanded Driver's License" className="max-w-full max-h-[90vh] rounded-lg" />
+          </div>
+        </div>
+      );
+
       const handleDeleteCustomer = async () => {
         try {
           await axios.delete(`http://127.0.0.1:8000/api/staff/customers/${id}/`);
@@ -153,12 +153,16 @@ export default function EditCustomer() {
           console.error("Error deleting customer:", err);
         }
       };
+      const goToCustomerList = () => {
+        navigate('/customers/list/'); // Change to the correct customer list route
+    };
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Edit Customer</h2>
-                 {/* Delete Confirmation Modal */}
+                {/* Delete Confirmation Modal */}
                 {isDeleteModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
@@ -237,56 +241,67 @@ export default function EditCustomer() {
                 ) : (
                 <p className="text-gray-600">No driver's license uploaded yet.</p>
                 )}
+                </div>
+
+                {/* Render Image Modal if open */}
+                {isImageModalOpen && (
+                <ImageModal
+                    imageSrc={modalImage}
+                    onClose={() => setIsImageModalOpen(false)}
+                />
+                )}
+
+
+
+
+                {/* Next of Kin 1 and 2 */}
+                {[1, 2].map((kin) => (
+                    <div key={kin}>
+                        <h3 className="text-lg font-semibold mb-2">Next of Kin {kin}</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {["first_name", "last_name", "id_number", "phone"].map((field) => (
+                                <div key={field}>
+                                    <label htmlFor={`next_of_kin${kin}_${field}`} className="block text-gray-700 font-medium">{field.replace("_", " ").toUpperCase()}</label>
+                                    <input
+                                        type="text"
+                                        id={`next_of_kin${kin}_${field}`}
+                                        name={`next_of_kin${kin}_${field}`}
+                                        value={form[`next_of_kin${kin}_${field}`] || ""}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
+                ))}
 
-                    {/* Next of Kin 1 and 2 */}
-                    {[1, 2].map((kin) => (
-                        <div key={kin}>
-                            <h3 className="text-lg font-semibold mb-2">Next of Kin {kin}</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {["first_name", "last_name", "id_number", "phone"].map((field) => (
-                                    <div key={field}>
-                                        <label htmlFor={`next_of_kin${kin}_${field}`} className="block text-gray-700 font-medium">{field.replace("_", " ").toUpperCase()}</label>
-                                        <input
-                                            type="text"
-                                            id={`next_of_kin${kin}_${field}`}
-                                            name={`next_of_kin${kin}_${field}`}
-                                            value={form[`next_of_kin${kin}_${field}`] || ""}
-                                            onChange={handleChange}
-                                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-
-                    <div className="md:col-span-2 flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
-                        <div className="flex space-x-4 w-full md:w-auto">
-                            <button
-                            type="button"
-                            onClick={() => setIsDeleteModalOpen(true)}
-                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full md:w-auto"
-                            >
-                            Delete Customer
-                            </button>
-
-                            <button
-                            type="button"
-                            onClick={() => navigate("/customers/list")}
-                            className="bg-gray-500 text-white px-4 py-2 rounded-lg w-full md:w-auto"
-                            >
-                            Cancel
-                            </button>
-                        </div>
+                <div className="md:col-span-2 flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="flex space-x-4 w-full md:w-auto">
+                        <button
+                        type="button"
+                        onClick={() => setIsDeleteModalOpen(true)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full md:w-auto"
+                        >
+                        Delete Customer
+                        </button>
 
                         <button
-                            type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto"
+                        type="button"
+                        onClick={() => navigate("/customers/list")}
+                        className="bg-gray-500 text-white px-4 py-2 rounded-lg w-full md:w-auto"
                         >
-                            Update Vehicle
+                        Cancel
                         </button>
                     </div>
+
+                    <button
+                        type="submit"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto"
+                    >
+                        Update Vehicle
+                    </button>
+                </div>
 
 
                 </form>
@@ -305,8 +320,8 @@ export default function EditCustomer() {
                             <p>No changes detected.</p>
                             )}
                             <div className="flex justify-end space-x-4">
-                                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
-                                <button onClick={confirmSubmit}className="px-4 py-2 bg-green-600 text-white rounded">Confirm</button>
+                                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded">Continue Editing</button>
+                                <button onClick={goToCustomerList}className="px-4 py-2 bg-green-600 text-white rounded">Customer List</button>
                             </div>
                         </div>
                     </div>
