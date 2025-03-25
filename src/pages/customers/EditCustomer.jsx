@@ -17,6 +17,10 @@ export default function EditCustomer() {
         phone_number: "",
         email: "",
         national_id: "",
+        street_address: "",
+        address_line2: "",
+        city: "",
+        country: "",
         drivers_license: null,
         next_of_kin1_first_name: "",
         next_of_kin1_last_name: "",
@@ -135,7 +139,7 @@ export default function EditCustomer() {
           <div className="relative p-2">
             <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white text-sm font-semibold bg-gray-800 bg-opacity-70 rounded-full px-4 py-2 hover:bg-gray-600"
+            className="absolute cursor-pointer top-4 right-4 text-white text-sm font-semibold bg-gray-800 bg-opacity-70 rounded-full px-4 py-2 hover:bg-gray-600"
             >
             Close
             </button>
@@ -157,6 +161,13 @@ export default function EditCustomer() {
         navigate('/customers/list/'); // Change to the correct customer list route
     };
 
+    const toCamelCase = (str) => {
+        return str
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      };
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
@@ -171,13 +182,13 @@ export default function EditCustomer() {
                             <div className="mt-4 flex justify-end space-x-4">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
-                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 cursor-pointer"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleDeleteCustomer}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
                             >
                                 Delete
                             </button>
@@ -190,19 +201,29 @@ export default function EditCustomer() {
                     <div>
                         <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {["first_name", "last_name", "phone_number", "email", "national_id"].map((name) => (
-                                <div key={name}>
-                                    <label htmlFor={name} className="block text-gray-700 font-medium">{name.replace("_", " ").toUpperCase()}</label>
-                                    <input
-                                        type={name === "email" ? "email" : "text"}
-                                        id={name}
-                                        name={name}
-                                        value={form[name] || ""}
-                                        onChange={handleChange}
-                                        required
-                                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
+                        {[
+                            { name: "first_name", label: "First Name" },
+                            { name: "last_name", label: "Last Name" },
+                            { name: "phone_number", label: "Phone Number" },
+                            { name: "email", label: "Email", type: "email" },
+                            { name: "national_id", label: "National ID" },
+                            { name: "street_address", label: "Street Address" },
+                            { name: "address_line2", label: "Apartment, Suite, etc. (Optional)", required: false },
+                            { name: "city", label: "City" },
+                            { name: "country", label: "Country" },
+                            ].map(({ name, label, type = "text" }) => (
+                            <div key={name}>
+                                <label htmlFor={name} className="block text-gray-700 font-medium">{label}</label>
+                                <input
+                                type={type}
+                                id={name}
+                                name={name}
+                                value={form[name]}
+                                onChange={handleChange}
+                                required={name !== "address_line2"}
+                                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
+                                />
+                            </div>
                             ))}
                         </div>
                     </div>
@@ -230,7 +251,7 @@ export default function EditCustomer() {
                     </>
                     ) : currentLicenseUrl ? (
                     <>
-                        <p className="text-gray-600">Current License (Click to Expand):</p>
+                        <p className="text-gray-600">Current License (Click to Expand)</p>
                         <img
                         src={currentLicenseUrl}
                         alt="Existing Driver's License"
@@ -261,7 +282,7 @@ export default function EditCustomer() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {["first_name", "last_name", "id_number", "phone"].map((field) => (
                                 <div key={field}>
-                                    <label htmlFor={`next_of_kin${kin}_${field}`} className="block text-gray-700 font-medium">{field.replace("_", " ").toUpperCase()}</label>
+                                    <label htmlFor={`next_of_kin${kin}_${field}`} className="block text-gray-700 font-medium">{toCamelCase(field)}</label>
                                     <input
                                         type="text"
                                         id={`next_of_kin${kin}_${field}`}
@@ -281,7 +302,7 @@ export default function EditCustomer() {
                         <button
                         type="button"
                         onClick={() => setIsDeleteModalOpen(true)}
-                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full md:w-auto"
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full md:w-auto cursor-pointer"
                         >
                         Delete Customer
                         </button>
@@ -289,7 +310,7 @@ export default function EditCustomer() {
                         <button
                         type="button"
                         onClick={() => navigate("/customers/list")}
-                        className="bg-gray-500 text-white px-4 py-2 rounded-lg w-full md:w-auto"
+                        className="bg-gray-500 text-white px-4 py-2 rounded-lg w-full md:w-auto cursor-pointer"
                         >
                         Cancel
                         </button>
@@ -297,9 +318,9 @@ export default function EditCustomer() {
 
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto cursor-pointer"
                     >
-                        Update Vehicle
+                        Update Customer
                     </button>
                 </div>
 
@@ -309,7 +330,7 @@ export default function EditCustomer() {
                 {isModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                            <h3 className="text-lg font-semibold mb-4">Confirm Changes</h3>
+                            <h3 className="text-lg font-semibold mb-4 cursor-pointer">Confirm Changes</h3>
                             {changes.length > 0 ? (
                             <ul className="list-disc pl-5 mb-4">
                                 {changes.map((change, index) => (
@@ -320,8 +341,8 @@ export default function EditCustomer() {
                             <p>No changes detected.</p>
                             )}
                             <div className="flex justify-end space-x-4">
-                                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded">Continue Editing</button>
-                                <button onClick={goToCustomerList}className="px-4 py-2 bg-green-600 text-white rounded">Customer List</button>
+                                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded cursor-pointer">Continue Editing</button>
+                                <button onClick={goToCustomerList}className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer">Customer List</button>
                             </div>
                         </div>
                     </div>

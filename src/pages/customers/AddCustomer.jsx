@@ -16,6 +16,10 @@ export default function AddCustomer() {
         phone_number: "",
         email: "",
         national_id: "",
+        street_address: "",
+        address_line2: "",
+        city: "",
+        country: "",
         drivers_license: null,
         next_of_kin1_first_name: "",
         next_of_kin1_last_name: "",
@@ -90,6 +94,10 @@ export default function AddCustomer() {
             phone_number: "",
             email: "",
             national_id: "",
+            street_address: "",
+            address_line2: "",
+            city: "",
+            country: "",
             drivers_license: null,
             next_of_kin1_first_name: "",
             next_of_kin1_last_name: "",
@@ -125,6 +133,10 @@ export default function AddCustomer() {
                                 { name: "phone_number", label: "Phone Number" },
                                 { name: "email", label: "Email", type: "email" },
                                 { name: "national_id", label: "National ID" },
+                                { name: "street_address", label: "Street Address" },
+                                { name: "address_line2", label: "Address Line 2", required: false },
+                                { name: "city", label: "City" },
+                                { name: "country", label: "Country" },
                             ].map(({ name, label, type = "text" }) => (
                                 <div key={name}>
                                     <label htmlFor={name} className="block text-gray-700 font-medium">{label}</label>
@@ -134,7 +146,7 @@ export default function AddCustomer() {
                                         name={name}
                                         value={form[name]}
                                         onChange={handleChange}
-                                        required
+                                        required={name !== "address_line2"}
                                         className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-500 transition"
                                     />
                                 </div>

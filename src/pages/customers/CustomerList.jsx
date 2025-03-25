@@ -86,39 +86,42 @@ function CustomerList() {
 
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 sm:py-4 md:mt-0 mt-5 overflow-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-1 sticky top-0 bg-white z-20"> 
-        <h2 className="text-xl font-bold mb-2 sm:mb-0">Customers</h2>
-        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 mb-4 sm:mb-0"></div>
-          <div className="hidden md:flex items-center gap-4 mb-4">
-            <input
-              type="text"
-              placeholder="Search by name, email, phone, or ID..."
-              className="border border-gray-300 px-4 py-2 rounded-lg w-80 mb-2"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div> 
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-3">
+        {/* Header */}
+        <h2 className="text-xl font-bold">Customers</h2>
+
+        {/* Search Input and Button */}
+        <div className="hidden md:flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search by name, email, phone, or ID..."
+            className="border border-gray-300 px-4 py-2 rounded-lg w-80"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          
           <button
             onClick={() => navigate('/add-customer')}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 hidden md:block"
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 hidden md:block cursor-pointer"
           >
             Add Customer
           </button>
         </div>
+      </div>
 
       {/* Table for Desktop */}
-      <div className="bg-white rounded-sm shadow-md py-0 overflow-x-auto hidden md:block" style={{ maxHeight: '500px' }}>
+      <div className="bg-white rounded-sm shadow-md py-0 mt-5 overflow-x-auto hidden md:block" style={{ height: 'calc(100vh - 100px)'   }}>
         <table className="w-full min-w-[600px]">
           <thead className="sticky top-0 bg-blue-100 z-10">
-            <tr className="text-gray-600 font-semibold text-sm bg-blue-100">
+            <tr className="text-gray-600 font-bold text-lg bg-blue-100">
               <th
-                className="p-3 text-left cursor-pointer"
+                className="p-3 text-left cursor-pointer hover:text-black"
                 onClick={() => handleSort("name")}
               >
                 Name {sortConfig.key === "name" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
               </th>
               <th
-                className="p-3 text-left cursor-pointer"
+                className="p-3 text-left cursor-pointer hover:text-black"
                 onClick={() => handleSort("email")}
               >
                 Email {sortConfig.key === "email" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
@@ -127,7 +130,7 @@ function CustomerList() {
               <th className="p-3 text-left">Phone</th>
               <th className="p-3 text-left">National ID</th>
               <th
-                className="p-3 text-left cursor-pointer"
+                className="p-3 text-left cursor-pointer hover:text-black"
                 onClick={() => handleSort("created_at")}
               >
                 Date Added {sortConfig.key === "created_at" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
@@ -135,7 +138,7 @@ function CustomerList() {
               <th className="p-3 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody className="overflow-y-auto" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          <tbody className="overflow-y-auto" style={{ overflowY: 'auto' }}>
             {filteredCustomers.map((customer) => (
               <tr key={customer.id} className="even:bg-gray-50 hover:bg-gray-100">
                 <td className="p-3">{customer.first_name} {customer.last_name} </td>
@@ -145,20 +148,20 @@ function CustomerList() {
                 <td className="p-3"> {new Date(customer.created_at).toLocaleDateString('en-GB')}</td>
                 <td className="p-3 text-center relative">
                 <button onClick={() => toggleMenu(customer.id)} className="p-2">
-                  <MoreVertical className="w-5 h-5 text-gray-600 menu-btn" />
+                  <MoreVertical className="w-7 h-7 text-gray-500 menu-btn hover:text-black cursor-pointer" />
                   </button>
 
                   {menuOpen === customer.id && (
                     <div className="absolute right-18 top-2 mb-2 w-32 bg-green-100 border rounded-sm shadow-lg z-10 dropdown">
                       <button
                         onClick={() => handleEdit(customer.id)}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200"
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200 cursor-pointer"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleEdit(customer.id)}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200"
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200 cursor-pointer"
                       >
                         View
                       </button>
@@ -185,7 +188,7 @@ function CustomerList() {
           <select
             id="sort"
             onChange={(e) => handleSort(e.target.value)}
-            className="w-50 p-2 border border-gray-300 rounded-lg"
+            className="w-50 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
           >
             <option value="">Sort By</option>
             <option value="name">Name</option>
@@ -194,20 +197,20 @@ function CustomerList() {
           </select>
           <button
             onClick={() => navigate('/add-customer')}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 w-full"
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 w-full cursor-pointer shadow-lg"
           >
             Add Customer
           </button>
         </div>
     
         {filteredCustomers.map((customer) => (
-          <div key={customer.id} className="bg-white shadow-md rounded-xl p-4 mb-4 relative">
+          <div key={customer.id} className="bg-white shadow-xl rounded-xl p-4 mb-4 relative">
             {/* 3 Dots Menu Button */}
             <button
               onClick={() => toggleMenu(customer.id)}
-              className="absolute top-4 right-4 p-2 menu-btn"
+              className="absolute top-3 right-5 p-2 menu-btn"
             >
-              <MoreVertical className="w-5 h-5 text-gray-600 rotate-90" />
+              <MoreVertical className="w-7 h-7 text-blue-600 rotate-90 hover:text-blue-400 cursor-pointer" />
             </button>
 
             {/* Dropdown Menu */}
@@ -215,7 +218,7 @@ function CustomerList() {
               <div className="absolute top-12 right-4 w-32 bg-white border rounded-lg shadow-lg z-10 dropdown">
                 <button
                   onClick={() => handleEdit(customer.id)}
-                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
                 >
                   Edit
                 </button>
@@ -223,29 +226,36 @@ function CustomerList() {
             )}
 
             {/* Customer Details */}
-            <div className="mt-4 space-y-2"> 
+            <div className="mt-4 p-4 space-y-2"> 
               <div className="flex justify-between mt-5">
-                <span className="font-semibold text-gray-700">First Name:</span>
-                <span className="text-gray-700">{customer.first_name}</span>
+                <span className="font-semibold text-gray-700">Name</span>
+                <span className="text-gray-700">{customer.first_name} {customer.last_name} </span>
               </div>
               <div className="border-t-[0.5px] border-gray-300" />
 
               <div className="flex justify-between">
-                <span className="font-semibold text-gray-700">Last Name:</span>
-                <span className="text-gray-700">{customer.last_name}</span>
+                <span className="font-semibold text-gray-700">Email</span>
+                <span className="text-gray-700">{customer.email}</span>
               </div>
               <div className="border-t-[0.5px] border-gray-300" />
 
               <div className="flex justify-between">
-                <span className="font-semibold text-gray-700">Phone:</span>
+                <span className="font-semibold text-gray-700">Phone</span>
                 <span className="text-gray-700">{customer.phone_number}</span>
               </div>
               <div className="border-t-[0.5px] border-gray-300" />
 
               <div className="flex justify-between">
-                <span className="font-semibold text-gray-700">Last Booking:</span>
-                <span className="text-gray-700">{customer.last_booking_date || "N/A"}</span>
+                <span className="font-semibold text-gray-700">Date Added</span>
+                <span className="text-gray-700">{new Date(customer.created_at).toLocaleDateString('en-GB')}</span>
               </div>
+              {/* View Details Button */}
+              <button
+                onClick={() => navigate(`/customer-details/${customer.id}`)}
+                className="mt-4 bg-white border border-blue-500 bored text-blue-500 py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white w-full cursor-pointer"
+              >
+                View Details
+              </button>
             </div>
           </div>
         ))}
