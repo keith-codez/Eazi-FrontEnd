@@ -22,7 +22,7 @@ import AddVehicle from "./pages/fleet/AddVehicle";
 import EditVehicle from "./pages/fleet/EditVehicle";
 import AddCustomer from "./pages/customers/AddCustomer.jsx";
 import EditCustomer from "./pages/customers/EditCustomer.jsx";
-
+import CustomerDetails from "./pages/customers/CustomerDetails.jsx";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
@@ -70,6 +70,7 @@ function App() {
                 <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
                 <Route path="/fleet/unavailability" element={<Unavailability />} />
                 <Route path="/customers/list" element={<CustomerList />} />
+                <Route path="/details/:id" element={<CustomerDetails />} />
                 <Route path="/add-customer" element={<AddCustomer />} />
                 <Route path="/edit-customer/:id" element={<EditCustomer />} />
                 <Route path="/customers/bookings" element={<CustomerBookings />} />

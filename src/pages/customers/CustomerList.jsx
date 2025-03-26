@@ -31,6 +31,11 @@ function CustomerList() {
     navigate(`/edit-customer/${id}`);
   };
 
+  const handleView = (id) => {
+    navigate(`/details/${id}`);
+  };
+
+
   const toggleMenu = (id) => {
     setMenuOpen(menuOpen === id ? null : id);
   };
@@ -160,7 +165,7 @@ function CustomerList() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleEdit(customer.id)}
+                        onClick={() => navigate(`/details/${customer.id}`)}
                         className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200 cursor-pointer"
                       >
                         View
