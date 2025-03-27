@@ -30,11 +30,10 @@ const CustomerDetails = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <button onClick={() => navigate('/customers')} className="text-blue-500 mb-4">&larr; Back to Customers</button>
-
-      {/* Customer Info Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div className="container mx-auto p-6 flex flex-col md:flex-row gap-6">
+    {/* Left Section - Customer Details */}
+    <div className="md:w-1/3 flex flex-col gap-6">
+      <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-4">Customer Details</h2>
         <p><strong>Title:</strong> {customer.title}</p>
         <p><strong>Name:</strong> {customer.first_name} {customer.last_name}</p>
@@ -45,38 +44,69 @@ const CustomerDetails = () => {
         <p><strong>Created At:</strong> {new Date(customer.created_at).toLocaleDateString('en-GB')}</p>
         <p><strong>Last Booking Date:</strong> {customer.last_booking_date ? new Date(customer.last_booking_date).toLocaleDateString('en-GB') : 'N/A'}</p>
       </div>
+    </div>
 
-      {/* Driver's License Section */}
-      {customer.drivers_license && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-2xl font-bold mb-4">Driver's License</h2>
-          <img src={customer.drivers_license} alt="Driver's License" className="w-full max-w-sm rounded-md" />
+    {/* Right Section - Analytics, Financials, and Booking History Table */}
+    <div className="md:w-2/3 flex flex-col gap-6">
+
+    {/* Customer Analytics with 3 columns */}
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4">Customer Analytics</h2>
+
+      {/* Three-column layout */}
+      <div className="grid grid-cols-3 gap-4">
+        {/* Total Bookings */}
+        <div className="bg-gray-100 p-4 rounded-lg text-center">
+          <h3 className="text-lg font-semibold">Total Bookings</h3>
+          <p className="text-2xl font-bold">{customer.total_bookings || 0}</p>
         </div>
-      )}
 
-      {/* Next of Kin Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-2xl font-bold mb-4">Next of Kin</h2>
-        <h3 className="font-semibold">Primary Next of Kin</h3>
-        <p>{customer.next_of_kin1_first_name} {customer.next_of_kin1_last_name} ({customer.next_of_kin1_phone})</p>
-        <p>ID: {customer.next_of_kin1_id_number}</p>
+        {/* Total Spent */}
+        <div className="bg-gray-100 p-4 rounded-lg text-center">
+          <h3 className="text-lg font-semibold">Total Spent</h3>
+          <p className="text-2xl font-bold">${customer.total_spent?.toFixed(2) || '0.00'}</p>
+        </div>
 
-        {customer.next_of_kin2_first_name && (
-          <>
-            <h3 className="font-semibold mt-4">Secondary Next of Kin</h3>
-            <p>{customer.next_of_kin2_first_name} {customer.next_of_kin2_last_name} ({customer.next_of_kin2_phone})</p>
-            <p>ID: {customer.next_of_kin2_id_number}</p>
-          </>
-        )}
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex gap-4">
-        <button onClick={() => navigate(`/edit-customer/${customer.id}`)} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Edit Customer</button>
-        <button onClick={() => alert('Deleting customer...')} className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">Delete Customer</button>
+        {/* Total Mileage */}
+        <div className="bg-gray-100 p-4 rounded-lg text-center">
+          <h3 className="text-lg font-semibold">Total Mileage</h3>
+          <p className="text-2xl font-bold">{customer.total_mileage || 0} km</p>
+        </div>
       </div>
     </div>
-  );
+
+      {/* Booking History Table */}
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-4">Booking History</h2>
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 px-4 py-2">Booking ID</th>
+              <th className="border border-gray-300 px-4 py-2">Date</th>
+              <th className="border border-gray-300 px-4 py-2">Amount</th>
+              <th className="border border-gray-300 px-4 py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Placeholder for booking data */}
+            <tr>
+              <td className="border border-gray-300 px-4 py-2">#12345</td>
+              <td className="border border-gray-300 px-4 py-2">2025-03-20</td>
+              <td className="border border-gray-300 px-4 py-2">$100</td>
+              <td className="border border-gray-300 px-4 py-2">Completed</td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 px-4 py-2">#12346</td>
+              <td className="border border-gray-300 px-4 py-2">2025-03-21</td>
+              <td className="border border-gray-300 px-4 py-2">$75</td>
+              <td className="border border-gray-300 px-4 py-2">Pending</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+      );
 };
 
 export default CustomerDetails;
