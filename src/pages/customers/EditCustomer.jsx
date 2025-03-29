@@ -10,6 +10,7 @@ export default function EditCustomer() {
     const [currentLicenseUrl, setCurrentLicenseUrl] = useState(null);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteLicense, setDeleteLicense] = useState(false);
     const [form, setForm] = useState({
         title: "MR",
         first_name: "",
@@ -21,7 +22,7 @@ export default function EditCustomer() {
         address_line2: "",
         city: "",
         country: "",
-        drivers_license: null,
+        drivers_license: "",
         next_of_kin1_first_name: "",
         next_of_kin1_last_name: "",
         next_of_kin1_id_number: "",
@@ -105,6 +106,8 @@ export default function EditCustomer() {
                 // ✅ Only add the file if it's a new upload
                 if (form[key] instanceof File) {
                     formData.append(key, form[key]); 
+                } else if (deleteLicense) {
+                    formData.append("drivers_license", "DELETE"); // ✅ Tell backend to delete
                 }
             } else if (form[key] !== null && form[key] !== undefined) {
                 formData.append(key, form[key]);
@@ -167,6 +170,12 @@ export default function EditCustomer() {
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ');
       };
+
+      const handleDeleteImage = () => {
+        setLicensePreview(null); // Clear new image preview
+        setCurrentLicenseUrl(null); // Clear existing image URL
+        setDeleteLicense(true);  // ✅ Mark image for deletion
+    };
 
 
     return (
@@ -237,31 +246,52 @@ export default function EditCustomer() {
                     className="border p-2 rounded"
                     />
 
+
                     {/* Image Preview (New or Existing) */}
                     <div className="mt-4">
-                    {licensePreview ? (
+                        {licensePreview ? (
+                            <>
+                            <p className="text-gray-600">New License Preview (Click to Expand):</p>
+                            <div className="relative inline-block">
+                                <img
+                                src={licensePreview}
+                                alt="New Driver's License Preview"
+                                className="w-32 h-32 object-cover border rounded cursor-pointer"
+                                onClick={() => handleImageClick(licensePreview)}
+                                />
+                                {/* Delete Button */}
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteImage}
+                                    className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                                >
+                                    X
+                                </button>
+                            </div>
+                        </>
+                        ) : currentLicenseUrl ? (
                         <>
-                        <p className="text-gray-600">New License Preview (Click to Expand):</p>
-                        <img
-                        src={licensePreview}
-                        alt="New Driver's License Preview"
-                        className="w-32 h-32 object-cover border rounded cursor-pointer"
-                        onClick={() => handleImageClick(licensePreview)}
-                        />
-                    </>
-                    ) : currentLicenseUrl ? (
-                    <>
-                        <p className="text-gray-600">Current License (Click to Expand)</p>
-                        <img
-                        src={currentLicenseUrl}
-                        alt="Existing Driver's License"
-                        className="w-32 h-32 object-cover border rounded cursor-pointer"
-                        onClick={() => handleImageClick(currentLicenseUrl)}
-                        />
-                    </>
-                ) : (
-                <p className="text-gray-600">No driver's license uploaded yet.</p>
-                )}
+                            <p className="text-gray-600">Current License (Click to Expand)</p>
+                            <div className="relative inline-block">
+                                <img
+                                src={currentLicenseUrl}
+                                alt="Existing Driver's License"
+                                className="w-32 h-32 object-cover border rounded cursor-pointer"
+                                onClick={() => handleImageClick(currentLicenseUrl)}
+                                />
+                                {/* Delete Button */}
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteImage}
+                                    className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                                >
+                                    X
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                    <p className="text-gray-600">No driver's license uploaded yet.</p>
+                    )}
                 </div>
 
                 {/* Render Image Modal if open */}
@@ -318,6 +348,7 @@ export default function EditCustomer() {
 
                     <button
                         type="submit"
+                        onClick={() => confirmSubmit()}
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto cursor-pointer"
                     >
                         Update Customer

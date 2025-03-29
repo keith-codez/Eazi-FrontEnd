@@ -30,7 +30,7 @@ const CustomerDetails = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 flex flex-col md:flex-row gap-6">
+    <div className="container mx-auto p-6 flex flex-col md:flex-row gap-6 mt-5 "style={{ height: 'calc(100vh - 100px)'   }}>
     {/* Left Section - Customer Details */}
     <div className="md:w-1/3 flex flex-col gap-6">
       <div className="bg-white p-6 rounded-lg shadow-md">
@@ -40,9 +40,14 @@ const CustomerDetails = () => {
         <p><strong>Phone Number:</strong> {customer.phone_number}</p>
         <p><strong>Email:</strong> {customer.email || 'N/A'}</p>
         <p><strong>National ID:</strong> {customer.national_id}</p>
-        <p><strong>Address:</strong> {customer.street_address}, {customer.address_line2 || ''}, {customer.city}, {customer.country}</p>
-        <p><strong>Created At:</strong> {new Date(customer.created_at).toLocaleDateString('en-GB')}</p>
+        <p>
+          <strong>Address:</strong> {customer.street_address}
+          {customer.address_line2 ? `, ${customer.address_line2}` : ''}, {customer.city}, {customer.country}
+        </p>
+        <p><strong>Created On:</strong> {new Date(customer.created_at).toLocaleDateString('en-GB')}</p>
         <p><strong>Last Booking Date:</strong> {customer.last_booking_date ? new Date(customer.last_booking_date).toLocaleDateString('en-GB') : 'N/A'}</p>
+        <p><strong>Drivers Licence</strong></p>
+        <img src={customer.drivers_license} alt="Drivers Licence" className="w-full h-auto" />
       </div>
     </div>
 
