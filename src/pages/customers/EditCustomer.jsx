@@ -6,8 +6,8 @@ const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
 
 export default function EditCustomer() {
     const { id } = useParams();
-    const [licensePreview, setLicensePreview] = useState(null);
-    const [currentLicenseUrl, setCurrentLicenseUrl] = useState(null);
+    const [licensePreview, setLicensePreview] = useState("");
+    const [currentLicenseUrl, setCurrentLicenseUrl] = useState("");
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteLicense, setDeleteLicense] = useState(false);
@@ -36,7 +36,7 @@ export default function EditCustomer() {
     const [initialForm, setInitialForm] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [changes, setChanges] = useState([]);
-    const [modalImage, setModalImage] = useState(null);
+    const [modalImage, setModalImage] = useState("");
 
     useEffect(() => {
         fetchCustomerData();
@@ -99,27 +99,33 @@ export default function EditCustomer() {
     
     
     const confirmSubmit = async () => {
-        const formData = new FormData();
-      
-        Object.keys(form).forEach((key) => {
-            if (key === "drivers_license") {
-                // ✅ Only add the file if it's a new upload
-                if (form[key] instanceof File) {
-                    formData.append(key, form[key]); 
-                } else if (deleteLicense) {
-                    formData.append("drivers_license", "DELETE"); // ✅ Tell backend to delete
-                }
-            } else if (form[key] !== null && form[key] !== undefined) {
-                formData.append(key, form[key]);
-            }
-        });
-    
         try {
+            if (deleteLicense) {
+                // ✅ First, delete the driver's license if requested
+                await axios.delete(`${API_URL}${id}/delete_drivers_license/`);
+                console.log("Driver's license deleted successfully.");
+            }
+    
+            const formData = new FormData();
+    
+            Object.keys(form).forEach((key) => {
+                if (key === "drivers_license") {
+                    // ✅ Only add the file if it's a new upload
+                    if (form[key] instanceof File) {
+                        formData.append(key, form[key]);
+                    }
+                } else if (form[key] !== null && form[key] !== undefined) {
+                    formData.append(key, form[key]);
+                }
+            });
+    
+            // ✅ Then, send the update request
             await axios.put(`${API_URL}${id}/`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
+    
             alert("Customer updated successfully!");
             navigate("/customers/list/");
         } catch (error) {

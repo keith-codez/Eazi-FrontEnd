@@ -263,7 +263,7 @@ function CustomerList() {
               </div>
               {/* View Details Button */}
               <button
-                onClick={() => navigate(`/customer-details/${customer.id}`)}
+                 onClick={() => navigate(`/details/${customer.id}`)}
                 className="mt-4 bg-white border border-blue-500 bored text-blue-500 py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white w-full cursor-pointer"
               >
                 View Details
