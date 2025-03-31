@@ -90,7 +90,7 @@ function CustomerList() {
 
 
   return (
-    <div className="w-full min-h-screen px-4 md:px-8 py-6 sm:py-4 md:mt-0 mt-5 overflow-hidden">
+    <div className="w-full min-h-screen px-4 md:px-8 py-6 sm:py-4 md:mt-0 mt-5 overflow-hidden border">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-3">
         {/* Header */}
         <h2 className="text-xl font-bold">Customers</h2>
