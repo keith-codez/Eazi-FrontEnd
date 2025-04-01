@@ -188,13 +188,14 @@ export default function EditCustomer() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
-                <div className="py-3">
-                    <BackButton />
+                <div className="py-5 flex items-center relative border-b mb-5">
+                    <BackButton className="absolute left-0" />
+                    <h2 className="text-2xl font-semibold mx-auto">Edit Customer</h2>
                 </div>
-                <h2 className="text-2xl font-semibold mb-4 text-center">Edit Customer</h2>
+
                 {/* Delete Confirmation Modal */}
                 {isDeleteModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50">
+                    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm z-50 ">
                         <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative z-50">
                             <h3 className="text-lg font-semibold mb-4 text-red-600">Confirm Delete</h3>
                             <p className="text-gray-700">Are you sure you want to delete this customer? This action cannot be undone.</p>
@@ -219,15 +220,16 @@ export default function EditCustomer() {
                     {/* Customer Details */}
                     <div>
                         <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {[
+                            { name: "title", label: "Title" },
                             { name: "first_name", label: "First Name" },
                             { name: "last_name", label: "Last Name" },
                             { name: "phone_number", label: "Phone Number" },
                             { name: "email", label: "Email", type: "email" },
                             { name: "national_id", label: "National ID" },
                             { name: "street_address", label: "Street Address" },
-                            { name: "address_line2", label: "Apartment, Suite, etc. (Optional)", required: false },
+                            { name: "address_line2", label: "Apartment, etc. (Optional)", required: false },
                             { name: "city", label: "City" },
                             { name: "country", label: "Country" },
                             ].map(({ name, label, type = "text" }) => (
