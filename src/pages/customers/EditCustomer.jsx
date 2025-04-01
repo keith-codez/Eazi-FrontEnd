@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import BackButton from "../../components/BackButton";
 
 const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
 
@@ -186,7 +187,10 @@ export default function EditCustomer() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
+                <div className="py-3">
+                    <BackButton />
+                </div>
                 <h2 className="text-2xl font-semibold mb-4 text-center">Edit Customer</h2>
                 {/* Delete Confirmation Modal */}
                 {isDeleteModalOpen && (
@@ -215,7 +219,7 @@ export default function EditCustomer() {
                     {/* Customer Details */}
                     <div>
                         <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                         {[
                             { name: "first_name", label: "First Name" },
                             { name: "last_name", label: "Last Name" },
@@ -315,7 +319,7 @@ export default function EditCustomer() {
                 {[1, 2].map((kin) => (
                     <div key={kin}>
                         <h3 className="text-lg font-semibold mb-2">Next of Kin {kin}</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             {["first_name", "last_name", "id_number", "phone"].map((field) => (
                                 <div key={field}>
                                     <label htmlFor={`next_of_kin${kin}_${field}`} className="block text-gray-700 font-medium">{toCamelCase(field)}</label>
