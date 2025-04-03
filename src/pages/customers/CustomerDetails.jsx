@@ -13,6 +13,7 @@ function CustomerDetails() {
   const [bookings, setBookings] = useState([]);
   const [customer, setCustomer] = useState("");
   const [activeTab, setActiveTab] = useState("customer");
+  const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState({
     totalBookings: 0,
     totalSpent: 0,
@@ -22,18 +23,25 @@ function CustomerDetails() {
 
 
 
-  useEffect(() => {
-    axios.get(`${API_URL}${id}/`)
-        .then(response => setCustomer(response.data))
-        .catch(error => console.error("Error fetching customer:", error));
+useEffect(() => {
+  setLoading(true); // Start loading
+  axios.get(`${API_URL}${id}/`)
+      .then(response => setCustomer(response.data))
+      .catch(error => console.error("Error fetching customer:", error));
 
-    axios.get(`${API_URL_BOOKING}customer/${id}/`)
-        .then(response => setBookings(response.data))
-        .catch(error => console.error("Error fetching bookings:", error));
-      
-    axios.get(`${API_URL}${id}/analytics/`)
-        .then(response => setAnalytics(response.data))
-        .catch(error => console.error("Error fetching analytics:", error));
+  axios.get(`${API_URL_BOOKING}customer/${id}/`)
+      .then(response => {
+        setBookings(response.data);
+        setLoading(false); // Stop loading
+      })
+      .catch(error => {
+        console.error("Error fetching bookings:", error);
+        setLoading(false); // Stop loading even on error
+      });
+
+  axios.get(`${API_URL}${id}/analytics/`)
+      .then(response => setAnalytics(response.data))
+      .catch(error => console.error("Error fetching analytics:", error));
 }, []);
   
 
@@ -183,74 +191,81 @@ function CustomerDetails() {
           </div>
 
 
-          {/* Booking History Table */}
           <div className="bg-white p-6 rounded-lg shadow-md hidden md:block">
             <h2 className="text-2xl font-bold mb-4">Booking History</h2>
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">Booking ID</th>
-                  <th className="border border-gray-300 px-4 py-2">Date</th>
-                  <th className="border border-gray-300 px-4 py-2">Amount</th>
-                  <th className="border border-gray-300 px-4 py-2">Status</th>
-                </tr>
-              </thead>
-              <tbody className='overflow-y-auto'>
-                {/* Placeholder for booking data */}
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2">#12345</td>
-                  <td className="border border-gray-300 px-4 py-2">2025-03-20</td>
-                  <td className="border border-gray-300 px-4 py-2">$100</td>
-                  <td className="border border-gray-300 px-4 py-2">Completed</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2">#12346</td>
-                  <td className="border border-gray-300 px-4 py-2">2025-03-21</td>
-                  <td className="border border-gray-300 px-4 py-2">$75</td>
-                  <td className="border border-gray-300 px-4 py-2">Pending</td>
-                </tr>
-              </tbody>
-            </table>
+            {loading ? (
+              <p>Loading...</p>
+            ) : bookings.length === 0 ? (
+              <p>No bookings found for this customer.</p>
+            ) : (
+              <table className="w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border border-gray-300 px-4 py-2">Booking ID</th>
+                    <th className="border border-gray-300 px-4 py-2">Date</th>
+                    <th className="border border-gray-300 px-4 py-2">Amount</th>
+                    <th className="border border-gray-300 px-4 py-2">Deposit</th>
+                    <th className="border border-gray-300 px-4 py-2">Discount</th>
+                    <th className="border border-gray-300 px-4 py-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bookings.map((booking) => (
+                    <tr key={booking.id} className="text-center">
+                      <td className="border border-gray-300 px-4 py-2">{booking.id}</td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(booking.booking_date).toLocaleDateString("en-GB")}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">${booking.booking_amount}</td>
+                      <td className="border border-gray-300 px-4 py-2">${booking.booking_deposit}</td>
+                      <td className="border border-gray-300 px-4 py-2">${booking.discount_amount}</td>
+                      <td className="border border-gray-300 px-4 py-2">{booking.booking_status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
 
           {/* Mobile Cards */}
           <div className="block md:hidden space-y-4">
             {/* Booking Cards */}
-            {[
-              { id: "B001", date: "2025-03-20", amount: "$120", status: "Completed" },
-              { id: "B002", date: "2025-03-22", amount: "$75", status: "Pending" },
-            ].map((booking) => (
-              <div key={booking.id} className="bg-gray-50 shadow-lg rounded-xl p-4 mb-4 relative">
-                {/* Booking Details */}
-                <div className="mt-4 p-4 space-y-2">
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-gray-700">Booking ID</span>
-                    <span className="text-gray-700">#{booking.id}</span>
-                  </div>
-                  <div className="border-t-[0.5px] border-gray-300" />
+            {bookings.length > 0 ? (
+              bookings.map((booking) => (
+                <div key={booking.id} className="bg-gray-50 shadow-lg rounded-xl p-4 mb-4 relative">
+                  {/* Booking Details */}
+                  <div className="mt-4 p-4 space-y-2">
+                    <div className="flex justify-between">
+                      <span className="font-semibold text-gray-700">Booking ID</span>
+                      <span className="text-gray-700">#{booking.id}</span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
 
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-gray-700">Date</span>
-                    <span className="text-gray-700">{booking.date}</span>
-                  </div>
-                  <div className="border-t-[0.5px] border-gray-300" />
+                    <div className="flex justify-between">
+                      <span className="font-semibold text-gray-700">Date</span>
+                      <span className="text-gray-700">{booking.booking_}</span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
 
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-gray-700">Amount</span>
-                    <span className="text-gray-700">{booking.amount}</span>
-                  </div>
-                  <div className="border-t-[0.5px] border-gray-300" />
+                    <div className="flex justify-between">
+                      <span className="font-semibold text-gray-700">Amount</span>
+                      <span className="text-gray-700">${booking.booking_amount}</span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
 
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-gray-700">Status</span>
-                    <span className={`px-2 py-1 rounded-lg text-white ${booking.status === 'Completed' ? 'bg-green-500' : 'bg-yellow-500'}`}>
-                      {booking.status}
-                    </span>
+                    <div className="flex justify-between">
+                      <span className="font-semibold text-gray-700">Status</span>
+                      <span className={`px-2 py-1 rounded-lg text-white ${booking.booking_status === 'Completed' ? 'bg-green-500' : 'bg-yellow-500'}`}>
+                        {booking.booking_status}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No bookings found.</p>
+            )}
           </div>
         </div>
       </div>
