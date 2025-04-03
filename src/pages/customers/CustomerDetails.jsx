@@ -5,25 +5,37 @@ import axios from "axios";
 import BackButton from "../../components/BackButton";
 
 const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
+const API_URL_BOOKING = "http://127.0.0.1:8000/api/staff/bookings/"
 
 function CustomerDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [bookings, setBookings] = useState([]);
   const [customer, setCustomer] = useState("");
   const [activeTab, setActiveTab] = useState("customer");
+  const [analytics, setAnalytics] = useState({
+    totalBookings: 0,
+    totalSpent: 0,
+    totalMileage: 0
+});
+
+
+
 
   useEffect(() => {
-    fetchCustomer();
-  }, [id]);
+    axios.get(`${API_URL}${id}/`)
+        .then(response => setCustomer(response.data))
+        .catch(error => console.error("Error fetching customer:", error));
 
-  const fetchCustomer = async () => {
-    try {
-      const response = await axios.get(`${API_URL}${id}/`);
-      setCustomer(response.data);
-    } catch (error) {
-        console.error('Error fetching customer:', error);
-    }
-  };
+    axios.get(`${API_URL_BOOKING}customer/${id}/`)
+        .then(response => setBookings(response.data))
+        .catch(error => console.error("Error fetching bookings:", error));
+      
+    axios.get(`${API_URL}${id}/analytics/`)
+        .then(response => setAnalytics(response.data))
+        .catch(error => console.error("Error fetching analytics:", error));
+}, []);
+  
 
   return (
     <div className='w-full min-h-screen px-0 md:px-6 py-3 sm:py-4 md:mt-0 mt-5 overflow-hidden border'> 
@@ -82,9 +94,9 @@ function CustomerDetails() {
                       <span className="text-gray-700">{customer.national_id} </span>
                     </div>
                     <div className="border-t-[0.5px] border-gray-300" />
-                    <div className='flex justify-between mt-5'>
-                      <span className="font-bold">Address:</span>
-                      <span className="text-gray-700">
+                    <div className='mt-3'>
+                      <span className="font-bold block">Address:</span>
+                      <span className="text-gray-700 block">
                       {customer.street_address ? `${customer.street_address}, ` : ''}
                       {customer.address_line2 ? ` ${customer.address_line2}` : ''}
                       {customer.city ? `${customer.city},` : ''}
@@ -155,17 +167,17 @@ function CustomerDetails() {
               {/* Total Bookings */}
               <div className="bg-gray-100 p-4 rounded-lg text-center">
                 <h3 className="text-lg font-semibold">Total Bookings</h3>
-                <p className="text-2xl font-bold"> 0</p>
+                <p className="text-2xl font-bold">{analytics.totalBookings}</p>
               </div>
               {/* Total Spent */}
               <div className="bg-gray-100 p-4 rounded-lg text-center">
                 <h3 className="text-lg font-semibold">Total Spent</h3>
-                <p className="text-2xl font-bold">$'0.00</p>
+                <p className="text-2xl font-bold">${analytics.totalSpent.toFixed(2)}</p>
               </div>
               {/* Total Mileage */}
               <div className="bg-gray-100 p-4 rounded-lg text-center">
                 <h3 className="text-lg font-semibold">Total Mileage</h3>
-                <p className="text-2xl font-bold"> km</p>
+                <p className="text-2xl font-bold">{analytics.totalMileage} km</p>
               </div>
             </div>
           </div>
