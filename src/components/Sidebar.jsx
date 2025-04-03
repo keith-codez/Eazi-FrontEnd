@@ -59,7 +59,7 @@ const Sidebar = ({ onLogout }) => {
       name: "Bookings",
       icon: <Calendar />,
       sub: [
-        { name: "Active Bookings", link: "/bookings/active" },
+        { name: "Bookings", link: "/bookings/list" },
         { name: "Booking History", link: "/bookings/history" },
       ],
     },

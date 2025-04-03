@@ -11,7 +11,7 @@ import Unavailability from "./pages/fleet/Unavailability";
 import CustomerList from "./pages/customers/CustomerList.jsx";
 import CustomerBookings from "./pages/customers/CustomerBookings.jsx";
 import SupplierList from "./pages/suppliers/SupplierList";
-import ActiveBookings from "./pages/bookings/ActiveBookings";
+import BookingList from "./pages/bookings/Bookings.jsx";
 import BookingHistory from "./pages/bookings/BookingHistory";
 import Payments from "./pages/finances/Payments";
 import Invoices from "./pages/finances/Invoices";
@@ -23,6 +23,9 @@ import EditVehicle from "./pages/fleet/EditVehicle";
 import AddCustomer from "./pages/customers/AddCustomer.jsx";
 import EditCustomer from "./pages/customers/EditCustomer.jsx";
 import CustomerDetails from "./pages/customers/CustomerDetails.jsx";
+import AddBooking from "./pages/bookings/AddBooking.jsx";
+
+
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
@@ -75,7 +78,8 @@ function App() {
                 <Route path="/edit-customer/:id" element={<EditCustomer />} />
                 <Route path="/customers/bookings" element={<CustomerBookings />} />
                 <Route path="/suppliers/list" element={<SupplierList />} />
-                <Route path="/bookings/active" element={<ActiveBookings />} />
+                <Route path="/bookings/list" element={<BookingList />} />
+                <Route path="/add-booking" element={<AddBooking />} />
                 <Route path="/bookings/history" element={<BookingHistory />} />
                 <Route path="/finances/payments" element={<Payments />} />
                 <Route path="/finances/invoices" element={<Invoices />} />

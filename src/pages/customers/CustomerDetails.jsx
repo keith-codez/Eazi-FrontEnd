@@ -10,9 +10,6 @@ function CustomerDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [customer, setCustomer] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [menuOpen, setMenuOpen] = useState(null);
   const [activeTab, setActiveTab] = useState("customer");
 
   useEffect(() => {
@@ -33,7 +30,7 @@ function CustomerDetails() {
       <div className="p-4">
         <BackButton />
       </div>
-      <div className="container mx-auto p-1 flex flex-col md:flex-row gap-6 mt-5 "style={{ height: 'calc(100vh - 100px)'   }}>
+      <div className="container mx-auto p-1 flex flex-col md:flex-row gap-6 mt-5 "style={{ minHeight: 'calc(100vh - 100px)', overflowY: 'auto'  }}>
         {/* Left Section - Customer Details */}
         <div className="md:w-1/3 flex flex-col gap-6">
 
@@ -58,19 +55,58 @@ function CustomerDetails() {
             <div className="p-4 bg-white rounded-b-lg shadow-md">
               {activeTab === "customer" && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4">Customer Details</h2>
-                  <p><strong>Title:</strong> {customer.title}</p>
-                  <p><strong>Name:</strong> {customer.first_name} {customer.last_name}</p>
-                  <p><strong>Phone Number:</strong> {customer.phone_number}</p>
-                  <p><strong>Email:</strong> {customer.email || "N/A"}</p>
-                  <p><strong>National ID:</strong> {customer.national_id}</p>
-                  <p>
-                    <strong>Address:</strong> {customer.street_address}, {customer.city}, {customer.country}
-                  </p>
-                  <p><strong>Date Added:</strong> {new Date(customer.created_at).toLocaleDateString("en-GB")}</p>
-                  <p><strong>Last Booking Date:</strong> {customer.last_booking_date ? new Date(customer.last_booking_date).toLocaleDateString("en-GB") : "N/A"}</p>
-                  <p><strong>Drivers License:</strong></p>
-                  <img src={customer.drivers_license} alt="Drivers License" className="w-50 h-auto rounded-md" />
+                  <h2 className="text-2xl font-bold mb-4 text-center">Customer Details</h2>
+                  <div className='mt-4 p-4 space-y-2'>
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Title:</span>
+                      <span className="text-gray-700">{customer.title} </span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Name:</span>
+                      <span className="text-gray-700">{customer.first_name} {customer.last_name} </span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Phone Number:</span>
+                      <span className="text-gray-700">{customer.phone_number} </span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Email:</span>
+                      <span className="text-gray-700">{customer.email} </span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">National ID:</span>
+                      <span className="text-gray-700">{customer.national_id} </span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Address:</span>
+                      <span className="text-gray-700">
+                      {customer.street_address ? `${customer.street_address}, ` : ''}
+                      {customer.address_line2 ? ` ${customer.address_line2}` : ''}
+                      {customer.city ? `${customer.city},` : ''}
+                      {customer.country ? ` ${customer.country}` : ''}
+                      </span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Date Added:</span>
+                      <span className="text-gray-700"> {new Date(customer.created_at).toLocaleDateString("en-GB")}</span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    <div className='flex justify-between mt-5'>
+                      <span className="font-bold">Last Booking Date:</span>
+                      <span className="text-gray-700"> {customer.last_booking_date ? new Date(customer.last_booking_date).toLocaleDateString("en-GB") : "N/A"}</span>
+                    </div>
+                    <div className="border-t-[0.5px] border-gray-300" />
+                    
+        
+                      <p><strong>Drivers License:</strong></p>
+                      <img src={customer.drivers_license} alt="Drivers License" className="w-50 h-auto rounded-md" />
+                      </div>
                 </div>
               )}
 
