@@ -4,26 +4,35 @@ import axios from "axios";
 import { MoreVertical } from "lucide-react";
 
 const API_URL = "http://127.0.0.1:8000/api/staff/bookings/";
+const API_URL_BOOKING = "http://127.0.0.1:8000/api/staff/bookings/"
+
 
 function BookingList() {
   const [bookings, setBookings] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: "customer", direction: "ascending" });
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetchBookings();
+    setLoading(true); // Start loading
+    axios.get(API_URL)
+        .then(response => setCustomers(response.data))
+        .catch(error => console.error("Error fetching customer:", error));
+  
+    axios.get(API_URL_BOOKING)
+        .then(response => {
+          setBookings(response.data);
+          setLoading(false); // Stop loading
+        })
+        .catch(error => {
+          console.error("Error fetching bookings:", error);
+          setLoading(false); // Stop loading even on error
+        });
   }, []);
-
-  const fetchBookings = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setBookings(response.data);
-    } catch (error) {
-      console.error("Error fetching bookings", error);
-    }
-  };
+    
 
   const handleEdit = (id) => {
     navigate(`/edit-booking/${id}`);
@@ -63,8 +72,8 @@ function BookingList() {
       aValue = `${a.customer.first_name} ${a.customer.last_name}`;
       bValue = `${b.customer.first_name} ${b.customer.last_name}`;
     } else if (sortConfig.key === "vehicle") {
-      aValue = `${a.vehicle.brand} ${a.vehicle.model}`;
-      bValue = `${b.vehicle.brand} ${b.vehicle.model}`;
+      aValue = `${a.vehicle.make} ${a.vehicle.model}`;
+      bValue = `${b.vehicle.make} ${b.vehicle.model}`;
     } else {
       aValue = a[sortConfig.key];
       bValue = b[sortConfig.key];
@@ -84,7 +93,7 @@ function BookingList() {
   });
 
   return (
-    <div className="w-full min-h-screen px-4 md:px-8 py-6 overflow-hidden border">
+    <div className="w-full min-h-screen px-4 md:px-8 py-6 sm:py-4 md:mt-0 mt-5 overflow-hidden border">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-3">
         <h2 className="text-xl font-bold">Bookings</h2>
         <button
@@ -98,7 +107,7 @@ function BookingList() {
       {/* Table View */}
       <div className="bg-white rounded-sm shadow-md py-0 mt-5 overflow-x-auto hidden md:block" style={{ height: 'calc(100vh - 100px)'   }}>
         <table className="w-full min-w-[600px]">
-          <thead className="bg-blue-100">
+          <thead className="bg-blue-100 sticky top-0 z-10">
             <tr className="text-gray-600 font-bold text-lg">
               <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("customer")}>
                 Customer {sortConfig.key === "customer" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
@@ -106,11 +115,11 @@ function BookingList() {
               <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("vehicle")}>
                 Vehicle {sortConfig.key === "vehicle" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
               </th>
-              <th className="p-3 text-left">Start Date</th>
-              <th className="p-3 text-left">End Date</th>
-              <th className="p-3 text-left">Booking Amount</th>
-              <th className="p-3 text-left">Created On</th>
-              <th className="p-3 text-center">Actions</th>
+              <th className="p-2 text-left">Start Date</th>
+              <th className="p-2 text-left">End Date</th>
+              <th className="p-2 text-left">Amount $</th>
+              <th className="p-2 text-left">Date Added</th>
+              <th className="p-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -153,6 +162,102 @@ function BookingList() {
           </tbody>
         </table>
       </div>
+
+      {/* Card Layout for Mobile */}
+      <div className="block md:hidden my-4">
+        {/* Search for Mobile */}
+        <div className="flex flex-col gap-4 mb-5">
+          <input
+            type="text"
+            placeholder="Search by name, email, phone, or ID..."
+            className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select
+            id="sort"
+            onChange={(e) => handleSort(e.target.value)}
+            className="w-50 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+          >
+            <option value="">Sort By</option>
+            <option value="name">Name</option>
+            <option value="email">Email</option>
+            <option value="created_at">Date Added</option>
+          </select>
+          <button
+            onClick={() => navigate('/add-booking')}
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 w-full cursor-pointer shadow-lg"
+          >
+            Add Booking
+          </button>
+        </div>
+    
+        {filteredBookings.map((booking) => (
+          <div key={booking.id} className="bg-white shadow-xl rounded-xl p-4 mb-4 relative">
+            {/* 3 Dots Menu Button */}
+            <button
+              onClick={() => toggleMenu(booking.id)}
+              className="absolute top-3 right-5 p-2 menu-btn"
+            >
+              <MoreVertical className="w-7 h-7 text-blue-600 rotate-90 hover:text-blue-400 cursor-pointer" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {menuOpen === booking.id && (
+              <div className="absolute top-12 right-4 w-32 bg-white border rounded-lg shadow-lg z-10 dropdown">
+                <button
+                  
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  Edit
+                </button>
+                <button
+                  
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  View
+                </button>
+              </div>
+              
+            )}
+
+            {/* Customer Details */}
+            <div className="mt-4 p-4 space-y-2"> 
+              <div className="flex justify-between mt-5">
+                <span className="font-semibold text-gray-700">Customer</span>
+                <span className="text-gray-700">{booking.customer_details.first_name}</span>
+              </div>
+              <div className="border-t-[0.5px] border-gray-300" />
+
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Vehicle</span>
+                <span className="text-gray-700">{booking.vehicle_details.make} {booking.vehicle_details.model}</span>
+              </div>
+              <div className="border-t-[0.5px] border-gray-300" />
+
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Amount $</span>
+                <span className="text-gray-700">{booking.booking_amount}</span>
+              </div>
+              <div className="border-t-[0.5px] border-gray-300" />
+
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Date Added</span>
+                <span className="text-gray-700">{new Date(booking.created_at).toLocaleDateString('en-GB')}</span>
+              </div>
+              {/* View Details Button */}
+              <button
+                
+                className="mt-4 bg-white border border-blue-500 bored text-blue-500 py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white w-full cursor-pointer"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+
     </div>
   );
 }

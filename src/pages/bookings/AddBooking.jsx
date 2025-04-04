@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddBooking = () => {
     const [customers, setCustomers] = useState([]);
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         customer: "",
         vehicle: "",
@@ -82,9 +84,13 @@ const AddBooking = () => {
         }
     };
 
+    const goToBookingList = () => {
+        navigate('/bookings/list'); // Change to the correct customer list route
+    };
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 mt-16 md:mt-0">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Add Booking</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     
@@ -199,10 +205,14 @@ const AddBooking = () => {
                         <textarea name="notes" value={formData.notes} onChange={handleChange} className="p-2 border rounded w-full"></textarea>
                     </div>
 
-                    {/* Submit Button */}
-                    <button type="submit" className="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full">
-                        {loading ? "Submitting..." : "Submit Booking"}
-                    </button>
+                    <div className="flex justify-between">
+                        <button type="button" onClick={goToBookingList} className="px-4 py-2 bg-gray-500 text-white rounded">
+                        Cancel
+                        </button>
+                        <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
+                        Add Booking
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

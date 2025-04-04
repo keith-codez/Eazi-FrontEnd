@@ -9,7 +9,6 @@ import VehicleList from "./pages/fleet/VehicleList"; // Move to pages folder
 import MaintenanceRecords from "./pages/fleet/MaintenanceRecords";
 import Unavailability from "./pages/fleet/Unavailability";
 import CustomerList from "./pages/customers/CustomerList.jsx";
-import CustomerBookings from "./pages/customers/CustomerBookings.jsx";
 import SupplierList from "./pages/suppliers/SupplierList";
 import BookingList from "./pages/bookings/Bookings.jsx";
 import BookingHistory from "./pages/bookings/BookingHistory";
@@ -76,7 +75,6 @@ function App() {
                 <Route path="/details/:id" element={<CustomerDetails />} />
                 <Route path="/add-customer" element={<AddCustomer />} />
                 <Route path="/edit-customer/:id" element={<EditCustomer />} />
-                <Route path="/customers/bookings" element={<CustomerBookings />} />
                 <Route path="/suppliers/list" element={<SupplierList />} />
                 <Route path="/bookings/list" element={<BookingList />} />
                 <Route path="/add-booking" element={<AddBooking />} />

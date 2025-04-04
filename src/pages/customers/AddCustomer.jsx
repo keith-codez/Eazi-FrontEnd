@@ -119,14 +119,13 @@ export default function AddCustomer() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 md:px-8 py-6 mt-16 md:mt-0">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 mt-16 md:mt-0">
+            <div className="bg-white p-6 shadow-md w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Add Customer</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Customer Details */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">Customer Details</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:px-5">
                             {[
                                 { name: "first_name", label: "First Name" },
                                 { name: "last_name", label: "Last Name" },
@@ -232,8 +231,13 @@ export default function AddCustomer() {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="flex justify-end">
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Add Customer</button>
+                    <div className="flex justify-between">
+                    <button type="button" onClick={goToCustomerList} className="px-4 py-2 bg-gray-500 text-white rounded">
+                    Cancel
+                    </button>
+                    <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
+                    Add Customer
+                    </button>
                     </div>
                 </form>
             </div>
