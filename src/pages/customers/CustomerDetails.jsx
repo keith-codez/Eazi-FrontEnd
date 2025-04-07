@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { MoreVertical } from 'lucide-react';
 import axios from "axios";
 import BackButton from "../../components/BackButton";
+import { Car, DollarSign, Gauge } from 'lucide-react'
 
 const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
 const API_URL_BOOKING = "http://127.0.0.1:8000/api/staff/bookings/"
@@ -46,7 +47,7 @@ useEffect(() => {
   
 
   return (
-    <div className='w-full min-h-screen px-0 md:px-6 py-3 sm:py-4 md:mt-0 mt-5 overflow-hidden border'> 
+    <div className='w-full min-h-screen px-0 md:px-6 py-3 sm:py-4 md:mt-0 mt-5 overflow-hidden bg-gray-50'> 
       <div className="p-4">
         <BackButton />
       </div>
@@ -57,7 +58,7 @@ useEffect(() => {
 
           <div className="w-full max-w-lg mx-auto">
             {/* Mini Navigation Bar */}
-            <div className="flex justify-between bg-blue-600 text-white p-1 rounded-t-md">
+            <div className="flex justify-between bg-blue-600 text-white font-semibold text-lg p-1 rounded-t-md">
               {["customer", "kin1", "kin2"].map((tab) => (
                 <button
                   key={tab}
@@ -75,9 +76,9 @@ useEffect(() => {
             <div className="p-4 bg-white rounded-b-lg shadow-md">
               {activeTab === "customer" && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-center">Customer Details</h2>
-                  <div className='mt-4 p-4 space-y-2'>
-                    <div className='flex justify-between mt-5'>
+                  <h2 className="text-xl font-semibold italic text-center">Customer Details</h2>
+                  <div className='mt-3 p-4 space-y-2'>
+                    <div className='flex justify-between'>
                       <span className="font-bold">Title:</span>
                       <span className="text-gray-700">{customer.title} </span>
                     </div>
@@ -125,41 +126,68 @@ useEffect(() => {
                     
         
                       <p><strong>Drivers License:</strong></p>
-                      <img src={customer.drivers_license} alt="Drivers License" className="w-50 h-auto rounded-md" />
-                      </div>
-                </div>
+                      <img src={customer.drivers_license} alt="Drivers License" className="w-50 h-auto rounded-md text-orange-500" />
+                  </div>
+              </div>
               )}
 
               {activeTab === "kin1" && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4">Next of Kin 1</h2>
+                  <h2 className="text-xl font-semibold italic text-center">Next of Kin 1</h2>
                   {customer?.next_of_kin1_first_name? (  // Apply optional chaining (?.)
                     <>
-                      <p><strong>Name:</strong> {customer.next_of_kin1_first_name} {customer.next_of_kin1_last_name} </p>
-                      <p><strong>Phone Number:</strong> {customer.next_of_kin1_phone}</p>
-                      <p><strong>ID Number:</strong> {customer.next_of_kin1_id_number}</p>
+                      <div className='mt-3 p-4 space-y-2'>
+                        <div className='flex justify-between'>
+                          <span className="font-bold">Name:</span>
+                          <span className="text-gray-700"> {customer.next_of_kin1_first_name} {customer.next_of_kin1_last_name}</span>
+                        </div>
+                        <div className="border-t-[0.5px] border-gray-300" />
+                        <div className='flex justify-between'>
+                          <span className="font-bold">Phone Number:</span>
+                          <span className="text-gray-700">{customer.next_of_kin1_phone}</span>
+                        </div>
+                        <div className="border-t-[0.5px] border-gray-300" />
+                        <div className='flex justify-between'>
+                          <span className="font-bold">ID Number:</span>
+                          <span className="text-gray-700">{customer.next_of_kin1_id_number}</span>
+                        </div>
+                        <div className="border-t-[0.5px] border-gray-300" />
+                      </div>
                     </>
                   ) : (
-                    <p className="text-gray-500">No Next of Kin 1 provided.</p>
+                    <p className="text-orange-500 mt-3 text-center">No Next of Kin 1 provided.</p>
                   )}
                 </div>
               )}
 
               {activeTab === "kin2" && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4">Next of Kin 2</h2>
+                  <h2 className="text-xl font-semibold italic text-center">Next of Kin 2</h2>
                   {customer?.next_of_kin_2 ? (  // Apply optional chaining (?.)
                     <>
-                      <p><strong>Name:</strong> {customer.next_of_kin_2?.name}</p>
-                      <p><strong>Phone Number:</strong> {customer.next_of_kin_2?.phone}</p>
-                      <p><strong>Relationship:</strong> {customer.next_of_kin_2?.relationship}</p>
+                      <div className='mt-3 p-4 space-y-2'>
+                        <div className='flex justify-between'>
+                          <span className="font-bold">Name:</span>
+                          <span className="text-gray-700"> {customer.next_of_kin2_first_name} {customer.next_of_kin2_last_name}</span>
+                        </div>
+                        <div className="border-t-[0.5px] border-gray-300" />
+                        <div className='flex justify-between'>
+                          <span className="font-bold">Phone Number:</span>
+                          <span className="text-gray-700">{customer.next_of_kin2_phone}</span>
+                        </div>
+                        <div className="border-t-[0.5px] border-gray-300" />
+                        <div className='flex justify-between'>
+                          <span className="font-bold">ID Number:</span>
+                          <span className="text-gray-700">{customer.next_of_kin2_id_number}</span>
+                        </div>
+                        <div className="border-t-[0.5px] border-gray-300" />
+                      </div>
                     </>
                   ) : (
-                    <p className="text-gray-500">No Next of Kin 2 provided.</p>
+                    <p className="text-orange-500 mt-3 text-center">No Next of Kin 2 provided.</p>
                   )}
                 </div>
               )}
-
             </div>
           </div>
 
@@ -168,64 +196,88 @@ useEffect(() => {
         {/* Right Section - Analytics, Financials, and Booking History Table */}
         <div className="md:w-2/3 flex flex-col gap-6">
           {/* Customer Analytics with 3 columns */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Customer Analytics</h2>
-            {/* Three-column layout */}
-            <div className="grid grid-cols-3 gap-4">
+          <div className="p-6 bg-white rounded-2xl shadow-lg">
+            <h2 className="text-2xl font-semibold italic text-center mb-6 tracking-tight text-gray-700">Customer Analytics</h2>
+            <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
+              
               {/* Total Bookings */}
-              <div className="bg-gray-100 p-4 rounded-lg text-center">
-                <h3 className="text-lg font-semibold">Total Bookings</h3>
-                <p className="text-2xl font-bold">{analytics.totalBookings}</p>
+              <div className="bg-gradient-to-br from-orange-100 to-orange-300 p-4 rounded-xl shadow-md hover:scale-105 transition-transform">
+                <div className="flex items-center gap-2 mb-4">
+                  <Car className="w-5 h-5 text-orange-500" />
+                  <h3 className="text-sm font-medium text-gray-700">Total Bookings</h3>
+                </div>
+                <p className="text-3xl font-bold text-gray-800">{analytics.totalBookings}</p>
               </div>
-              {/* Total Spent */}
-              <div className="bg-gray-100 p-4 rounded-lg text-center">
-                <h3 className="text-lg font-semibold">Total Spent</h3>
-                <p className="text-2xl font-bold">${analytics.totalSpent.toFixed(2)}</p>
+
+              {/* Total Spending */}
+              <div className="bg-gradient-to-br from-green-100 to-green-300 p-4 rounded-xl shadow-md hover:scale-105 transition-transform">
+                <div className="flex items-center gap-2 mb-4">
+                  <DollarSign className="w-5 h-5 text-green-600" />
+                  <h3 className="text-sm font-medium text-gray-700">Total Spending</h3>
+                </div>
+                <p className="text-3xl font-bold text-gray-800">${analytics.totalSpent.toFixed(2)}</p>
               </div>
+
               {/* Total Mileage */}
-              <div className="bg-gray-100 p-4 rounded-lg text-center">
-                <h3 className="text-lg font-semibold">Total Mileage</h3>
-                <p className="text-2xl font-bold">{analytics.totalMileage} km</p>
+              <div className="bg-gradient-to-br from-blue-100 to-blue-300 p-4 rounded-xl shadow-md hover:scale-105 transition-transform">
+                <div className="flex items-center gap-2 mb-4">
+                  <Gauge className="w-5 h-5 text-blue-500" />
+                  <h3 className="text-sm font-medium text-gray-700">Total Mileage</h3>
+                </div>
+                <p className="text-3xl font-bold text-gray-800">{analytics.totalMileage ? `${analytics.totalMileage}km` : '0km'}</p>
               </div>
+
             </div>
           </div>
 
 
-          <div className="bg-white p-6 rounded-lg shadow-md hidden md:block">
-            <h2 className="text-2xl font-bold mb-4">Booking History</h2>
-            {loading ? (
-              <p>Loading...</p>
-            ) : bookings.length === 0 ? (
-              <p>No bookings found for this customer.</p>
-            ) : (
-              <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-4 py-2">Booking ID</th>
-                    <th className="border border-gray-300 px-4 py-2">Date</th>
-                    <th className="border border-gray-300 px-4 py-2">Amount</th>
-                    <th className="border border-gray-300 px-4 py-2">Deposit</th>
-                    <th className="border border-gray-300 px-4 py-2">Discount</th>
-                    <th className="border border-gray-300 px-4 py-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.map((booking) => (
-                    <tr key={booking.id} className="text-center">
-                      <td className="border border-gray-300 px-4 py-2">{booking.id}</td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {new Date(booking.booking_date).toLocaleDateString("en-GB")}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">${booking.booking_amount}</td>
-                      <td className="border border-gray-300 px-4 py-2">${booking.booking_deposit}</td>
-                      <td className="border border-gray-300 px-4 py-2">${booking.discount_amount}</td>
-                      <td className="border border-gray-300 px-4 py-2">{booking.booking_status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
+          <div className="bg-white p-6 rounded-xl shadow-md hidden md:block">
+  <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking History</h2>
+
+  {loading ? (
+    <p>Loading...</p>
+  ) : bookings.length === 0 ? (
+    <p className='text-orange-500'>No bookings found for this customer.</p>
+  ) : (
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+        <thead className="bg-gray-100 text-gray-700">
+          <tr>
+            <th className="px-4 py-3 text-left">Booking ID</th>
+            <th className="px-4 py-3 text-left">Date</th>
+            <th className="px-4 py-3 text-left">Amount</th>
+            <th className="px-4 py-3 text-left">Deposit</th>
+            <th className="px-4 py-3 text-left">Discount</th>
+            <th className="px-4 py-3 text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map((booking) => (
+            <tr key={booking.id} className="even:bg-gray-50 hover:bg-gray-100 transition-colors text-sm text-gray-700">
+              <td className="px-4 py-2">{booking.id}</td>
+              <td className="px-4 py-2">
+                {new Date(booking.booking_date).toLocaleDateString("en-GB")}
+              </td>
+              <td className="px-4 py-2 font-mono">${booking.booking_amount}</td>
+              <td className="px-4 py-2 font-mono">${booking.booking_deposit}</td>
+              <td className="px-4 py-2 font-mono">${booking.discount_amount}</td>
+              <td className="px-4 py-2">
+                <span className={`
+                  px-3 py-1 rounded-full text-xs font-semibold 
+                  ${booking.booking_status === 'Completed' ? 'bg-green-100 text-green-700' : 
+                    booking.booking_status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 
+                    'bg-red-100 text-red-700'}
+                `}>
+                  {booking.booking_status}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
 
 
           {/* Mobile Cards */}
