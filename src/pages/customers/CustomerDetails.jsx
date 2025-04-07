@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MoreVertical } from 'lucide-react';
 import axios from "axios";
 import BackButton from "../../components/BackButton";
+import WhatsappButton from "../../components/WhatsappButton";
+import BookingCarousel from "../../components/BookingsCarousel";
 import { Car, DollarSign, Gauge } from 'lucide-react'
 
 const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
@@ -77,6 +79,7 @@ useEffect(() => {
               {activeTab === "customer" && (
                 <div>
                   <h2 className="text-xl font-semibold italic text-center">Customer Details</h2>
+                  <WhatsappButton phoneNumber={customer.phone_number} />
                   <div className='mt-3 p-4 space-y-2'>
                     <div className='flex justify-between'>
                       <span className="font-bold">Title:</span>
@@ -232,93 +235,58 @@ useEffect(() => {
 
 
           <div className="bg-white p-6 rounded-xl shadow-md hidden md:block">
-  <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking History</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking History</h2>
 
-  {loading ? (
-    <p>Loading...</p>
-  ) : bookings.length === 0 ? (
-    <p className='text-orange-500'>No bookings found for this customer.</p>
-  ) : (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="px-4 py-3 text-left">Booking ID</th>
-            <th className="px-4 py-3 text-left">Date</th>
-            <th className="px-4 py-3 text-left">Amount</th>
-            <th className="px-4 py-3 text-left">Deposit</th>
-            <th className="px-4 py-3 text-left">Discount</th>
-            <th className="px-4 py-3 text-left">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((booking) => (
-            <tr key={booking.id} className="even:bg-gray-50 hover:bg-gray-100 transition-colors text-sm text-gray-700">
-              <td className="px-4 py-2">{booking.id}</td>
-              <td className="px-4 py-2">
-                {new Date(booking.booking_date).toLocaleDateString("en-GB")}
-              </td>
-              <td className="px-4 py-2 font-mono">${booking.booking_amount}</td>
-              <td className="px-4 py-2 font-mono">${booking.booking_deposit}</td>
-              <td className="px-4 py-2 font-mono">${booking.discount_amount}</td>
-              <td className="px-4 py-2">
-                <span className={`
-                  px-3 py-1 rounded-full text-xs font-semibold 
-                  ${booking.booking_status === 'Completed' ? 'bg-green-100 text-green-700' : 
-                    booking.booking_status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 
-                    'bg-red-100 text-red-700'}
-                `}>
-                  {booking.booking_status}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-</div>
+            {loading ? (
+              <p>Loading...</p>
+            ) : bookings.length === 0 ? (
+              <p className='text-orange-500'>No bookings found for this customer.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+                  <thead className="bg-gray-100 text-gray-700">
+                    <tr>
+                      <th className="px-4 py-3 text-left">Booking ID</th>
+                      <th className="px-4 py-3 text-left">Date</th>
+                      <th className="px-4 py-3 text-left">Amount</th>
+                      <th className="px-4 py-3 text-left">Deposit</th>
+                      <th className="px-4 py-3 text-left">Discount</th>
+                      <th className="px-4 py-3 text-left">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((booking) => (
+                      <tr key={booking.id} className="even:bg-gray-50 hover:bg-gray-100 transition-colors text-sm text-gray-700">
+                        <td className="px-4 py-2">{booking.id}</td>
+                        <td className="px-4 py-2">
+                          {new Date(booking.booking_date).toLocaleDateString("en-GB")}
+                        </td>
+                        <td className="px-4 py-2 font-mono">${booking.booking_amount}</td>
+                        <td className="px-4 py-2 font-mono">${booking.booking_deposit}</td>
+                        <td className="px-4 py-2 font-mono">${booking.discount_amount}</td>
+                        <td className="px-4 py-2">
+                          <span className={`
+                            px-3 py-1 rounded-full text-xs font-semibold 
+                            ${booking.booking_status === 'Completed' ? 'bg-green-100 text-green-700' : 
+                              booking.booking_status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 
+                              'bg-red-100 text-red-700'}
+                          `}>
+                            {booking.booking_status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
 
 
           {/* Mobile Cards */}
-          <div className="block md:hidden space-y-4">
-            {/* Booking Cards */}
-            {bookings.length > 0 ? (
-              bookings.map((booking) => (
-                <div key={booking.id} className="bg-gray-50 shadow-lg rounded-xl p-4 mb-4 relative">
-                  {/* Booking Details */}
-                  <div className="mt-4 p-4 space-y-2">
-                    <div className="flex justify-between">
-                      <span className="font-semibold text-gray-700">Booking ID</span>
-                      <span className="text-gray-700">#{booking.id}</span>
-                    </div>
-                    <div className="border-t-[0.5px] border-gray-300" />
 
-                    <div className="flex justify-between">
-                      <span className="font-semibold text-gray-700">Date</span>
-                      <span className="text-gray-700">{booking.booking_}</span>
-                    </div>
-                    <div className="border-t-[0.5px] border-gray-300" />
+          <BookingCarousel bookings={bookings} />
 
-                    <div className="flex justify-between">
-                      <span className="font-semibold text-gray-700">Amount</span>
-                      <span className="text-gray-700">${booking.booking_amount}</span>
-                    </div>
-                    <div className="border-t-[0.5px] border-gray-300" />
-
-                    <div className="flex justify-between">
-                      <span className="font-semibold text-gray-700">Status</span>
-                      <span className={`px-2 py-1 rounded-lg text-white ${booking.booking_status === 'Completed' ? 'bg-green-500' : 'bg-yellow-500'}`}>
-                        {booking.booking_status}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500">No bookings found.</p>
-            )}
-          </div>
         </div>
       </div>
     </div>
