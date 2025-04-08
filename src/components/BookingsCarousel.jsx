@@ -74,7 +74,7 @@ export default function BookingCarousel({ bookings }) {
                 className="w-full snap-start shrink-0"
               >
                 <div className="bg-white shadow-lg mb-2 rounded-lg">
-                  <div className="mt-4 p-4 space-y-2">
+                  <div className="my-4 p-4 space-y-2">
                     <div className="flex justify-between">
                       <span className="font-semibold text-gray-700">Booking ID</span>
                       <span className="text-gray-700">#{booking.id}</span>

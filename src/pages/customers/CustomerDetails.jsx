@@ -285,7 +285,7 @@ useEffect(() => {
 
           {/* Mobile Cards */}
 
-          <div className="md:hidden bg-white rounded-xl shadow-md">    
+          <div className="md:hidden bg-white rounded-xl shadow-md bg-yellow-50">    
           <BookingCarousel bookings={bookings} />
           </div>
         </div>
