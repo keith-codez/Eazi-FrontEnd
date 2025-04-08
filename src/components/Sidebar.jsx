@@ -2,25 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Car, Users, Briefcase, Calendar, DollarSign, Settings, LogOut, ChevronDown } from "lucide-react";
 
-const Sidebar = ({ onLogout }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Sidebar = ({ onLogout, isOpen, setIsOpen }) => {
   const [openSubmenus, setOpenSubmenus] = useState({});
   const navigate = useNavigate();
 
-  // Detect screen size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsOpen(true); // Keep sidebar open on desktop
-      } else {
-        setIsOpen(false); // Collapse sidebar on mobile
-      }
-    };
 
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleSubmenu = (name) =>

@@ -49,7 +49,7 @@ useEffect(() => {
   
 
   return (
-    <div className='w-full min-h-screen px-0 md:px-6 py-3 sm:py-4 md:mt-0 mt-5 overflow-hidden bg-gray-50'> 
+    <div className='w-full min-h-screen overflow-hidden bg-gray-50'> 
       <div className="p-4">
         <BackButton />
       </div>
@@ -285,8 +285,9 @@ useEffect(() => {
 
           {/* Mobile Cards */}
 
+          <div className="md:hidden bg-white rounded-xl shadow-md">    
           <BookingCarousel bookings={bookings} />
-
+          </div>
         </div>
       </div>
     </div>

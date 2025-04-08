@@ -1,94 +1,79 @@
-import { useRef,  useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function BookingCarousel({ bookings }) {
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const itemRefs = useRef([]);
 
+  // Watch which item is in view using IntersectionObserver
   useEffect(() => {
-    const carousel = carouselRef.current;
-  
-    // Check if carouselRef is valid
-    if (carousel) {
-      const handleScroll = () => {
-        const scrollLeft = carousel.scrollLeft;
-        const itemWidth = carousel.offsetWidth;
-        const index = Math.round(scrollLeft / itemWidth);
-        setCurrentIndex(index);
-      };
-  
-      carousel.addEventListener("scroll", handleScroll);
-  
-      // Cleanup on unmount
-      return () => {
-        if (carousel) {
-          carousel.removeEventListener("scroll", handleScroll);
-        }
-      };
-    }
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute("data-index"));
+            setCurrentIndex(index);
+          }
+        });
+      },
+      {
+        root: carouselRef.current,
+        threshold: 0.6, // 60% in view = active
+      }
+    );
+
+    itemRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [bookings]);
 
   const scrollToIndex = (index) => {
-    const carousel = carouselRef.current;
-    const itemWidth = carousel.offsetWidth;
-    carousel.scrollTo({
-      left: index * itemWidth,
-      behavior: "smooth",
-    });
+    const node = itemRefs.current[index];
+    if (node) {
+      node.scrollIntoView({ behavior: "smooth", inline: "center" });
+      setCurrentIndex(index);
+    }
   };
 
-  const scrollLeft = () => {
-    carouselRef.current.scrollBy({
-      left: -carouselRef.current.offsetWidth,
-      behavior: "smooth",
-    });
-  };
-
-  const scrollRight = () => {
-    carouselRef.current.scrollBy({
-      left: carouselRef.current.offsetWidth,
-      behavior: "smooth",
-    });
-  };
+  const scrollLeft = () => scrollToIndex(Math.max(currentIndex - 1, 0));
+  const scrollRight = () => scrollToIndex(Math.min(currentIndex + 1, bookings.length - 1));
 
   return (
-    <div className="relative block md:hidden w-100 overflow-hidden my-3 pt-10 pb-6">
+    <div className="relative block md:hidden w-full overflow-hidden my-3 pt-10 pb-6">
       {bookings.length > 0 ? (
         <>
-
-
-        {/* Container for Arrow Buttons (Flexbox layout) */}
-        <div className="flex justify-between items-center w-100 absolute top-0 px-4 z-10">
-            {/* Left Arrow Button */}
+          {/* Arrow Buttons */}
+          <div className="flex justify-between items-center w-full mt-3 absolute top-0 z-10">
             <button
-                onClick={scrollLeft}
-                className="bg-white mx-5 shadow-md p-3 rounded-sm hover:bg-gray-200 transition-all duration-200 transform hover:scale-105"
+              onClick={scrollLeft}
+              className="bg-white mx-5 shadow-md p-3 rounded-sm hover:bg-gray-200 transition-all duration-200 transform hover:scale-105"
             >
-                <ChevronLeft size={20} />
+              <ChevronLeft size={20} />
             </button>
-
-            {/* Right Arrow Button */}
             <button
-                onClick={scrollRight}
-                className="bg-white mx-5 shadow-md p-3 rounded-sm hover:bg-gray-200 transition-all duration-200 transform hover:scale-105"
+              onClick={scrollRight}
+              className="bg-white mx-5 shadow-md p-3 rounded-sm hover:bg-gray-200 transition-all duration-200 transform hover:scale-105"
             >
-                <ChevronRight size={20} />
+              <ChevronRight size={20} />
             </button>
-        </div>
-
-
+          </div>
 
           {/* Carousel */}
           <div
             ref={carouselRef}
             className="flex space-x-4 my-3 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar w-full"
           >
-            {bookings.map((booking) => (
+            {bookings.map((booking, index) => (
               <div
                 key={booking.id}
-                className=" w-100 p-1 snap-start shrink-0"
+                ref={(el) => (itemRefs.current[index] = el)}
+                data-index={index}
+                className="w-full snap-start shrink-0"
               >
-                <div className="bg-white shadow-lg mb-2 rounded-lg p-4">
+                <div className="bg-white shadow-lg mb-2 rounded-lg">
                   <div className="mt-4 p-4 space-y-2">
                     <div className="flex justify-between">
                       <span className="font-semibold text-gray-700">Booking ID</span>
@@ -124,18 +109,17 @@ export default function BookingCarousel({ bookings }) {
           </div>
 
           {/* Navigation dots */}
-        <div className="flex justify-center mt-5 space-x-2">
-        {bookings.map((_, index) => (
-            <button
-            key={index}
-            onClick={() => scrollToIndex(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentIndex ? "bg-blue-500 scale-125" : "bg-gray-300"
-            }`}
-            ></button>
-        ))}
-        </div>
-
+          <div className="flex justify-center mt-5 space-x-2">
+            {bookings.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? "bg-blue-500 scale-125" : "bg-gray-300"
+                }`}
+              ></button>
+            ))}
+          </div>
         </>
       ) : (
         <p className="text-center text-gray-500">No bookings found.</p>

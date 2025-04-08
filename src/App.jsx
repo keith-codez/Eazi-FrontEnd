@@ -28,11 +28,20 @@ import AddBooking from "./pages/bookings/AddBooking.jsx";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  
   useEffect(() => {
-    const handleStorageChange = () => setToken(localStorage.getItem("access_token"));
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true); // show on desktop
+      } else {
+        setSidebarOpen(false); // hide on mobile
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleLogin = (newToken) => {
@@ -49,8 +58,8 @@ function App() {
   return (
     <Router>
       <div className="flex w-full min-h-screen overflow-x-hidden">
-        {token && <Sidebar onLogout={handleLogout} />}
-        <div className={`flex-grow p-4 ${token ? "md:ml-64" : ""}`}>
+        {token && <Sidebar onLogout={handleLogout} isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />}
+        <div className={`flex-grow p-4 w-full transition-all duration-300 ${token && sidebarOpen ? "ml-64" : ""} ${token ? "pt-16 md:pt-4" : ""}`}>
           <Routes>
             {/* Public Routes */}
             {!token ? (
