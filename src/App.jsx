@@ -23,6 +23,8 @@ import AddCustomer from "./pages/customers/AddCustomer.jsx";
 import EditCustomer from "./pages/customers/EditCustomer.jsx";
 import CustomerDetails from "./pages/customers/CustomerDetails.jsx";
 import AddBooking from "./pages/bookings/AddBooking.jsx";
+import CustomerVehicleList from "./pages/rentals/CustomerVehicleList";
+import BookingRequestPage from "./pages/rentals/BookingRequestPage"; 
 
 
 
@@ -62,6 +64,8 @@ function App() {
         <div className={`flex-grow p-4 w-full transition-all duration-300 ${token ? "md:ml-64" : ""} ${token ? "pt-16 md:pt-4" : ""}`}>
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<CustomerVehicleList />} />
+            <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
             {!token ? (
               <>
                 <Route path="/login" element={<Login onLogin={handleLogin} />} />
