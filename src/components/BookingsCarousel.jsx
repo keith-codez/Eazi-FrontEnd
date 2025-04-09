@@ -1,10 +1,23 @@
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 
-export default function BookingCarousel({ bookings }) {
+
+
+
+export default function BookingCarousel({
+  bookings, 
+  openDropdownId,
+  toggleDropdown,
+  handleViewBooking,
+  handleEditBooking,
+  handleCreateInvoice
+ }) {
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemRefs = useRef([]);
+
+
 
   // Watch which item is in view using IntersectionObserver
   useEffect(() => {
@@ -46,7 +59,7 @@ export default function BookingCarousel({ bookings }) {
       {bookings.length > 0 ? (
         <>
           {/* Arrow Buttons */}
-          <div className="flex justify-between items-center w-full mt-3 absolute top-0 z-10">
+          <div className="flex justify-between items-center w-full absolute top-0 z-10">
             <button
               onClick={scrollLeft}
               className="bg-white mx-5 shadow-md p-3 rounded-sm hover:bg-gray-200 transition-all duration-200 transform hover:scale-105"
@@ -74,6 +87,43 @@ export default function BookingCarousel({ bookings }) {
                 className="w-full snap-start shrink-0"
               >
                 <div className="bg-white shadow-lg mb-2 rounded-lg">
+
+                  {/* 3-dot button */}
+                  <div className="flex justify-end items-center px-3 pt-3">
+                    <div className="relative">
+                      <button
+                        onClick={() => toggleDropdown(booking.id)}
+                        className="text-gray-500 hover:text-black p-1"
+                      >
+                        <MoreVertical className="w-7 h-7 text-blue-600 rotate-90 hover:text-blue-400 cursor-pointer" /> {/* rotate to make it horizontal */}
+                      </button>
+
+                      {openDropdownId === booking.id && (
+                        <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-md z-20">
+                          <button
+                            onClick={() => handleCreateInvoice(booking.id)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Create Invoice
+                          </button>
+                          <button
+                            onClick={() => handleViewBooking(booking.id)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            View Booking
+                          </button>
+                          <button
+                            onClick={() => handleEditBooking(booking.id)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Edit Booking
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+
                   <div className="my-4 p-4 space-y-2">
                     <div className="flex justify-between">
                       <span className="font-semibold text-gray-700">Booking ID</span>

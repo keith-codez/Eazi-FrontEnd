@@ -1,14 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+
+
 
 const AddBooking = () => {
     const [customers, setCustomers] = useState([]);
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const prefilledCustomerId = queryParams.get("customerId");
     const [formData, setFormData] = useState({
-        customer: "",
+        customer: prefilledCustomerId || "",
         vehicle: "",
         start_date: "",
         end_date: "",

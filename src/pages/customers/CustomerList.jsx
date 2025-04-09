@@ -145,7 +145,15 @@ function CustomerList() {
           </thead>
           <tbody className="overflow-y-auto" style={{ overflowY: 'auto' }}>
             {filteredCustomers.map((customer) => (
-              <tr key={customer.id} className="even:bg-gray-50 hover:bg-gray-100">
+              <tr
+                key={customer.id}
+                className="even:bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                onClick={(e) => {
+                  // Prevent redirect if click comes from inside the Actions column
+                  if (!e.target.closest('.dropdown') && !e.target.closest('.menu-btn')) {
+                    navigate(`/details/${customer.id}`);
+                  }
+                }}>
                 <td className="p-3">{customer.first_name} {customer.last_name} </td>
                 <td className="p-3">{customer.email}</td>
                 <td className="p-3">{customer.phone_number}</td>
@@ -169,6 +177,12 @@ function CustomerList() {
                         className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200 cursor-pointer"
                       >
                         View
+                      </button>
+                      <button
+                        onClick={() => navigate(`/add-booking?customerId=${customer.id}`)}
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-200 cursor-pointer"
+                      >
+                        Add Booking
                       </button>
                     </div>
                   )}
