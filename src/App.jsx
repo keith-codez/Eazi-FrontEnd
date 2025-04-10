@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import CustomerLogin from "./components/CustomerLogin";
+import StaffLogin from "./components/StaffLogin";
 import Sidebar from "./components/Sidebar";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -23,14 +25,14 @@ import AddCustomer from "./pages/customers/AddCustomer.jsx";
 import EditCustomer from "./pages/customers/EditCustomer.jsx";
 import CustomerDetails from "./pages/customers/CustomerDetails.jsx";
 import AddBooking from "./pages/bookings/AddBooking.jsx";
-import CustomerVehicleList from "./pages/rentals/CustomerVehicleList";
+import CustomerLandingPage from "./pages/rentals/CustomerLandingPage.jsx";
 import BookingRequestPage from "./pages/rentals/BookingRequestPage"; 
-
+import BookingRequests from "./pages/bookings/BookingRequests.jsx"; 
 
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("access_token"));
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [staffToken, setStaffToken] = useState(localStorage.getItem("access_token"));
+  const [customerToken, setCustomerToken] = useState(localStorage.getItem("customer_access_token"));
 
   
   useEffect(() => {
@@ -64,7 +66,7 @@ function App() {
         <div className={`flex-grow p-4 w-full transition-all duration-300 ${token ? "md:ml-64" : ""} ${token ? "pt-16 md:pt-4" : ""}`}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<CustomerVehicleList />} />
+            <Route path="/" element={<CustomerLandingPage />} />
             <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
             {!token ? (
               <>
@@ -91,6 +93,7 @@ function App() {
                 <Route path="/suppliers/list" element={<SupplierList />} />
                 <Route path="/bookings/list" element={<BookingList />} />
                 <Route path="/add-booking" element={<AddBooking />} />
+                <Route path="/bookings/requests" element={<BookingRequests />} />
                 <Route path="/bookings/history" element={<BookingHistory />} />
                 <Route path="/finances/payments" element={<Payments />} />
                 <Route path="/finances/invoices" element={<Invoices />} />

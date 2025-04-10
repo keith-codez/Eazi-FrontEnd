@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import CustomerNavbar from "../../components/CustomerNavbar";
 
 const CustomerLandingPage = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -8,6 +9,7 @@ const CustomerLandingPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [ownershipFilter, setOwnershipFilter] = useState("");
+  
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -49,7 +51,7 @@ const CustomerLandingPage = () => {
 
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-10 md:mt-0">
-      <Navbar /> {/* Navigation Bar */}
+      <CustomerNavbar />
       {/* Search and Filter */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
         <h2 className="text-2xl font-semibold">Available Vehicles</h2>
@@ -85,21 +87,7 @@ const CustomerLandingPage = () => {
   );
 };
 
-const Navbar = () => {
-  return (
-    <nav className="bg-blue-500 p-4">
-      <div className="flex justify-between items-center">
-        <Link to="/" className="text-white text-lg font-semibold">EaziDrive</Link>
-        <div className="space-x-6">
-          <Link to="/" className="text-white hover:text-gray-200">Home</Link>
-          <Link to="/about" className="text-white hover:text-gray-200">About</Link>
-          <Link to="/contact" className="text-white hover:text-gray-200">Contact</Link>
-          <Link to="/login" className="text-white hover:text-gray-200">Login</Link>
-        </div>
-      </div>
-    </nav>
-  );
-};
+
 
 const VehicleCard = ({ vehicle }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

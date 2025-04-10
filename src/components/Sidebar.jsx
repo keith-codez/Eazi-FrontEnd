@@ -46,7 +46,7 @@ const Sidebar = ({ onLogout, isOpen, setIsOpen }) => {
       icon: <Calendar />,
       sub: [
         { name: "Bookings", link: "/bookings/list" },
-        { name: "Booking History", link: "/bookings/history" },
+        { name: "Booking Requests", link: "/bookings/requests" },
       ],
     },
     {

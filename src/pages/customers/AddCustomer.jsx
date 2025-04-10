@@ -119,7 +119,7 @@ export default function AddCustomer() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 mt-16 md:mt-0">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-6 shadow-md w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Add Customer</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">

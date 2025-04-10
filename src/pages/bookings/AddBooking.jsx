@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import BackButton from "../../components/BackButton";
 
 
 
@@ -22,7 +23,7 @@ const AddBooking = () => {
         booking_amount: "",
         booking_deposit: "",
         payment_method: "cash",
-        booking_status: "upcoming",
+        booking_status: "pending",
         estimated_mileage: "",
         destination: "",
         discount_amount: "0.00",
@@ -96,8 +97,11 @@ const AddBooking = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 mt-16 md:mt-0">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full">
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="bg-white p-4 shadow-md w-full">
+            <div className="">
+                <BackButton />
+            </div>
                 <h2 className="text-2xl font-semibold mb-4 text-center">Add Booking</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     
@@ -186,10 +190,8 @@ const AddBooking = () => {
                         <div>
                             <label className="block text-gray-700 font-medium">Booking Status:</label>
                             <select name="booking_status" value={formData.booking_status} onChange={handleChange} className="p-2 border rounded w-full">
-                                <option value="upcoming">Upcoming</option>
-                                <option value="active">Active</option>
-                                <option value="completed">Completed</option>
-                                <option value="canceled">Canceled</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
                             </select>
                         </div>
                     </div>

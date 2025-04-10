@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";  // Use useNavigate
 import axios from "axios";
+import CustomerNavbar from "../../components/CustomerNavbar";
 
 const BookingRequestPage = () => {
   const { vehicleId } = useParams();  // Get vehicleId from URL
@@ -50,6 +51,7 @@ const BookingRequestPage = () => {
 
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-10 md:mt-0">
+       <CustomerNavbar />
       <h2 className="text-2xl font-semibold mb-4">Booking Request</h2>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
