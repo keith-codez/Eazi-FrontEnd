@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import CustomerLogin from "./components/CustomerLogin";
-import StaffLogin from "./components/StaffLogin";
+import CustomerRegister from "./components/CustomerRegister.jsx";
 import Sidebar from "./components/Sidebar";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -33,6 +33,7 @@ import BookingRequests from "./pages/bookings/BookingRequests.jsx";
 function App() {
   const [staffToken, setStaffToken] = useState(localStorage.getItem("access_token"));
   const [customerToken, setCustomerToken] = useState(localStorage.getItem("customer_access_token"));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   
   useEffect(() => {
@@ -48,60 +49,86 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleLogin = (newToken) => {
-    localStorage.setItem("access_token", newToken);
-    setToken(newToken);
-  };
+  
 
+  const handleStaffLogin = (newToken) => {
+    localStorage.setItem("access_token", newToken);
+    setStaffToken(newToken);
+  };
+  
+  const handleCustomerLogin = (newToken) => {
+    localStorage.setItem("customer_access_token", newToken);
+    setCustomerToken(newToken);
+  };
+  
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    setToken(null);
+    localStorage.removeItem("customer_access_token");
+    localStorage.removeItem("customer_refresh_token");
+    setStaffToken(null);
+    setCustomerToken(null);
   };
+
+
+
 
   return (
     <Router>
       <div className="flex w-full min-h-screen overflow-x-hidden">
-        {token && <Sidebar onLogout={handleLogout} isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />}
-        <div className={`flex-grow p-4 w-full transition-all duration-300 ${token ? "md:ml-64" : ""} ${token ? "pt-16 md:pt-4" : ""}`}>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<CustomerLandingPage />} />
-            <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
-            {!token ? (
-              <>
-                <Route path="/login" element={<Login onLogin={handleLogin} />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/request/password_reset" element={<PasswordResetRequest />} />
-                <Route path="/password-reset/:token" element={<PasswordReset />} />
-                <Route path="*" element={<Navigate to="/login" />} />
-              </>
-            ) : (
-              <>
-                {/* Private Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/fleet/vehicles" element={<VehicleList />} />
-                <Route path="/add-vehicle" element={<AddVehicle />} />
-                <Route path="/edit-vehicle/:id" element={<EditVehicle />} />
-                <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
-                <Route path="/fleet/unavailability" element={<Unavailability />} />
-                <Route path="/customers/list" element={<CustomerList />} />
-                <Route path="/details/:id" element={<CustomerDetails />} />
-                <Route path="/add-customer" element={<AddCustomer />} />
-                <Route path="/edit-customer/:id" element={<EditCustomer />} />
-                <Route path="/suppliers/list" element={<SupplierList />} />
-                <Route path="/bookings/list" element={<BookingList />} />
-                <Route path="/add-booking" element={<AddBooking />} />
-                <Route path="/bookings/requests" element={<BookingRequests />} />
-                <Route path="/bookings/history" element={<BookingHistory />} />
-                <Route path="/finances/payments" element={<Payments />} />
-                <Route path="/finances/invoices" element={<Invoices />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<Navigate to="/dashboard" />} />
-              </>
-            )}
-          </Routes>
+      {(staffToken || customerToken) && (
+        <Sidebar onLogout={handleLogout} isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />)}
+        <div className={`flex-grow p-4 w-full transition-all duration-300 ${(staffToken || customerToken) ? "md:ml-64 pt-16 md:pt-4" : ""}`}>
+        <Routes>
+          {/* Always Public Routes */}
+          <Route path="/" element={<CustomerLandingPage />} />
+          <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
+
+          {/* Customer Routes if logged in */}
+          {!staffToken && customerToken && (
+            <>
+              {/* Add any future customer-only pages here */}
+              <Route path="*" element={<Navigate to="/" />} />
+            </>
+          )}
+
+          {/* Staff Routes if logged in */}
+          {staffToken && (
+          <>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/fleet/vehicles" element={<VehicleList />} />
+            <Route path="/add-vehicle" element={<AddVehicle />} />
+            <Route path="/edit-vehicle/:id" element={<EditVehicle />} />
+            <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
+            <Route path="/fleet/unavailability" element={<Unavailability />} />
+            <Route path="/customers/list" element={<CustomerList />} />
+            <Route path="/details/:id" element={<CustomerDetails />} />
+            <Route path="/add-customer" element={<AddCustomer />} />
+            <Route path="/edit-customer/:id" element={<EditCustomer />} />
+            <Route path="/suppliers/list" element={<SupplierList />} />
+            <Route path="/bookings/list" element={<BookingList />} />
+            <Route path="/add-booking" element={<AddBooking />} />
+            <Route path="/bookings/requests" element={<BookingRequests />} />
+            <Route path="/bookings/history" element={<BookingHistory />} />
+            <Route path="/finances/payments" element={<Payments />} />
+            <Route path="/finances/invoices" element={<Invoices />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </>
+        )}
+          {/* Unauthenticated Routes */}
+          {!staffToken && !customerToken && (
+            <>
+              <Route path="/login" element={<Login onLogin={handleStaffLogin} />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/customer-register" element={<CustomerRegister />} />
+              <Route path="/customer-login" element={<CustomerLogin onLogin={handleCustomerLogin} />} />
+              <Route path="/request/password_reset" element={<PasswordResetRequest />} />
+              <Route path="/password-reset/:token" element={<PasswordReset />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </>
+          )}
+        </Routes>
         </div>
       </div>
     </Router>
