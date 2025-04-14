@@ -49,7 +49,7 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
+
 
   const handleStaffLogin = (newToken) => {
     localStorage.setItem("access_token", newToken);

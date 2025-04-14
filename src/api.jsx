@@ -59,7 +59,7 @@ export const resetPassword = async (token, password) => {
 
 
 export const loginCustomer = async (email, password) => {
-    const response = await fetch(`${API_PASS_URL}/rental/login`, {
+    const response = await fetch(`${API_PASS_URL}rentals/auth/login/customer/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,13 +74,13 @@ export const loginCustomer = async (email, password) => {
     return data;
   };
   
-  export const registerCustomer = async (name, email, password) => {
-    const response = await fetch(`${API_PASS_URL}/rental/register`, {
+  export const registerCustomer = async (email, username, phone_number, first_name, last_name, password) => {
+    const response = await fetch(`${API_PASS_URL}rentals/auth/register/customer/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ email, username, phone_number, first_name, last_name, password }),
     });
     return await response.json();
   };
