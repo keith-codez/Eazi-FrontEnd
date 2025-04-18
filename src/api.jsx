@@ -58,29 +58,3 @@ export const resetPassword = async (token, password) => {
 };
 
 
-export const loginCustomer = async (email, password) => {
-    const response = await fetch(`${API_PASS_URL}rentals/auth/login/customer/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    if (data.access_token) {
-      localStorage.setItem("customer_access_token", data.access_token);
-      localStorage.setItem("customer_refresh_token", data.refresh_token);
-    }
-    return data;
-  };
-  
-  export const registerCustomer = async (email, username, phone_number, first_name, last_name, password) => {
-    const response = await fetch(`${API_PASS_URL}rentals/auth/register/customer/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, username, phone_number, first_name, last_name, password }),
-    });
-    return await response.json();
-  };
