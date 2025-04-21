@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import CustomerLogin from "./components/CustomerLogin";
-import CustomerRegister from "./components/CustomerRegister.jsx";
 import Sidebar from "./components/Sidebar";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -121,8 +119,6 @@ function App() {
             <>
               <Route path="/login" element={<Login onLogin={handleStaffLogin} />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/customer-register" element={<CustomerRegister />} />
-              <Route path="/customer-login" element={<CustomerLogin onLogin={handleCustomerLogin} />} />
               <Route path="/request/password_reset" element={<PasswordResetRequest />} />
               <Route path="/password-reset/:token" element={<PasswordReset />} />
               <Route path="*" element={<Navigate to="/login" />} />

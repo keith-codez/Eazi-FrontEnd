@@ -11,7 +11,7 @@ const BookingRequestPage = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    phone: "",
+    phone_number: "",
     email: "",
     start_date: "",
     end_date: "",
@@ -79,10 +79,10 @@ const BookingRequestPage = () => {
         <div className="flex flex-col md:flex-row gap-4">
           <input
             type="text"
-            name="phone"
-            placeholder="Phone"
+            name="phone_number"
+            placeholder="Phone Name"
             className="border border-gray-300 px-4 py-2 rounded-lg w-full"
-            value={formData.phone}
+            value={formData.phone_number}
             onChange={handleChange}
             required
           />
