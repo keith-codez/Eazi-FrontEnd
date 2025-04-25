@@ -16,7 +16,15 @@ function Login({ onLogin }) {
     try {
       const data = await loginManager(formData.username, formData.password);
       onLogin(data.access_token);
-      navigate("/");
+  
+      if (data.role === "agent") {
+        navigate("/dashboard"); // agent dashboard
+      } else if (data.role === "customer") {
+        navigate("/dashboard"); // customer dashboard (but will show based on token state)
+      } else {
+        navigate("/"); // fallback
+      }
+  
     } catch (error) {
       setMessage(error.response?.data.error || "Login failed.");
     }

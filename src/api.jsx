@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/api/staff/";
+const API_URL = "http://127.0.0.1:8000/api/regulator/";
 const API_PASS_URL = "http://127.0.0.1:8000/api/"
 
 
@@ -9,8 +9,12 @@ const API_PASS_URL = "http://127.0.0.1:8000/api/"
 export const loginManager = async (username, password) => {
     try {
         const response = await axios.post(`${API_URL}login/`, { username, password });
-        localStorage.setItem("access_token", response.data.access_token);
-        localStorage.setItem("refresh_token", response.data.refresh_token);
+        const { access_token, refresh_token, role } = response.data;
+
+        localStorage.setItem("access_token", access_token);
+        localStorage.setItem("refresh_token", refresh_token);
+        localStorage.setItem("user_role", role);
+
         return response.data;
     } catch (error) {
         console.error("Login failed:", error.response?.data);

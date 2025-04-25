@@ -23,9 +23,10 @@ import AddCustomer from "./pages/customers/AddCustomer.jsx";
 import EditCustomer from "./pages/customers/EditCustomer.jsx";
 import CustomerDetails from "./pages/customers/CustomerDetails.jsx";
 import AddBooking from "./pages/bookings/AddBooking.jsx";
-import CustomerLandingPage from "./pages/rentals/CustomerLandingPage.jsx";
-import BookingRequestPage from "./pages/rentals/BookingRequestPage"; 
+import CustomerLandingPage from "./pages/demand/CustomerLandingPage.jsx";
+import BookingRequestPage from "./pages/demand/BookingRequestPage"; 
 import BookingRequests from "./pages/bookings/BookingRequests.jsx"; 
+import CustomerDashboard from "./pages/demand/CustomerDashboard";
 
 
 function App() {
@@ -74,7 +75,7 @@ function App() {
   return (
     <Router>
       <div className="flex w-full min-h-screen overflow-x-hidden">
-      {(staffToken || customerToken) && (
+      {staffToken && (
         <Sidebar onLogout={handleLogout} isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />)}
         <div className={`flex-grow p-4 w-full transition-all duration-300 ${(staffToken || customerToken) ? "md:ml-64 pt-16 md:pt-4" : ""}`}>
         <Routes>
@@ -83,10 +84,10 @@ function App() {
           <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
 
           {/* Customer Routes if logged in */}
-          {!staffToken && customerToken && (
+          {!staffToken && (
             <>
-              {/* Add any future customer-only pages here */}
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path="/dashboard" element={<CustomerDashboard />} />
+              <Route path="*" element={<Navigate to="/dashboard" />} />
             </>
           )}
 

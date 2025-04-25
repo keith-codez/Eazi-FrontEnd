@@ -52,27 +52,9 @@ const CustomerLandingPage = () => {
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-10 md:mt-0">
       <CustomerNavbar />
-      {/* Auth Links */}
-      <div className="flex flex-col md:flex-row justify-center md:justify-end items-center gap-4 mt-4 mb-6">
-        <div className="flex gap-4">
-          <Link to="/customer-login" className="text-blue-600 hover:underline">
-            Customer Login
-          </Link>
-          <Link to="/customer-register" className="text-blue-600 hover:underline">
-            Customer Register
-          </Link>
-        </div>
-        <div className="flex gap-4">
-          <Link to="/login" className="text-green-600 hover:underline">
-            Staff Login
-          </Link>
-          <Link to="/register" className="text-green-600 hover:underline">
-            Staff Register
-          </Link>
-        </div>
-      </div>
+      
       {/* Search and Filter */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-center my-4 gap-4">
         <h2 className="text-2xl font-semibold">Available Vehicles</h2>
         <input
           type="text"
