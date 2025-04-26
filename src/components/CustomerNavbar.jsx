@@ -10,7 +10,7 @@ const CustomerNavbar = () => {
           <Link to="/about" className="text-white hover:text-gray-200">About</Link>
           <Link to="/contact" className="text-white hover:text-gray-200">Contact</Link>
           <Link to="/login" className="text-white hover:text-gray-200">Login</Link>
-          <Link to="/register" className="text-white hover:text-gray-200">Register</Link>
+          <Link to="/register-customer" className="text-white hover:text-gray-200">Register</Link>
         </div>
       </div>
     </nav>

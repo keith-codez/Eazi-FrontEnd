@@ -62,3 +62,16 @@ export const resetPassword = async (token, password) => {
 };
 
 
+
+export const registerCustomer = async ( email, username, phone_number, first_name, last_name, password) => {
+    try {
+        const response = await axios.post(`${API_URL}register/customer/`, {
+            email, username, phone_number, first_name, last_name, password
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Registration failed:", error.response?.data);
+        throw error;
+    }
+};

@@ -15,7 +15,7 @@ function Login({ onLogin }) {
     e.preventDefault();
     try {
       const data = await loginManager(formData.username, formData.password);
-      onLogin(data.access_token);
+      onLogin(data.access_token, data.role);
   
       if (data.role === "agent") {
         navigate("/dashboard"); // agent dashboard
@@ -37,7 +37,7 @@ function Login({ onLogin }) {
         <input
           type="text"
           name="username"
-          placeholder="Username"
+          placeholder="Username or Email"
           className="w-full p-2 mb-2 border border-gray-300 rounded"
           onChange={handleChange}
         />
