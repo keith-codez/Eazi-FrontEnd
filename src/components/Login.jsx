@@ -1,32 +1,53 @@
 import React, { useState } from "react";
 import { loginManager } from "../api";
 import { useNavigate, Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
-function Login({ onLogin }) {
-  const [formData, setFormData] = useState({ username: "", password: "" });
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  const { login } = useContext(AuthContext);
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "username") {
+      setUsername(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = await loginManager(formData.username, formData.password);
-      onLogin(data.access_token, data.role);
   
-      if (data.role === "agent") {
-        navigate("/dashboard"); // agent dashboard
-      } else if (data.role === "customer") {
-        navigate("/dashboard"); // customer dashboard (but will show based on token state)
+    try {
+      const { access, refresh, role } = await loginManager(username, password);  // ✅ destructure properly
+      
+      console.log("Login response:", { access, refresh, role });
+  
+      // Save to localStorage
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+      localStorage.setItem("role", role);
+  
+      // Update AuthContext
+      login(access, role);
+  
+      // Navigate based on role
+      if (role === "customer") {
+        navigate("/customer/dashboard");
+      } else if (role === "staff" || role === "agent" || role === "agency") {
+        navigate("/staff/dashboard");
       } else {
-        navigate("/"); // fallback
+        navigate("/");
       }
   
     } catch (error) {
-      setMessage(error.response?.data.error || "Login failed.");
+      console.error("Login error:", error);
+      setMessage("Login failed. Please check your username and password.");
     }
   };
 

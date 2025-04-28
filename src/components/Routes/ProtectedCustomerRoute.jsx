@@ -1,14 +1,15 @@
-import { Navigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedCustomerRoute = ({ children }) => {
-  const accessToken = localStorage.getItem('accessToken');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem("access_token");
+  const role = localStorage.getItem("role");
 
-  if (!accessToken || !user || user.role !== 'customer') {
-    return <Navigate to="/login" replace />;
-  }
+  if (!token || (role !== "customer" && role !== "Customer")) {
+      return <Navigate to="/login" />;
+    }
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedCustomerRoute;

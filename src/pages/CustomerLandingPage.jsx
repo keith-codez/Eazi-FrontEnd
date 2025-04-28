@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import CustomerNavbar from "../../components/CustomerNavbar";
+import CustomerNavbar from "../components/CustomerNavbar";
 
 const CustomerLandingPage = () => {
   const [vehicles, setVehicles] = useState([]);

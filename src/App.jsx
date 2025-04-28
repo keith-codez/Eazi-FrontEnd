@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import Sidebar from "./components/Sidebar";
@@ -9,8 +9,8 @@ import PasswordReset from "./components/PasswordReset";
 import ProtectedCustomerRoute from "./components/Routes/ProtectedCustomerRoute";
 import ProtectedStaffRoute from "./components/Routes/ProtectedStaffRoute";
 
-import CustomerLandingPage from "./pages/demand/CustomerLandingPage";
-import BookingRequestPage from "./pages/demand/BookingRequestPage";
+import CustomerLandingPage from "./pages/CustomerLandingPage";
+import BookingRequestPage from "./pages/BookingRequestPage";
 import CustomerDashboard from "./pages/demand/CustomerDashboard";
 
 import Dashboard from "./pages/Dashboard";
@@ -36,25 +36,12 @@ import Payments from "./pages/finances/Payments";
 import Invoices from "./pages/finances/Invoices";
 
 import Settings from "./pages/Settings";
+import { useContext } from "react";
+import { AuthContext } from "./contexts/AuthContext";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("access_token"));
-  const [role, setRole] = useState(localStorage.getItem("role"));
 
-  const handleLogin = (newToken, newRole) => {
-    localStorage.setItem("access_token", newToken);
-    localStorage.setItem("role", newRole);
-    setToken(newToken);
-    setRole(newRole);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("role");
-    setToken(null);
-    setRole(null);
-  };
+  const { token, role, logout } = useContext(AuthContext);
 
   return (
     <Router>
@@ -67,7 +54,7 @@ function App() {
 
             {/* Protected Customer Routes */}
             <Route element={<ProtectedCustomerRoute />}>
-              <Route path="/dashboard" element={<CustomerDashboard />} />
+              <Route path="/customer/dashboard" element={<CustomerDashboard />} />
             </Route>
 
             {/* Protected Staff Routes */}
@@ -93,7 +80,7 @@ function App() {
             </Route>
 
             {/* Authentication Routes */}
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register-customer" element={<CustomerRegister />} />
             <Route path="/request/password_reset" element={<PasswordResetRequest />} />
             <Route path="/password-reset/:token" element={<PasswordReset />} />

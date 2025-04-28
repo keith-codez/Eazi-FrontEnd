@@ -7,19 +7,19 @@ const API_PASS_URL = "http://127.0.0.1:8000/api/"
 
 
 export const loginManager = async (username, password) => {
-    try {
-        const response = await axios.post(`${API_URL}login/`, { username, password });
-        const { access_token, refresh_token, role } = response.data;
+  try {
+    const response = await axios.post(`${API_URL}login/`, { username, password });
+    
+    console.log('API Response:', response.data);
 
-        localStorage.setItem("access_token", access_token);
-        localStorage.setItem("refresh_token", refresh_token);
-        localStorage.setItem("user_role", role);
+    const { access, refresh, user } = response.data;
+    const { role } = user;
 
-        return response.data;
-    } catch (error) {
-        console.error("Login failed:", error.response?.data);
-        throw error;
-    }
+    return { access, refresh, role };  // ✅ Only return the important clean data
+  } catch (error) {
+    console.error("Login failed:", error.response?.data);
+    throw error;
+  }
 };
 
 export const registerManager = async (username, first_name, middle_name, last_name, email, password) => {
