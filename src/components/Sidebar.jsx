@@ -18,7 +18,7 @@ const Sidebar = ({ onLogout, isOpen, setIsOpen }) => {
   };
 
   const menuItems = [
-    { name: "Dashboard", icon: <Car />, link: "/dashboard" },
+    { name: "Dashboard", icon: <Car />, link: "/staff/dashboard" },
     {
       name: "Fleet",
       icon: <Car />,

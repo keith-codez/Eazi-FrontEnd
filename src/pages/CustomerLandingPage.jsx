@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomerNavbar from "../components/CustomerNavbar";
+import { AuthContext } from "../contexts/AuthContext";
+
+
+
 
 const CustomerLandingPage = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -9,7 +15,27 @@ const CustomerLandingPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [ownershipFilter, setOwnershipFilter] = useState("");
-  
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { load } = useContext(AuthContext);
+  const location = useLocation();
+
+  console.log("User in Landing Page:", user); 
+
+  // 👇 If not exactly on "/", DO NOTHING
+  if (location.pathname !== "/") {
+    return null;
+  }
+
+  // Redirect if a non-customer user is logged in
+  useEffect(() => {
+    if (!load && user && user.role) {
+      if (user.role === "staff" || user.role === "agent" || user.role === "agency") {
+        navigate("/staff/dashboard");
+      }
+    }
+  }, [user, loading, navigate]);
+
 
   useEffect(() => {
     const fetchVehicles = async () => {
