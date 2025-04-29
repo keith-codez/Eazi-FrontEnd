@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import CustomerNavbar from "../components/CustomerNavbar";
+import CustomerNavbar from "../components/PublicSidebar";
 import { AuthContext } from "../contexts/AuthContext";
 
 
@@ -76,8 +76,7 @@ const CustomerLandingPage = () => {
   if (loading) return <p className="text-center text-gray-500">Loading vehicles...</p>;
 
   return (
-    <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-10 md:mt-0">
-      <CustomerNavbar />
+    <div className="w-full min-h-screen">
       
       {/* Search and Filter */}
       <div className="flex flex-col md:flex-row justify-between items-center my-4 gap-4">

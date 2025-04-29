@@ -1,13 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-import Sidebar from "./components/Sidebar";
+
 import Login from "./components/Login";
 import CustomerRegister from "./components/CustomerRegister";
 import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordReset from "./components/PasswordReset";
 import ProtectedCustomerRoute from "./components/Routes/ProtectedCustomerRoute";
 import ProtectedStaffRoute from "./components/Routes/ProtectedStaffRoute";
+import PublicRoute from "./components/Routes/PublicRoute";
 
 import CustomerLandingPage from "./pages/CustomerLandingPage";
 import BookingRequestPage from "./pages/BookingRequestPage";
@@ -46,12 +47,22 @@ function App() {
   return (
     <Router>
       <div className="flex w-full min-h-screen overflow-x-hidden">
-        <div className="flex-grow p-4 w-full transition-all duration-300">
+        <div className="flex-grow w-full transition-all duration-300">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<CustomerLandingPage />} />
-            <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
+            {/* Public Routes */}
+            <Route element={<PublicRoute />}>
+              <Route path="/" element={<CustomerLandingPage />} />
+              <Route path="/book-now/:vehicleId" element={<BookingRequestPage />} />
+              {/* Authentication Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register-customer" element={<CustomerRegister />} />
+              <Route path="/request/password_reset" element={<PasswordResetRequest />} />
+              <Route path="/password-reset/:token" element={<PasswordReset />} />
 
+              {/* any other public pages */}
+            </Route>
+        
             {/* Protected Customer Routes */}
             <Route element={<ProtectedCustomerRoute />}>
               <Route path="/customer/dashboard" element={<CustomerDashboard />} />
@@ -79,11 +90,6 @@ function App() {
               <Route path="/settings" element={<Settings />} />
             </Route>
 
-            {/* Authentication Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register-customer" element={<CustomerRegister />} />
-            <Route path="/request/password_reset" element={<PasswordResetRequest />} />
-            <Route path="/password-reset/:token" element={<PasswordReset />} />
 
             {/* Catch-all Redirect */}
             <Route path="*" element={<Navigate to="/" />} />
