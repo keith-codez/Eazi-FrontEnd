@@ -5,7 +5,7 @@ import { MoreVertical } from "lucide-react";
 
 
 
-const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
+const API_URL = "http://127.0.0.1:8000/api/regulator/customers/";
 
 function CustomerList() {
   const [customers, setCustomers] = useState([]);

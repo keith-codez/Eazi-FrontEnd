@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
+const API_URL = "http://127.0.0.1:8000/api/regulator/customers/";
 
 export default function AddCustomer() {
     const [licenseFile, setLicenseFile] = useState(null);

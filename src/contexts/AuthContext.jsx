@@ -7,6 +7,11 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
 
+
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+
+
+
   useEffect(() => {
     // Load token and role from localStorage on app startup
     const storedToken = localStorage.getItem("access_token");
@@ -26,6 +31,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setRole(null);
+    setUser(null);
+    setIsLoggedOut(true);
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("role");

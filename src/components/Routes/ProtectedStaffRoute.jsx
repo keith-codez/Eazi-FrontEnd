@@ -16,7 +16,7 @@ const ProtectedStaffRoute = () => {
     localStorage.removeItem("role");
     // Navigate to login page
     navigate("/login");
-  };
+  };  
 
 
   if (!token || (role !== "staff" && role !== "agent" && role !== "agency")) {

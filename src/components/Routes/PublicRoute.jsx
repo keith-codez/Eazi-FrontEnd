@@ -1,48 +1,40 @@
-import React, { useContext, useState } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+// src/routes/PublicRoute.jsx
+
+import React, { useState, useContext } from "react";
+import { Outlet, Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import PublicSidebar from "../PublicSidebar";
 
-
-
 const PublicRoute = () => {
-  const { role } = useContext(AuthContext); // ✅ Correct here
+  const { role } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-
   const [isOpen, setIsOpen] = useState(false);
-  
-    const handleLogout = () => {
-      // Clear the user data (tokens, etc)
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("role");
-      // Navigate to login page
-      navigate("/login");
-    };
+
+ 
 
   if (role === "staff" || role === "agent" || role === "agency") {
     return <Navigate to="/staff/dashboard" replace />;
   }
 
   return (
-    <div className="flex w-full min-h-screen overflow-x-hidden">
-      <PublicSidebar 
-        onLogout={handleLogout} 
-        isOpen={isOpen} 
-        setIsOpen={setIsOpen} 
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-      />
-      <div
-        className={`flex-grow p-4 w-full transition-all duration-300 pt-16 md:pt-4 ${
-            isCollapsed ? "md:ml-16" : "md:ml-65"
-        }`}
-        >
-        <Outlet />
+    <div className="relative">
+      <PublicSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+  
+      <main
+        className="
+          w-full
+          md:pl-64  // Only add left padding on medium and larger screens
+          pt-16      // To push content below the fixed top navbar on mobile
+          transition-all
+          duration-300
+        "
+      >
+        <div className="max-w-screen-md mx-auto px-4">
+          <Outlet />
         </div>
+      </main>
     </div>
-    );
+  );
 };
 
 export default PublicRoute;

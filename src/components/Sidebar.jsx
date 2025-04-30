@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Car, Users, Briefcase, Calendar, DollarSign, Settings, LogOut, ChevronDown } from "lucide-react";
+import { Menu, X, Car, Users, Briefcase, Calendar, DollarSign, Settings, LogOut, ChevronDown, Home } from "lucide-react";
 
-const Sidebar = ({ onLogout, isOpen, setIsOpen }) => {
+const Sidebar = ({ onLogout, isOpen, setIsOpen, isLoggedOut }) => {
   const [openSubmenus, setOpenSubmenus] = useState({});
   const navigate = useNavigate();
 
@@ -14,11 +14,18 @@ const Sidebar = ({ onLogout, isOpen, setIsOpen }) => {
 
   const handleLogout = () => {
     onLogout();
-    navigate("/login");
   };
 
+  
+  useEffect(() => {
+    if (isLoggedOut) {
+      navigate("/login");
+    }
+  }, [isLoggedOut, navigate]);
+
+
   const menuItems = [
-    { name: "Dashboard", icon: <Car />, link: "/staff/dashboard" },
+    { name: "Dashboard", icon: <Home />, link: "/staff/dashboard" },
     {
       name: "Fleet",
       icon: <Car />,
