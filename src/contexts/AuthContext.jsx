@@ -31,8 +31,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setRole(null);
-    setUser(null);
-    setIsLoggedOut(true);
+    setIsLoggedOut(true); // you may not even need this
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("role");

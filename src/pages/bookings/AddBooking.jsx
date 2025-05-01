@@ -36,7 +36,7 @@ const AddBooking = () => {
     });
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/staff/customers/")
+        axios.get("http://127.0.0.1:8000/api/regulator/customers/")
             .then(response => setCustomers(response.data))
             .catch(error => console.error("Error fetching customers:", error));
 

@@ -24,12 +24,13 @@ const PublicRoute = () => {
         className="
           w-full
           md:pl-64  // Only add left padding on medium and larger screens
-          pt-16      // To push content below the fixed top navbar on mobile
+          pt-16 
+          md:pt-5     // To push content below the fixed top navbar on mobile
           transition-all
           duration-300
         "
       >
-        <div className="max-w-screen-md mx-auto px-4">
+        <div className="w-full px-4">
           <Outlet />
         </div>
       </main>
