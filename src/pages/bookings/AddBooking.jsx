@@ -40,7 +40,7 @@ const AddBooking = () => {
             .then(response => setCustomers(response.data))
             .catch(error => console.error("Error fetching customers:", error));
 
-        axios.get("http://127.0.0.1:8000/api/staff/vehicles/")
+        axios.get("http://127.0.0.1:8000/api/regulator/vehicles/")
             .then(response => setVehicles(response.data))
             .catch(error => console.error("Error fetching vehicles:", error));
     }, []);
@@ -78,7 +78,7 @@ const AddBooking = () => {
     
         try {
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/staff/bookings/",
+                "http://127.0.0.1:8000/api/regulator/bookings/",
                 bookingData
             );
             console.log("Booking created:", response.data);
