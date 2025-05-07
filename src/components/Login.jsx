@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginManager } from "../api";
+import { loginManager } from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";

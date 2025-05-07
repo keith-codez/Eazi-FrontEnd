@@ -40,7 +40,7 @@ const CustomerLandingPage = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/regulator/public-vehicles/");
+        const response = await axios.get("http://127.0.0.1:8000/api/regulator/public-vehicles");
         setVehicles(response.data);
         setFilteredVehicles(response.data); // Initialize filtered list
       } catch (err) {

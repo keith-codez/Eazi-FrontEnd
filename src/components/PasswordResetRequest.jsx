@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { requestPasswordReset } from "../api";
+import { requestPasswordReset } from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
 
 const PasswordResetRequest = () => {

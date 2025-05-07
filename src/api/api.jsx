@@ -18,9 +18,13 @@ export const loginManager = async (username, password) => {
     return { access, refresh, role };  // ✅ Only return the important clean data
   } catch (error) {
     console.error("Login failed:", error.response?.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
     throw error;
   }
 };
+
+
 
 export const registerManager = async (username, first_name, middle_name, last_name, email, password) => {
     try {
@@ -75,3 +79,5 @@ export const registerCustomer = async ( email, username, phone_number, first_nam
         throw error;
     }
 };
+
+
