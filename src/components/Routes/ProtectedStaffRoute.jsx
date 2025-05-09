@@ -4,8 +4,10 @@ import Sidebar from "../Sidebar";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const ProtectedStaffRoute = () => {
-  const { token, role, logout } = useContext(AuthContext);
+  const { token, role, logout, loading } = useContext(AuthContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  if (loading) return null
 
   if (!token || (role !== "staff" && role !== "agent" && role !== "agency")) {
     return <Navigate to="/login" replace />;

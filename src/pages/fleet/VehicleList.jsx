@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSwipeable } from "react-swipeable";
 import { Link } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
+
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -9,11 +11,12 @@ const VehicleList = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [ownershipFilter, setOwnershipFilter] = useState("");
+  const token = localStorage.getItem("access_token"); 
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/staff/vehicles/");
+        const response = await axiosInstance.get("regulator/staff-vehicles/");
         setVehicles(response.data);
         setFilteredVehicles(response.data); // Initialize filtered list
       } catch (err) {

@@ -6,19 +6,17 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
-
-
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
-
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
-    // Load token and role from localStorage on app startup
     const storedToken = localStorage.getItem("access_token");
     const storedRole = localStorage.getItem("role");
 
     if (storedToken) setToken(storedToken);
     if (storedRole) setRole(storedRole);
+
+    setLoading(false); // ✅ done checking localStorage
   }, []);
 
   const login = (accessToken, userRole) => {
@@ -31,14 +29,13 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setRole(null);
-    setIsLoggedOut(true); // you may not even need this
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("role");
   };
 
   return (
-    <AuthContext.Provider value={{ token, role, login, logout }}>
+    <AuthContext.Provider value={{ token, role, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
