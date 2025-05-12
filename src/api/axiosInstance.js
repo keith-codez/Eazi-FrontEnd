@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
         console.error("Refresh token failed", refreshError);
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        
+        localStorage.removeItem("role")
         return Promise.reject(refreshError);
       }
     }

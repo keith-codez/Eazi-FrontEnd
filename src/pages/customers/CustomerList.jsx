@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MoreVertical } from "lucide-react";
-
+import axiosInstance from "../../api/axiosInstance";
 
 
 const API_URL = "http://127.0.0.1:8000/api/regulator/customers/";
@@ -13,19 +13,23 @@ function CustomerList() {
   const [menuOpen, setMenuOpen] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: "name", direction: "ascending" });
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axiosInstance.get("regulator/customers/");
+        setCustomers(response.data);
+      } catch (err) {
+        console.error("Error fetching customers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCustomers();
   }, []);
 
-  const fetchCustomers = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setCustomers(response.data);
-    } catch (error) {
-      console.error("Error fetching customers", error);
-    }
-  };
 
   const handleEdit = (id) => {
     navigate(`/edit-customer/${id}`);
@@ -86,9 +90,11 @@ function CustomerList() {
       nationalId.includes(query)
     );
   });
+  
+  
+  if (loading) return <p className="text-center text-gray-500">Loading vehicles...</p>;
 
-
-
+  
   return (
     <div className="w-full min-h-screen px-4 md:px-8 py-6 sm:py-4 md:mt-0 mt-5 overflow-hidden border">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-3">
