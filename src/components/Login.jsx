@@ -21,35 +21,29 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-      const { access, refresh, role } = await loginManager(username, password);  // ✅ destructure properly
-      
-      console.log("Login response:", { access, refresh, role });
-  
-      // Save to localStorage
-      localStorage.setItem("access_token", access);
-      localStorage.setItem("refresh_token", refresh);
-      localStorage.setItem("role", role);
-  
-      // Update AuthContext
-      login(access, role);
-  
-      // Navigate based on role
-      if (role === "customer") {
-        navigate("/customer/dashboard");
-      } else if (role === "staff" || role === "agent" || role === "agency") {
-        navigate("/staff/dashboard");
-      } else {
-        navigate("/");
-      }
-  
-    } catch (error) {
-      console.error("Login error:", error);
-      setMessage("Login failed. Please check your username and password.");
+  e.preventDefault();
+
+  try {
+    const { user } = await loginManager(username, password);
+
+    const role = user.role; // ✅ define role before using it
+
+    login(null, role);
+
+    // Navigate based on role
+    if (role === "customer") {
+      navigate("/customer/dashboard");
+    } else if (role === "agent" || role === "agency") {
+      navigate("/staff/dashboard");
+    } else {
+      navigate("/");
     }
-  };
+
+  } catch (error) {
+    console.error("Login error:", error);
+    setMessage("Login failed. Please check your username and password.");
+  }
+};
 
   return (
     <div className="flex justify-center items-center h-screen w-full px-4 bg-gray-100">

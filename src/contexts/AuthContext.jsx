@@ -4,25 +4,40 @@ import React, { createContext, useState, useEffect } from "react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await fetch("/api/auth/me", {
+        method: "GET",
+        credentials: "include", // ✅ send cookies
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        setRole(data.role);
+      } else {
+        setUser(null);
+        setRole(null);
+      }
+    } catch (err) {
+      console.error("Auth check failed:", err);
+      setUser(null);
+      setRole(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("access_token");
-    const storedRole = localStorage.getItem("role");
+  fetchUser();
+}, []);
 
-    if (storedToken) setToken(storedToken);
-    if (storedRole) setRole(storedRole);
 
-    setLoading(false); // ✅ done checking localStorage
-  }, []);
-
-  const login = (accessToken, userRole) => {
-    setToken(accessToken);
+  const login = (_token, userRole) => {
     setRole(userRole);
-    localStorage.setItem("access_token", accessToken);
     localStorage.setItem("role", userRole);
   };
 

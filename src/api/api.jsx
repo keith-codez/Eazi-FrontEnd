@@ -4,27 +4,27 @@ const API_URL = "http://127.0.0.1:8000/api/regulator/";
 const API_PASS_URL = "http://127.0.0.1:8000/api/"
 
 
-
-
 export const loginManager = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}login/`, { username, password });
-    
-    console.log('API Response:', response.data);
+    const response = await axios.post(
+      `${API_URL}login/`,
+      { username, password },
+      {
+        withCredentials: true, // ✅ send cookies with the request
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    const { access, refresh, user } = response.data;
-    const { role } = user;
+    // ✅ Ensure response is what you expect
+    return response.data; // should include { user: { ... } }
 
-    return { access, refresh, role };  // ✅ Only return the important clean data
   } catch (error) {
-    console.error("Login failed:", error.response?.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
-    throw error;
+    console.error("Login request failed:", error);
+    throw new Error("Login failed");
   }
 };
-
-
 
 export const registerManager = async (username, first_name, middle_name, last_name, email, password) => {
     try {

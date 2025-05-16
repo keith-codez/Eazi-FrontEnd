@@ -2,13 +2,14 @@ import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:8000/api/";
 
-// Create instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,  // 👈 Needed to send cookies
 });
+
 
 // Request interceptor: Attach access token
 axiosInstance.interceptors.request.use(
