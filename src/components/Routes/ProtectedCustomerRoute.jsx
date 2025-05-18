@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import CustomerSidebar from "../CustomerSidebar";
+import { AuthContext } from "../../contexts/AuthContext";
+
 
 const ProtectedCustomerRoute = ({ children }) => {
   const token = localStorage.getItem("access_token");

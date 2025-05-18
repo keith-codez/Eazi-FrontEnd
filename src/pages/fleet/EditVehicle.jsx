@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
+
 
 const EditVehicle = () => {
   const { id } = useParams();
@@ -19,7 +21,7 @@ const EditVehicle = () => {
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`);
+        const response = await axiosInstance.get(`staff-vehicles/${id}/`);
         setVehicle(response.data);
         setInitialVehicle(response.data); // Store initial data for comparison
         setExistingImages(response.data.images || []);

@@ -4,19 +4,25 @@ import Sidebar from "../Sidebar";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const ProtectedStaffRoute = () => {
-  const { token, role, logout, loading } = useContext(AuthContext);
+  const { user, role, logout, loading } = useContext(AuthContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  if (loading) return null
+  // Guard: wait until loading is complete
+  if (loading) {
+  return <div className="text-center mt-10">Loading...</div>;
+}
 
-  if (!token || (role !== "staff" && role !== "agent" && role !== "agency")) {
+  // Guard: not logged in or incorrect role
+  const isAllowed = user && (role === "staff" || role === "agent" || role === "agency");
+
+  if (!isAllowed) {
     return <Navigate to="/login" replace />;
   }
 
   return (
     <div className="flex w-full min-h-screen overflow-x-hidden">
-      <Sidebar 
-        onLogout={logout} // Use context logout directly
+      <Sidebar
+        onLogout={logout}
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
       />

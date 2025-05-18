@@ -16,7 +16,7 @@ const VehicleList = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axiosInstance.get("regulator/staff-vehicles/");
+        const response = await axiosInstance.get("staff-vehicles/");
         setVehicles(response.data);
         setFilteredVehicles(response.data); // Initialize filtered list
       } catch (err) {

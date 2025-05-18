@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-
+import axiosInstance from "../api/axiosInstance"; // adjust path as needed
 
 export const AuthContext = createContext();
 
@@ -8,23 +8,15 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
   const fetchUser = async () => {
     try {
-      const res = await fetch("/api/auth/me", {
-        method: "GET",
-        credentials: "include", // ✅ send cookies
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-        setRole(data.role);
-      } else {
-        setUser(null);
-        setRole(null);
-      }
+      const res = await axiosInstance.get("auth/me/");
+      setUser(res.data);
+      setRole(res.data.role);
     } catch (err) {
-      console.error("Auth check failed:", err);
+      if (err.response?.status !== 401) {
+        console.error("Error fetching user:", err);
+      }
       setUser(null);
       setRole(null);
     } finally {
@@ -32,25 +24,45 @@ useEffect(() => {
     }
   };
 
-  fetchUser();
-}, []);
+  // Run once on mount
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
+  const login = async (username, password) => {
+    try {
+      // Step 1: Login and get cookie
+      await axiosInstance.post("login/", { username, password }, {
+        withCredentials: true,
+      });
 
-  const login = (_token, userRole) => {
-    setRole(userRole);
-    localStorage.setItem("role", userRole);
+      // Step 2: Fetch user profile
+      const res = await axiosInstance.get("auth/me/");
+      const userData = res.data;
+
+      setUser(userData);
+      setRole(userData.role);
+
+      return userData; // ⬅️ return for redirect logic
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
   };
 
-  const logout = () => {
-    setToken(null);
-    setRole(null);
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("role");
+  const logout = async () => {
+    try {
+      await axiosInstance.post("auth/logout/");
+    } catch (err) {
+      console.warn("Logout failed:", err);
+    } finally {
+      setUser(null);
+      setRole(null);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ token, role, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, role, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

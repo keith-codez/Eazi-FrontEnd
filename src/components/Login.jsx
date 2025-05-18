@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { loginManager } from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
@@ -20,30 +19,26 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+    const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const { user } = await loginManager(username, password);
+    try {
+      const user = await login(username, password); // ⬅️ direct call
 
-    const role = user.role; // ✅ define role before using it
+      const role = user.role;
+      if (role === "customer") {
+        navigate("/customer/dashboard");
+      } else if (role === "agent" || role === "agency") {
+        navigate("/staff/dashboard");
+      } else {
+        navigate("/");
+      }
 
-    login(null, role);
-
-    // Navigate based on role
-    if (role === "customer") {
-      navigate("/customer/dashboard");
-    } else if (role === "agent" || role === "agency") {
-      navigate("/staff/dashboard");
-    } else {
-      navigate("/");
+    } catch (error) {
+      console.error("Login error:", error);
+      setMessage("Login failed. Please check your username and password.");
     }
-
-  } catch (error) {
-    console.error("Login error:", error);
-    setMessage("Login failed. Please check your username and password.");
-  }
-};
+  };
 
   return (
     <div className="flex justify-center items-center h-screen w-full px-4 bg-gray-100">
