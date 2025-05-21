@@ -82,8 +82,9 @@ const EditVehicle = () => {
   formData.append("deleted_images", JSON.stringify(deletedImages));
 
   try {
-    await axios.patch(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`, formData, {
+    await axiosInstance.patch(`staff-vehicles/${id}/`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
     });
     navigate("/vehicles");
   } catch (err) {

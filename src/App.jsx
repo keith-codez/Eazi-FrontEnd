@@ -37,12 +37,24 @@ import Payments from "./pages/finances/Payments";
 import Invoices from "./pages/finances/Invoices";
 
 import Settings from "./pages/Settings";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext";
+
+
+
+import axiosInstance from "./api/axiosInstance.js";
+
+
 
 function App() {
 
   const { token, role, logout } = useContext(AuthContext);
+
+  useEffect(() => {
+  axiosInstance.get("csrf/")
+    .then(() => console.log("✅ CSRF cookie set"))
+    .catch((err) => console.error("Failed to get CSRF token", err));
+}, []);
 
   return (
     <Router>
