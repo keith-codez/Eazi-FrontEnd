@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import axiosInstance from "../../api/axiosInstance";
 
 
@@ -101,7 +100,7 @@ const EditVehicle = () => {
 
   const handleDeleteVehicle = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/staff/vehicles/${id}/`);
+      await axiosInstance.delete(`staff-vehicles/${id}/`);
       setIsDeleteModalOpen(false); // Close modal
       navigate("/vehicles"); // Redirect to vehicle list after deletion
     } catch (err) {

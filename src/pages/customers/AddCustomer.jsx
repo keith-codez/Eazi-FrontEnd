@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
 
-const API_URL = "http://127.0.0.1:8000/api/regulator/customers/";
 
-const token = localStorage.getItem('access_token');
-
-axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 export default function AddCustomer() {
     const [licenseFile, setLicenseFile] = useState(null);
@@ -43,7 +40,7 @@ export default function AddCustomer() {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axiosInstance.get(`customers/`);
             setCustomers(response.data);
         } catch (error) {
             console.error("Error fetching customers", error);
@@ -77,8 +74,9 @@ export default function AddCustomer() {
         });
     
         try {
-            await axios.post(API_URL, formData, {
+            await axiosInstance.post(`customers/`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
+                withCredentials: true,
             });
     
             // Show confirmation modal

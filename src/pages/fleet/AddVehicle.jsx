@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
+
 
 const AddVehicle = () => {
   const navigate = useNavigate();
@@ -62,8 +64,9 @@ const AddVehicle = () => {
     }
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/staff/vehicles/", formDataToSend, {
+      await axiosInstance.post(`staff-vehicles/`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
       });
       alert("Vehicle added successfully!");
       navigate("/vehicles");

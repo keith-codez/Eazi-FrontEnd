@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MoreVertical } from 'lucide-react';
-import axios from "axios";
 import BackButton from "../../components/BackButton";
 import WhatsappButton from "../../components/WhatsappButton";
 import BookingCarousel from "../../components/BookingsCarousel";
 import { Car, DollarSign, Gauge } from 'lucide-react'
+import axiosInstance from "../../api/axiosInstance";
 
-const API_URL = "http://127.0.0.1:8000/api/regulator/customers/";
-const API_URL_BOOKING = "http://127.0.0.1:8000/api/staff/bookings/"
 
 function CustomerDetails() {
   const { id } = useParams();
@@ -35,11 +33,11 @@ function CustomerDetails() {
 
 useEffect(() => {
   setLoading(true); // Start loading
-  axios.get(`${API_URL}${id}/`)
+  axiosInstance.get(`customers/${id}/`)
       .then(response => setCustomer(response.data))
       .catch(error => console.error("Error fetching customer:", error));
 
-  axios.get(`${API_URL_BOOKING}customer/${id}/`)
+  axiosInstance.get(`bookings/customer/${id}/`)
       .then(response => {
         setBookings(response.data);
         setLoading(false); // Stop loading
@@ -49,7 +47,7 @@ useEffect(() => {
         setLoading(false); // Stop loading even on error
       });
 
-  axios.get(`${API_URL}${id}/analytics/`)
+  axiosInstance.get(`customers/${id}/analytics/`)
       .then(response => setAnalytics(response.data))
       .catch(error => console.error("Error fetching analytics:", error));
 

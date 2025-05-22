@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import axiosInstance from "../../api/axiosInstance";
+
 
 const API_URL = "http://127.0.0.1:8000/api/staff/customers/";
 
@@ -46,7 +48,7 @@ export default function EditCustomer() {
     
     const fetchCustomerData = async () => {
         try {
-        const response = await axios.get(`${API_URL}${id}/`);
+        const response = await axiosInstance.get(`customers/${id}/`);
         setForm(response.data);
         setInitialForm(response.data);
         if (response.data.drivers_license) {
@@ -103,7 +105,7 @@ export default function EditCustomer() {
         try {
             if (deleteLicense) {
                 // ✅ First, delete the driver's license if requested
-                await axios.delete(`${API_URL}${id}/delete_drivers_license/`);
+                await axiosInstance.delete(`customers/${id}/delete_drivers_license/`);
                 console.log("Driver's license deleted successfully.");
             }
     
@@ -121,10 +123,11 @@ export default function EditCustomer() {
             });
     
             // ✅ Then, send the update request
-            await axios.put(`${API_URL}${id}/`, formData, {
+            await axiosInstance.patch(`customers/${id}/`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
+                withCredentials: true,
             });
     
             alert("Customer updated successfully!");
@@ -160,7 +163,7 @@ export default function EditCustomer() {
 
       const handleDeleteCustomer = async () => {
         try {
-          await axios.delete(`http://127.0.0.1:8000/api/staff/customers/${id}/`);
+          await axiosInstance.delete(`customers/${id}/`);
           setIsDeleteModalOpen(false); // Close modal
           navigate("/customers/list"); // Redirect to vehicle list after deletion
         } catch (err) {

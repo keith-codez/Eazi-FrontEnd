@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import axiosInstance from "../../api/axiosInstance";
+
 
 
 
@@ -36,11 +37,11 @@ const AddBooking = () => {
     });
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/regulator/customers/")
+        axiosInstance.get(`customers/`)
             .then(response => setCustomers(response.data))
             .catch(error => console.error("Error fetching customers:", error));
 
-        axios.get("http://127.0.0.1:8000/api/regulator/vehicles/")
+        axiosInstance.get(`staff-vehicles/`)
             .then(response => setVehicles(response.data))
             .catch(error => console.error("Error fetching vehicles:", error));
     }, []);
@@ -77,8 +78,8 @@ const AddBooking = () => {
         };
     
         try {
-            const response = await axios.post(
-                "http://127.0.0.1:8000/api/regulator/bookings/",
+            const response = await axiosInstance.post(
+                `bookings/`,
                 bookingData
             );
             console.log("Booking created:", response.data);

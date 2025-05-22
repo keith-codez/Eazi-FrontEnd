@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { MoreVertical } from "lucide-react";
 import axiosInstance from "../../api/axiosInstance";
 
-
-const API_URL = "http://127.0.0.1:8000/api/regulator/customers/";
 
 function CustomerList() {
   const [customers, setCustomers] = useState([]);
@@ -18,7 +15,7 @@ function CustomerList() {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axiosInstance.get("regulator/customers/");
+        const response = await axiosInstance.get("customers/");
         setCustomers(response.data);
       } catch (err) {
         console.error("Error fetching customers:", err);
