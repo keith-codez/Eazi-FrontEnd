@@ -25,6 +25,7 @@ import CustomerList from "./pages/customers/CustomerList";
 import AddCustomer from "./pages/customers/AddCustomer";
 import EditCustomer from "./pages/customers/EditCustomer";
 import CustomerDetails from "./pages/customers/CustomerDetails";
+import CustomerAnalytics from "./pages/customers/CustomerAnalytics";
 
 import SupplierList from "./pages/suppliers/SupplierList";
 
@@ -89,6 +90,7 @@ function App() {
               <Route path="/fleet/maintenance" element={<MaintenanceRecords />} />
               <Route path="/fleet/unavailability" element={<Unavailability />} />
               <Route path="/customers/list" element={<CustomerList />} />
+              <Route path="/customers/analytics" element={<CustomerAnalytics />} />
               <Route path="/details/:id" element={<CustomerDetails />} />
               <Route path="/add-customer" element={<AddCustomer />} />
               <Route path="/edit-customer/:id" element={<EditCustomer />} />

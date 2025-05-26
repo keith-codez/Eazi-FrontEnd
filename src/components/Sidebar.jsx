@@ -41,6 +41,7 @@ const Sidebar = ({ onLogout, isOpen, setIsOpen, isLoggedOut }) => {
       sub: [
         { name: "Customer List", link: "/customers/list" },
         { name: "Bookings", link: "/customers/bookings" },
+        { name: "Analytics", link: "/customers/analytics" },
       ],
     },
     {
