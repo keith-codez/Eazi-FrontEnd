@@ -18,43 +18,14 @@ const PublicSidebar = ({ onLogout, isOpen, setIsOpen }) => {
   };
 
   const menuItems = [
-    { name: "Dashboard", icon: <Car />, link: "/staff/dashboard" },
-    {
-      name: "Fleet",
-      icon: <Car />,
-      sub: [
-        { name: "Vehicles", link: "/fleet/vehicles" },
-        { name: "Maintenance Records", link: "/fleet/maintenance" },
-        { name: "Unavailability", link: "/fleet/unavailability" },
-      ],
-    },
-    {
-      name: "Customers",
-      icon: <Users />,
-      sub: [
-        { name: "Customer List", link: "/customers/list" },
-        { name: "Bookings", link: "/customers/bookings" },
-      ],
-    },
-    {
-      name: "Suppliers",
-      icon: <Briefcase />,
-      sub: [{ name: "Supplier List", link: "/suppliers/list" }],
-    },
+    
+    { name: "Book a Vehicle", link: "/book-now", icon: <Car /> },
     {
       name: "Bookings",
       icon: <Calendar />,
       sub: [
         { name: "Bookings", link: "/bookings/list" },
         { name: "Booking Requests", link: "/bookings/requests" },
-      ],
-    },
-    {
-      name: "Finances",
-      icon: <DollarSign />,
-      sub: [
-        { name: "Payments", link: "/finances/payments" },
-        { name: "Booking Invoices", link: "/finances/invoices" },
       ],
     },
     { name: "Settings", icon: <Settings />, link: "/settings" },

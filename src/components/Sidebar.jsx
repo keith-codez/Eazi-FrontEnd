@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Car, Users, Briefcase, Calendar, DollarSign, Settings, LogOut, ChevronDown, Home } from "lucide-react";
+import { AuthContext } from "../contexts/AuthContext";
 
-const Sidebar = ({ onLogout, isOpen, setIsOpen, isLoggedOut }) => {
+const Sidebar = ({ isOpen, setIsOpen }) => {
+  const { logout } = useContext(AuthContext);
   const [openSubmenus, setOpenSubmenus] = useState({});
   const navigate = useNavigate();
 
@@ -12,17 +14,13 @@ const Sidebar = ({ onLogout, isOpen, setIsOpen, isLoggedOut }) => {
   const toggleSubmenu = (name) =>
     setOpenSubmenus((prev) => ({ [name]: !prev[name] }));
 
-  const handleLogout = () => {
-    onLogout();
-  };
+  const handleLogout = async () => {
+  await logout();
+  navigate("/login");
+};
 
   
-  useEffect(() => {
-    if (isLoggedOut) {
-      navigate("/login");
-    }
-  }, [isLoggedOut, navigate]);
-
+ 
 
   const menuItems = [
     { name: "Dashboard", icon: <Home />, link: "/staff/dashboard" },

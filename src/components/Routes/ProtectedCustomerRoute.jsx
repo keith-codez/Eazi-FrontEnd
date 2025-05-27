@@ -1,39 +1,36 @@
 import React, { useContext, useState } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import CustomerSidebar from "../CustomerSidebar";
 import { AuthContext } from "../../contexts/AuthContext";
 
+const ProtectedCustomerRoute = () => {
+  const { user, role, logout, loading } = useContext(AuthContext);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-const ProtectedCustomerRoute = ({ children }) => {
-  const token = localStorage.getItem("access_token");
-  const role = localStorage.getItem("role");
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  
-  const handleLogout = () => {
-    // Clear the user data (tokens, etc)
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("role");
-    // Navigate to login page
-    navigate("/login");
-  };
+  // Wait for auth check to complete
+  if (loading) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
 
-  if (!token || (role !== "customer" && role !== "Customer")) {
-      return <Navigate to="/login" />;
-    }
+  // Allow only logged-in users with role === "customer"
+  const isAllowed = user && role === "customer";
 
-    return (
-      <div className="flex w-full min-h-screen overflow-x-hidden">
-        <CustomerSidebar 
-          onLogout={handleLogout} 
-          isOpen={isOpen} 
-          setIsOpen={setIsOpen} 
-        />
-        <div className="flex-grow p-4 w-full transition-all duration-300 md:ml-64 pt-16 md:pt-4">
-          <Outlet />
-        </div>
+  if (!isAllowed) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <div className="flex w-full min-h-screen overflow-x-hidden">
+      <CustomerSidebar
+        onLogout={logout}
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
+      />
+      <div className="flex-grow p-4 w-full transition-all duration-300 md:ml-64 pt-16 md:pt-4">
+        <Outlet />
       </div>
-      );
+    </div>
+  );
 };
 
 export default ProtectedCustomerRoute;

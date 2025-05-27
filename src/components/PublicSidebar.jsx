@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, LogIn, Phone, Car, Users, UserPlus, Handshake } from "lucide-react";
 
 const menuItems = [
-  { name: "Book a Vehicle", link: "/", icon: <Car /> },
+  { name: "Available Vehicles", link: "/", icon: <Car /> },
   { name: "About Us", link: "/about", icon: <Users /> },
   { name: "Contact", link: "/contact", icon: <Phone /> },
   { name: "Become an Agent", link: "/agent-signup", icon: <Handshake /> },

@@ -162,11 +162,6 @@ const VehicleCard = ({ vehicle }) => {
         <p className="text-sm text-gray-600">Mileage: {vehicle.mileage} km</p>
         <p className="text-sm text-gray-600">Price: ${vehicle.price_per_day}/day</p>
       </div>
-      <div className="p-4 flex justify-center">
-        <Link to={`/book-now/${vehicle.id}`} className="bg-blue-500 w-40 text-center text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-          Book Now
-        </Link>
-      </div>
     </div>
   );
 };
