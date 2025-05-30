@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import CustomerSidebar from "../../components/CustomerSidebar";
-import BookVehicleForm from "../../components/PublicCustomers/BookVehicleForm";
+import CustomerSidebar from "../../../components/CustomerSidebar";
+import BookVehicleForm from "../../../components/PublicCustomers/BookVehicleForm";
 
 const BookVehiclePage = () => {
   const { vehicleId } = useParams();

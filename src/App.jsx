@@ -40,7 +40,8 @@ import Invoices from "./pages/finances/Invoices";
 import Settings from "./pages/Settings";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext";
-import BookVehiclePage from "./pages/customers/BookVehiclePage";
+import BookVehiclePage from "./pages/customers/public/BookVehiclePage";
+import CustomerVehicleBrowserPage from "./pages/customers/public/CustomerVehicleBrowserPage.jsx"
 
 
 import axiosInstance from "./api/axiosInstance.js";
@@ -77,10 +78,11 @@ function App() {
             </Route>
         
             {/* Protected Customer Routes */}
-          <Route element={<ProtectedCustomerRoute />}>
-            <Route path="/customer/dashboard" element={<CustomerDashboard />} />
-            <Route path="/book-now" element={<BookVehiclePage />} />
-          </Route>
+            <Route element={<ProtectedCustomerRoute />}>
+              <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+              <Route path="/public-customers/book-vehicle" element={<CustomerVehicleBrowserPage />} />
+              <Route path="/public-customers/book-vehicle/:vehicleId" element={<BookVehiclePage />} />
+            </Route>
 
             {/* Protected Staff Routes */}
             <Route element={<ProtectedStaffRoute />}>

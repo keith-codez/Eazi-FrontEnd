@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import axiosInstance from "../../api/axiosInstance";
+import { AuthContext } from "../../contexts/AuthContext";
+
 
 const BookVehicleForm = ({ vehicleId }) => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     vehicle_id: vehicleId,
@@ -30,16 +33,23 @@ const BookVehicleForm = ({ vehicleId }) => {
     setError(null);
 
     try {
-      await axiosInstance.post(
-        `booking-requests/`, formData, { 
-            headers: { "Content-Type": "multipart/form-data" },
-            withCredentials: true 
-        });
+      const payload = {
+        user: user.id,            // 👈 Required
+        vehicle: vehicleId,       // 👈 Match backend field name
+        start_date: formData.start_date,
+        end_date: formData.end_date,
+        message: formData.message,
+      };
+
+      await axiosInstance.post("booking-requests/", payload, {
+        withCredentials: true,
+      });
+
       alert("Booking request submitted successfully!");
       navigate("/customer/dashboard");
     } catch (err) {
       setError("Failed to submit booking request.");
-      console.error(err);
+      console.error(err.response?.data || err);
     } finally {
       setLoading(false);
     }

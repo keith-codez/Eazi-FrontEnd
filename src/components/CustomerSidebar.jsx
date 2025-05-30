@@ -19,7 +19,7 @@ const PublicSidebar = ({ onLogout, isOpen, setIsOpen }) => {
 
   const menuItems = [
     
-    { name: "Book a Vehicle", link: "/book-now", icon: <Car /> },
+    { name: "Book a Vehicle", link: "/public-customers/book-vehicle", icon: <Car /> },
     {
       name: "Bookings",
       icon: <Calendar />,
