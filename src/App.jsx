@@ -33,6 +33,7 @@ import BookingList from "./pages/bookings/Bookings";
 import AddBooking from "./pages/bookings/AddBooking";
 import BookingRequests from "./pages/bookings/BookingRequests";
 import BookingHistory from "./pages/bookings/BookingHistory";
+import BookingRequestDetail from './pages/bookings/BookingRequestDetail';
 
 import Payments from "./pages/finances/Payments";
 import Invoices from "./pages/finances/Invoices";
@@ -101,6 +102,7 @@ function App() {
               <Route path="/bookings/list" element={<BookingList />} />
               <Route path="/add-booking" element={<AddBooking />} />
               <Route path="/bookings/requests" element={<BookingRequests />} />
+               <Route path="/booking-requests/:id" element={<BookingRequestDetail />} />
               <Route path="/bookings/history" element={<BookingHistory />} />
               <Route path="/finances/payments" element={<Payments />} />
               <Route path="/finances/invoices" element={<Invoices />} />

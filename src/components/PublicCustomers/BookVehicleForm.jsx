@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import axiosInstance from "../../api/axiosInstance";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -33,9 +32,8 @@ const BookVehicleForm = ({ vehicleId }) => {
     setError(null);
 
     try {
-      const payload = {
-        user: user.id,            // 👈 Required
-        vehicle: vehicleId,       // 👈 Match backend field name
+      const payload = {            
+        vehicle_id: vehicleId,       // 👈 Match backend field name
         start_date: formData.start_date,
         end_date: formData.end_date,
         message: formData.message,
