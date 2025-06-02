@@ -80,8 +80,8 @@ const BookingRequests = () => {
       <div className="md:hidden space-y-4">
         {requests.map((req) => (
           <div key={req.id} className="bg-white p-4 shadow rounded space-y-2 relative">
-            <p className="font-semibold">{req.first_name} {req.last_name}</p>
-            <p><strong>Phone:</strong> {req.phone}</p>
+            <p className="font-semibold">{req.customer.first_name} {req.customer.last_name}</p>
+            <p><strong>Phone:</strong> {req.customer.phone_number}</p>
             <p><strong>Dates:</strong> {req.start_date} - {req.end_date}</p>
             <p><strong>Vehicle:</strong> {req.vehicle.make} {req.vehicle.model}</p>
             <p><strong>Reviewed:</strong> {req.is_reviewed ? "Yes" : "No"}</p>
