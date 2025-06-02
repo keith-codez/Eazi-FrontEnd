@@ -50,8 +50,8 @@ const BookingRequests = () => {
           <tbody>
             {requests.map((req) => (
               <tr key={req.id} className="border-t">
-                <td className="px-6 py-4">{req.first_name} {req.last_name}</td>
-                <td className="px-6 py-4">{req.phone}</td>
+                <td className="px-6 py-4">{req.customer.first_name} {req.customer.last_name}</td>
+                <td className="px-6 py-4">{req.customer.phone_number}</td>
                 <td className="px-6 py-4">{req.start_date} - {req.end_date}</td>
                 <td className="px-6 py-4">{req.vehicle.make} {req.vehicle.model}</td>
                 <td className="px-6 py-4">{req.is_reviewed ? "Yes" : "No"}</td>

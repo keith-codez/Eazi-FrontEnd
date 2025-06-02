@@ -12,7 +12,7 @@ function BookingRequestDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosInstance.get(`/booking-requests/${id}/`)
+    axiosInstance.get(`staff-booking-requests/${id}`)
       .then(res => {
         setBooking(res.data);
         setStatus(res.data.status);
@@ -27,7 +27,7 @@ function BookingRequestDetail() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axiosInstance.patch(`/booking-requests/${id}/`, {
+    axiosInstance.patch(`staff-booking-requests/${id}/`, {
       status,
       staff_notes: notes,
     })
