@@ -25,7 +25,7 @@ const PublicSidebar = ({ onLogout, isOpen, setIsOpen }) => {
       icon: <Calendar />,
       sub: [
         { name: "Bookings", link: "/bookings/list" },
-        { name: "Booking Requests", link: "/bookings/requests" },
+        { name: "Booking Requests", link: "/customer/booking-requests" },
       ],
     },
     { name: "Settings", icon: <Settings />, link: "/settings" },

@@ -34,6 +34,8 @@ import AddBooking from "./pages/bookings/AddBooking";
 import BookingRequests from "./pages/bookings/BookingRequests";
 import BookingHistory from "./pages/bookings/BookingHistory";
 import BookingRequestDetail from './pages/bookings/BookingRequestDetail';
+import CustomerVehicleBrowserPage from "./pages/customers/public/CustomerVehicleBrowserPage.jsx"
+import CustomerBookingRequestsPage from "./pages/customers/public/CustomerBookingRequests.jsx";
 
 import Payments from "./pages/finances/Payments";
 import Invoices from "./pages/finances/Invoices";
@@ -42,7 +44,7 @@ import Settings from "./pages/Settings";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import BookVehiclePage from "./pages/customers/public/BookVehiclePage";
-import CustomerVehicleBrowserPage from "./pages/customers/public/CustomerVehicleBrowserPage.jsx"
+
 
 
 import axiosInstance from "./api/axiosInstance.js";
@@ -83,6 +85,7 @@ function App() {
               <Route path="/customer/dashboard" element={<CustomerDashboard />} />
               <Route path="/public-customers/book-vehicle" element={<CustomerVehicleBrowserPage />} />
               <Route path="/public-customers/book-vehicle/:vehicleId" element={<BookVehiclePage />} />
+              <Route path="/customer/booking-requests" element={<CustomerBookingRequestsPage />} />
             </Route>
 
             {/* Protected Staff Routes */}
