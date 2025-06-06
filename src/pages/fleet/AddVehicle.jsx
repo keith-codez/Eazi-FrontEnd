@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import axiosInstance from "../../api/axiosInstance";
@@ -22,6 +22,12 @@ const AddVehicle = () => {
   });
 
   const [fileInputKey, setFileInputKey] = useState(Date.now()); // Reset input field after upload
+  const [pickupLocations, setPickupLocations] = useState([]);
+  useEffect(() => {
+    axiosInstance.get("agent-locations/").then((res) => {
+      setPickupLocations(res.data);  // List of locations agent can assign
+    });
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,11 +58,15 @@ const AddVehicle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    
+
     for (const key in formData) {
       if (key === "image_uploads") {
         formData.image_uploads.forEach(({ file }) => {
           formDataToSend.append("image_uploads", file);
+        });
+      } else if (key === "pickup_locations") {
+        formData.pickup_locations?.forEach((locId) => {
+          formDataToSend.append("pickup_locations", locId);
         });
       } else {
         formDataToSend.append(key, formData[key]);
@@ -152,6 +162,29 @@ const AddVehicle = () => {
                 <option value="company">Company</option>
               </select>
             </div>
+
+            <div>
+              <label htmlFor="pickup_locations" className="block text-gray-700 font-medium">
+                Pickup Locations
+              </label>
+              <select
+                id="pickup_locations"
+                name="pickup_locations"
+                multiple
+                onChange={(e) => {
+                  const selected = Array.from(e.target.selectedOptions, (option) => option.value);
+                  setFormData({ ...formData, pickup_locations: selected });
+                }}
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                {pickupLocations.map((location) => (
+                  <option key={location.id} value={location.id}>
+                    {location.name} - {location.city}
+                  </option>
+                ))}
+              </select>
+            </div>
+
 
           </div> {/* End of Grid */}
 
