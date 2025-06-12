@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import axiosInstance from "../../api/axiosInstance";
+import MultiSelectDropdown from "../../components/MultipleDropdown";
+
 
 
 const AddVehicle = () => {
@@ -163,27 +165,13 @@ const AddVehicle = () => {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="pickup_locations" className="block text-gray-700 font-medium">
-                Pickup Locations
-              </label>
-              <select
-                id="pickup_locations"
-                name="pickup_locations"
-                multiple
-                onChange={(e) => {
-                  const selected = Array.from(e.target.selectedOptions, (option) => option.value);
-                  setFormData({ ...formData, pickup_locations: selected });
-                }}
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                {pickupLocations.map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name} - {location.city}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <MultiSelectDropdown
+              options={pickupLocations}
+              selected={formData.pickup_locations || []}
+              setSelected={(selectedIds) =>
+                setFormData({ ...formData, pickup_locations: selectedIds })
+              }
+            />
 
 
           </div> {/* End of Grid */}
