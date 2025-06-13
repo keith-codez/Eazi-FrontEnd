@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -7,12 +7,18 @@ import { AuthContext } from "../../contexts/AuthContext";
 const BookVehicleForm = ({ vehicleId }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [pickupLocations, setPickupLocations] = useState([]);
+
 
   const [formData, setFormData] = useState({
     vehicle_id: vehicleId,
     start_date: "",
     end_date: "",
+    pickup_time: "",
+    dropoff_time: "",
     message: "",
+    pickup_location_id: "",
+    dropoff_location_id: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,6 +32,21 @@ const BookVehicleForm = ({ vehicleId }) => {
     }));
   };
 
+  useEffect(() => {
+  const fetchPickupLocations = async () => {
+    try {
+      const res = await axiosInstance.get(`public-vehicles/${vehicleId}/`);
+      if (res.data && res.data.pickup_locations) {
+        setPickupLocations(res.data.pickup_locations); // should be array of {id, name}
+      }
+    } catch (error) {
+      console.error("Failed to load pickup locations", error);
+    }
+  };
+
+  fetchPickupLocations();
+}, [vehicleId]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -36,7 +57,11 @@ const BookVehicleForm = ({ vehicleId }) => {
         vehicle_id: vehicleId,       // 👈 Match backend field name
         start_date: formData.start_date,
         end_date: formData.end_date,
+        pickup_time: formData.pickup_time,
+        dropoff_time: formData.dropoff_time,
         message: formData.message,
+        pickup_location_id: formData.pickup_location_id,
+        dropoff_location_id: formData.dropoff_location_id,
       };
 
       await axiosInstance.post("booking-requests/", payload, {
@@ -76,6 +101,53 @@ const BookVehicleForm = ({ vehicleId }) => {
           required
         />
       </div>
+
+      <div className="flex flex-col md:flex-row gap-4">
+        <input
+          type="time"
+          name="pickup_time"
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+          value={formData.pickup_time}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="time"
+          name="dropoff_time"
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+          value={formData.dropoff_time}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <select
+        name="pickup_location_id"
+        value={formData.pickup_location_id}
+        onChange={handleChange}
+        required
+        className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+      >
+        <option value="">Select Pickup Location</option>
+        {pickupLocations.map((loc) => (
+          <option key={loc.id} value={loc.id}>
+            {loc.name}
+          </option>
+        ))}
+      </select>
+
+      <select
+        name="dropoff_location_id"
+        value={formData.dropoff_location_id}
+        onChange={handleChange}
+        required
+        className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+      >
+        <option value="">Select Dropoff Location</option>
+        {pickupLocations.map((loc) => (
+          <option key={loc.id} value={loc.id}>{loc.name}</option>
+        ))}
+      </select>
 
       <textarea
         name="message"
