@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";  // Use useNavigate
 import axios from "axios";
-import CustomerNavbar from "../components/PublicSidebar";
+import CustomerNavbar from "../../components/PublicSidebar";
 
 const BookingRequestPage = () => {
   const { vehicleId } = useParams();  // Get vehicleId from URL

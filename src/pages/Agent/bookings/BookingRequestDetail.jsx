@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../../../api/axiosInstance';
 
 const statusColors = {
   pending: 'bg-yellow-100 text-yellow-800',

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import BackButton from "../../components/BackButton";
-import axiosInstance from "../../api/axiosInstance";
+import BackButton from "../../../components/BackButton";
+import axiosInstance from "../../../api/axiosInstance";
 
 
 const API_URL = "http://127.0.0.1:8000/api/staff/customers/";

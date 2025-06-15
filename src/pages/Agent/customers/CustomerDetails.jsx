@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MoreVertical } from 'lucide-react';
-import BackButton from "../../components/BackButton";
-import WhatsappButton from "../../components/WhatsappButton";
-import BookingCarousel from "../../components/BookingsCarousel";
+import BackButton from "../../../components/BackButton";
+import WhatsappButton from "../../../components/WhatsappButton";
+import BookingCarousel from "../../../components/BookingsCarousel";
 import { Car, DollarSign, Gauge } from 'lucide-react'
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../../api/axiosInstance";
 
 
 function CustomerDetails() {

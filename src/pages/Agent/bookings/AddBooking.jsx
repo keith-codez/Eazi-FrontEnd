@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import BackButton from "../../components/BackButton";
-import axiosInstance from "../../api/axiosInstance";
+import BackButton from "../../../components/BackButton";
+import axiosInstance from "../../../api/axiosInstance";
 
 
 
@@ -26,7 +26,6 @@ const AddBooking = () => {
         payment_method: "cash",
         booking_status: "pending",
         estimated_mileage: "",
-        destination: "",
         discount_amount: "0.00",
         discount_description: "",
         pickup_location: "",
@@ -67,7 +66,6 @@ const AddBooking = () => {
             payment_method: formData.payment_method,
             booking_status: formData.booking_status,
             estimated_mileage: formData.estimated_mileage,
-            destination: formData.destination,
             discount_amount: formData.discount_amount,
             discount_description: formData.discount_description,
             pickup_location: formData.pickup_location,
@@ -204,8 +202,8 @@ const AddBooking = () => {
                             <input type="number" name="estimated_mileage" value={formData.estimated_mileage} onChange={handleChange} className="p-2 border rounded w-full" />
                         </div>
                         <div>
-                            <label className="block text-gray-700 font-medium">Destination:</label>
-                            <input type="text" name="destination" value={formData.destination} onChange={handleChange} className="p-2 border rounded w-full" />
+                            <label className="block text-gray-700 font-medium">Discount Amount:</label>
+                            <input type="number" name="discount_amount" value={formData.discount_amount} onChange={handleChange} className="p-2 border rounded w-full" />
                         </div>
                     </div>
  

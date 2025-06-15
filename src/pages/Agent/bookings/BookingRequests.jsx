@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../../api/axiosInstance";
 import { MoreVertical } from "lucide-react";
 
 const statusColor = (reviewed) =>

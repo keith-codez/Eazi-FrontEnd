@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../../../src/api/axiosInstance';
 import { BadgeCheck, Clock, XCircle, CarFront } from 'lucide-react'; // Optional icons
 
 const statusColors = {

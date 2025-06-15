@@ -1,25 +1,24 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { useSwipeable } from "react-swipeable";
+import { Link } from "react-router-dom";
 import axiosInstance from "../../../api/axiosInstance";
 
-const CustomerVehicleBrowserPage = () => {
+
+const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [ownershipFilter, setOwnershipFilter] = useState("");
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
-
+  const token = localStorage.getItem("access_token"); 
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axiosInstance.get(`/public-vehicles`);
+        const response = await axiosInstance.get("staff-vehicles/");
         setVehicles(response.data);
-        setFilteredVehicles(response.data);
+        setFilteredVehicles(response.data); // Initialize filtered list
       } catch (err) {
         console.error("Error fetching vehicles:", err);
       } finally {
@@ -30,6 +29,7 @@ const CustomerVehicleBrowserPage = () => {
     fetchVehicles();
   }, []);
 
+  // Filter vehicles based on searchQuery and ownershipFilter
   useEffect(() => {
     let filtered = vehicles;
 
@@ -52,9 +52,10 @@ const CustomerVehicleBrowserPage = () => {
   if (loading) return <p className="text-center text-gray-500">Loading vehicles...</p>;
 
   return (
-    <div className="w-full min-h-screen px-4">
-      <div className="flex flex-col md:flex-row justify-between items-center my-4 gap-4">
-        <h2 className="text-2xl font-semibold">Browse & Book Vehicles</h2>
+    <div className="w-full min-h-screen px-4 md:px-8 py-6 mt-10 md:mt-0">
+      {/* Search and Filter */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+        <h2 className="text-2xl font-semibold">Vehicle List</h2>
         <input
           type="text"
           placeholder="Search by make, model, or color..."
@@ -71,8 +72,12 @@ const CustomerVehicleBrowserPage = () => {
           <option value="company">Company-owned</option>
           <option value="private">Privately-owned</option>
         </select>
+        <Link to="/add-vehicle" className="bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 text-center text-lg w-full md:w-auto md:px-6 md:py-2 shadow-md">
+        + Add Vehicle
+        </Link>
       </div>
 
+      {/* Vehicle List */}
       {filteredVehicles.length === 0 ? (
         <p className="text-gray-500">No vehicles found.</p>
       ) : (
@@ -88,7 +93,6 @@ const CustomerVehicleBrowserPage = () => {
 
 const VehicleCard = ({ vehicle }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const navigate = useNavigate();
 
   const handleNext = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % vehicle.images.length);
@@ -100,13 +104,16 @@ const VehicleCard = ({ vehicle }) => {
     );
   };
 
-  const handleBookNow = () => {
-    navigate(`/public-customers/book-vehicle/${vehicle.id}`);
-  };
+  const handlers = useSwipeable({
+    onSwipedLeft: handleNext,
+    onSwipedRight: handlePrev,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
 
   return (
-    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[440px] flex flex-col">
-      <div className="relative w-full h-48 bg-gray-200 flex items-center justify-center">
+    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[400px] md:h-[400px] flex flex-col">
+      <div {...handlers} className="relative w-full h-50 bg-gray-200 flex items-center justify-center">
         {vehicle.images.length > 0 ? (
           <img
             src={vehicle.images[currentImageIndex].image}
@@ -118,16 +125,10 @@ const VehicleCard = ({ vehicle }) => {
         )}
         {vehicle.images.length > 1 && (
           <>
-            <button
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full"
-              onClick={handlePrev}
-            >
+            <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full" onClick={handlePrev}>
               &#10094;
             </button>
-            <button
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full"
-              onClick={handleNext}
-            >
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full" onClick={handleNext}>
               &#10095;
             </button>
           </>
@@ -137,16 +138,15 @@ const VehicleCard = ({ vehicle }) => {
         <h3 className="text-lg font-semibold">{vehicle.make} {vehicle.model}</h3>
         <p className="text-sm text-gray-600">Color: {vehicle.color}</p>
         <p className="text-sm text-gray-600">Mileage: {vehicle.mileage} km</p>
-        <p className="text-sm text-gray-600 mb-3">Price: ${vehicle.price_per_day}/day</p>
-        <button
-          className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={handleBookNow}
-        >
-          Book Now
-        </button>
+        <p className="text-sm text-gray-600">Price: ${vehicle.price_per_day}/day</p>
+      </div>
+      <div className="p-4 flex justify-center">
+        <Link to={`/edit-vehicle/${vehicle.id}`} className="bg-blue-500 w-40 text-center text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+          Edit
+        </Link>
       </div>
     </div>
   );
 };
 
-export default CustomerVehicleBrowserPage;
+export default VehicleList;
