@@ -40,6 +40,7 @@ import {
   CustomerVehicleBrowserPage,
   CustomerBookingRequestsPage,
   BookVehiclePage,
+  ConfirmBooking,
 } from "./pages";
 
 
@@ -90,6 +91,7 @@ function App() {
               <Route path="/public-customers/book-vehicle" element={<CustomerVehicleBrowserPage />} />
               <Route path="/public-customers/book-vehicle/:vehicleId" element={<BookVehiclePage />} />
               <Route path="/customer/booking-requests" element={<CustomerBookingRequestsPage />} />
+              <Route path="/customer/booking-requests/:requestId/confirm" element={<ConfirmBooking />} />
             </Route>
 
             {/* Protected Staff Routes */}

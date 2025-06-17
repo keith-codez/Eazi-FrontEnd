@@ -27,6 +27,7 @@ export { default as CustomerDashboard } from "./Customer/CustomerDashboard.jsx"
 export { default as CustomerVehicleBrowserPage } from "./Customer/CustomerVehicleBrowserPage.jsx"
 export { default as CustomerBookingRequestsPage} from "./Customer/CustomerBookingRequests.jsx"
 export { default as BookVehiclePage } from "./Customer/BookVehiclePage.jsx"
+export { default as ConfirmBooking } from "./Customer/ConfirmBooking.jsx"
 
 // Public Pages
 export { default as CustomerLandingPage } from "./Public/CustomerLandingPage.jsx"
