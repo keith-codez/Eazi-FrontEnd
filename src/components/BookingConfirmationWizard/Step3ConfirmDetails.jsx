@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Step3ConfirmDetails = ({ formData, bookingRequest, onChange }) => {
+const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onBack }) => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
