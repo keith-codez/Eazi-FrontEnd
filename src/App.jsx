@@ -41,6 +41,7 @@ import {
   CustomerBookingRequestsPage,
   BookVehiclePage,
   ConfirmBooking,
+  BookingConfirmationPage,
 } from "./pages";
 
 
@@ -92,6 +93,7 @@ function App() {
               <Route path="/public-customers/book-vehicle/:vehicleId" element={<BookVehiclePage />} />
               <Route path="/customer/booking-requests" element={<CustomerBookingRequestsPage />} />
               <Route path="/customer/booking-requests/:requestId/confirm" element={<ConfirmBooking />} />
+              <Route path="/customer/bookings/:id/confirmation" element={<BookingConfirmationPage />} />
             </Route>
 
             {/* Protected Staff Routes */}

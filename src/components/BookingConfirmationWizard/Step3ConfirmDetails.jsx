@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+
 
 const EditableField = ({ label, name, value, onChange, isEditable, onEditToggle }) => (
   <div className="mb-4">
@@ -27,7 +29,8 @@ const EditableField = ({ label, name, value, onChange, isEditable, onEditToggle 
   </div>
 );
 
-const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onBack }) => {
+const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onSubmitRef }) => {
+  const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -65,6 +68,7 @@ const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onBack }) => 
         withCredentials: true,
       });
       setSuccess(true);
+      navigate(`/customer/bookings/${bookingRequest.id}/confirmation`);
     } catch (err) {
       setError('Failed to confirm booking.');
     } finally {
@@ -72,6 +76,12 @@ const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onBack }) => 
     }
   };
 
+  useEffect(() => {
+    if (onSubmitRef) {
+      onSubmitRef.current = handleSubmit;
+    }
+  }, [onSubmitRef]);
+  
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-semibold text-gray-800">Step 3: Confirm Details</h2>
@@ -115,19 +125,6 @@ const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onBack }) => 
 
       {error && <p className="text-sm text-red-500">{error}</p>}
       {success && <p className="text-sm text-green-500">Booking Confirmed!</p>}
-
-      {/* Navigation Buttons */}
-      <div className="mt-6 flex justify-between flex-col sm:flex-row gap-4">
-        <button
-          onClick={handleSubmit}
-          disabled={submitting}
-          className={`inline-flex items-center justify-center px-5 py-2 rounded-xl ${
-            submitting ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'
-          } text-white transition-all`}
-        >
-          {submitting ? 'Submitting...' : 'Confirm Booking'}
-        </button>
-      </div>
     </div>
   );
 };

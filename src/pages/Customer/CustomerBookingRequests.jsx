@@ -60,12 +60,21 @@ const CustomerBookingRequestsPage = () => {
 
             {req.status === 'accepted' && (
               <div className="pt-2 text-right">
-                <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm rounded-md transition"
-                  onClick={() => handleConfirmClick(req.id)}
-                >
-                  Confirm Booking
-                </button>
+                {req.has_booking ? (
+                  <button
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 text-sm rounded-md transition"
+                    onClick={() => navigate(`/customer/booking-requests/${req.id}/confirmation`)}
+                  >
+                    View Booking Details
+                  </button>
+                ) : (
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm rounded-md transition"
+                    onClick={() => handleConfirmClick(req.id)}
+                  >
+                    Confirm Booking
+                  </button>
+                )}
               </div>
             )}
           </div>
