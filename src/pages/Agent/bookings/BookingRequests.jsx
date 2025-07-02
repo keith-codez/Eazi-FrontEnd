@@ -71,7 +71,7 @@ const BookingRequests = () => {
                     <MoreVertical size={18} />
                   </button>
                   {dropdownOpen === req.id && (
-                    <div className="absolute z-10 right-0 mt-2 w-32 bg-white border border-gray-200 shadow-lg rounded-md">
+                    <div className="absolute right-2 top-2 mb-2 w-32 bg-white border rounded-sm shadow-lg z-10 dropdown">
                       <button
                         onClick={() => handleReview(req.id)}
                         className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"

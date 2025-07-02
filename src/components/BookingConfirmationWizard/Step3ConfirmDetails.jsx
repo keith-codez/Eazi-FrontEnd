@@ -119,12 +119,6 @@ const Step3ConfirmDetails = ({ formData, bookingRequest, onChange, onBack }) => 
       {/* Navigation Buttons */}
       <div className="mt-6 flex justify-between flex-col sm:flex-row gap-4">
         <button
-          onClick={onBack}
-          className="inline-flex items-center justify-center px-5 py-2 rounded-xl border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition-all"
-        >
-          ← Back
-        </button>
-        <button
           onClick={handleSubmit}
           disabled={submitting}
           className={`inline-flex items-center justify-center px-5 py-2 rounded-xl ${
