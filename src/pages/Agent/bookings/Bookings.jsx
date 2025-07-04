@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../api/axiosInstance";
 import { MoreVertical } from "lucide-react";
-
-const API_URL = "http://127.0.0.1:8000/api/staff/bookings/";
-const API_URL_BOOKING = "http://127.0.0.1:8000/api/staff/bookings/"
 
 
 function BookingList() {
@@ -16,21 +13,20 @@ function BookingList() {
   const [sortConfig, setSortConfig] = useState({ key: "customer", direction: "ascending" });
   const [searchQuery, setSearchQuery] = useState("");
 
+
   useEffect(() => {
-    setLoading(true); // Start loading
-    axios.get(API_URL)
-        .then(response => setCustomers(response.data))
-        .catch(error => console.error("Error fetching customer:", error));
-  
-    axios.get(API_URL_BOOKING)
-        .then(response => {
-          setBookings(response.data);
-          setLoading(false); // Stop loading
-        })
-        .catch(error => {
-          console.error("Error fetching bookings:", error);
-          setLoading(false); // Stop loading even on error
-        });
+    const fetchRequests = async () => {
+      try {
+        const res = await axiosInstance.get(`bookings`);
+        setCustomers(res.data);
+        setBookings(res.data);
+      } catch (error) {
+        console.error("Error fetching booking requests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRequests();
   }, []);
     
 
