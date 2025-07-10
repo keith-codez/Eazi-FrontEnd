@@ -13,17 +13,7 @@ const Step2DummyPayment = ({ onChange, formData }) => {
           checked={formData.pay_now === true}
           onChange={() => onChange('pay_now', true)}
         />{' '}
-        Pay Full Amount Now (Get Discount)
-      </label>
-      <label className="block mb-4">
-        <input
-          type="radio"
-          name="payment"
-          value="false"
-          checked={formData.pay_now === false}
-          onChange={() => onChange('pay_now', false)}
-        />{' '}
-        Pay at Counter
+        Pay deposit to secure your vehicle
       </label>
     </div>
   );

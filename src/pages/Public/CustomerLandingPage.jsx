@@ -128,8 +128,9 @@ const VehicleCard = ({ vehicle }) => {
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[400px] md:h-[400px] flex flex-col">
-      <div className="relative w-full h-50 bg-gray-200 flex items-center justify-center">
+    <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition h-[440px] flex flex-col bg-white">
+      {/* Image Section */}
+      <div className="relative w-full h-48 bg-gray-100 flex items-center justify-center">
         {vehicle.images.length > 0 ? (
           <img
             src={vehicle.images[currentImageIndex].image}
@@ -142,13 +143,13 @@ const VehicleCard = ({ vehicle }) => {
         {vehicle.images.length > 1 && (
           <>
             <button
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full"
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white px-2 py-1 rounded-full"
               onClick={handlePrev}
             >
               &#10094;
             </button>
             <button
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-1 rounded-full"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white px-2 py-1 rounded-full"
               onClick={handleNext}
             >
               &#10095;
@@ -156,14 +157,31 @@ const VehicleCard = ({ vehicle }) => {
           </>
         )}
       </div>
-      <div className="p-4 flex-1">
-        <h3 className="text-lg font-semibold">{vehicle.make} {vehicle.model}</h3>
-        <p className="text-sm text-gray-600">Color: {vehicle.color}</p>
-        <p className="text-sm text-gray-600">Mileage: {vehicle.mileage} km</p>
-        <p className="text-sm text-gray-600">Price: ${vehicle.price_per_day}/day</p>
+
+      {/* Info Section */}
+      <div className="p-4 flex-1 flex flex-col justify-between">
+        <div>
+          <h3 className="text-lg font-bold text-gray-800">{vehicle.make} {vehicle.model}</h3>
+          <p className="text-sm text-gray-600">Color: {vehicle.color}</p>
+          <p className="text-sm text-gray-600">Mileage: {vehicle.mileage} km</p>
+          <p className="text-sm text-gray-800 mt-1 font-medium"> ${vehicle.price_per_day} / day</p>
+        </div>
+
+        {/* Agency Section */}
+        {vehicle.agency_logo && (
+          <div className="mt-3 flex items-center gap-2 bg-green-100 p-2 rounded-md w-fit">
+            <img
+              src={vehicle.agency_logo}
+              alt={vehicle.agency_name}
+              className="w-10 h-10 rounded-full object-cover border"
+            />
+            <span className="text-sm font-medium text-gray-700">{vehicle.agency_name}</span>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
 
 export default CustomerLandingPage;
