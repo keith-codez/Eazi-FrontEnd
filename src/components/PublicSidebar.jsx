@@ -8,7 +8,8 @@ const menuItems = [
   { name: "Available Vehicles", link: "/", icon: <Car /> },
   { name: "About Us", link: "/about", icon: <Users /> },
   { name: "Contact", link: "/contact", icon: <Phone /> },
-  { name: "Become an Agent", link: "/agent-signup", icon: <Handshake /> },
+  { name: "Become an Partner", link: "/agent-signup", icon: <Handshake /> },
+   { name: "Register your Agency", link: "/agent-signup", icon: <Handshake /> },
   { name: "Register", link: "/register-customer", icon: <UserPlus /> },
 ];
 
